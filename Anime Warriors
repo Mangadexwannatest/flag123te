@@ -1,0 +1,74 @@
+local wave = game:GetService("ReplicatedStorage").Wave
+local vim = game:GetService("VirtualInputManager")
+
+coroutine.resume(coroutine.create(function()
+    while task.wait() do
+        if getgenv().AutoFarm then
+            setfflag("HumanoidParallelRemoveNoPhysics", "false")
+            setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "false")
+            game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
+end 
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().AutoFarm then
+    game:GetService("VirtualInputManager"):SendMouseButtonEvent(700, 50, 0, true, game, 1)
+        end
+end
+end))
+
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().SKill1 then
+vim:SendKeyEvent(true, "One", false, nil)
+vim:SendKeyEvent(false, "One", false, nil)
+end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().SKill2 then
+vim:SendKeyEvent(true, "Two", false, nil)
+vim:SendKeyEvent(false, "Two", false, nil)
+end 
+end 
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().SKill3 then
+vim:SendKeyEvent(true, "Three", false, nil)
+vim:SendKeyEvent(false, "Three", false, nil)
+end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().SKill4 then
+vim:SendKeyEvent(true, "Four", false, nil)
+vim:SendKeyEvent(false, "Four", false, nil)
+end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+while wait() do
+    if getgenv().AutoFarm then
+for i,v in pairs(game:GetService("Workspace").Live.NPCs:GetDescendants()) do
+    if v.Name == "HumanoidRootPart" and wave.Value <= 10  then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,6,0) * CFrame.Angles(math.rad(-90),0,0)
+    elseif v.Name == "HumanoidRootPart" and wave.Value == 10 then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,0,0) 
+    end 
+end
+end 
+end
+end))
+
+
+
