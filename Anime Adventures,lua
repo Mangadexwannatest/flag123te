@@ -4424,7 +4424,7 @@ if game.PlaceId == 8304191830 then
         game:GetService("ReplicatedStorage").packages.assets["ui_sfx"].error_old.Volume = 0
         
         
-        page1Challenge:Drop("Select Worl",false,{"namek : dbz","aot : aot","demonslayer : demonslayer","naruto : None","marineford : marine","tokyoghoul_ : tokyo_ghoul"},function(bool)
+        page1Challenge:Drop("Select Worl",false,{"namek : dbz","aot : aot","demonslayer : demonslayer","naruto : naruto","marineford : marine","tokyoghoul_ : tokyo_ghoul"},function(bool)
         getgenv().ChallengeDrop = bool
         updatejson()
         end)
@@ -5681,6 +5681,53 @@ end))
 coroutine.resume(coroutine.create(function()
     while task.wait(2) do
         if getgenv().AutoFarm then
+            if  game.PlaceId == 8349889591 then
+
+                function afc()
+                    game.Players.LocalPlayer.PlayerGui.ResultsUI.Enabled = false
+                    task.wait(1.5)
+
+                    local VirtualInputManager = game:GetService("VirtualInputManager")
+                    local X, Y = 0, 0
+                    VirtualInputManager:SendMouseButtonEvent(X, Y, 0, true, game, 1)
+                    VirtualInputManager:SendMouseButtonEvent(X, Y, 0, false, game, 1)
+                    
+
+                    if game:GetService("Workspace")["_DATA"].GameFinished.Value == true then
+                        webhook()
+                        task.wait(2)
+                    warn("Teleporting Back To Lobby....")
+                    game:GetService("ReplicatedStorage").endpoints.client_to_server.teleport_back_to_lobby:InvokeServer()
+                    task.wait(15)
+                    end
+                end
+
+                function clicknext()
+                    if game.Players.LocalPlayer.PlayerGui.ResultsUI.Enabled == true then
+                        for i,v in pairs(getconnections(game.Players.LocalPlayer.PlayerGui.ResultsUI.Holder.Buttons.Next.Activated)) do
+                            v:Fire()
+                        end
+                    end
+                end
+
+
+                if game.Players.LocalPlayer.PlayerGui.ResultsUI.Enabled == true then
+                    spawn(function()
+                        clicknext()
+                    end)
+                    spawn(function()
+                        afc()
+                    end)
+                end
+            end
+        end
+    end
+end))
+
+------// Auto Leave \\------
+coroutine.resume(coroutine.create(function()
+    while task.wait(2) do
+        if getgenv().AutoChallenge then
             if  game.PlaceId == 8349889591 then
 
                 function afc()
