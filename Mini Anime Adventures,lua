@@ -1,0 +1,223 @@
+-- init
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/4DailRyz/1yrsZHUB/main/vexy%20ui%20fixed%20ver"))()
+local venyx = library.new("Anime Adventures", 5013109572)
+local Test1 = {}
+local X1 = {}
+local Erwin1 = {}
+
+
+--Units Name
+for i, v in ipairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
+    if v.Name == "aot_generic" then 
+            v:Destroy()
+        elseif tostring(v["_stats"].player.Value) == game.Players.LocalPlayer.Name then
+    table.insert(Test1,v.Name)
+end
+end
+
+local function AntiAFk()
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+          game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+          wait()
+          game:GetService("VirtualUser"):Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+
+end)
+      
+end
+
+task.spawn(AntiAFk)--afk
+
+
+-- first page
+local page = venyx:addPage("Main", 5012544693)
+local section1 = page:addSection("Main")
+local section2 = page:addSection("Auto Farm")
+
+local redrop = section1:addDropdown("Select Unit",Test1, function(bool)
+   drop1 = bool
+end)
+
+section1:addDropdown("Select Traget to Chang",{"first","closest","last","farthest","strongest","weakest"},function(bool)
+    drop2 = bool
+end)
+
+section1:addButton("Copy UID Unit",function()
+    CopyUID()
+end)
+
+section1:addButton("Copy Name Unit",function()
+    CopyName()
+end)
+
+section1:addToggle("Upgrage Select ",nil,function(bool)
+    _G.UpgrageSelect = bool
+    if bool then
+        UpgrageSelect()
+    end
+end)
+
+section1:addToggle("Chang Traget Select ",nil,function(bool)
+    _G.Changtraget = bool
+    if bool then
+        Changtraget()
+    end
+end)
+
+
+section1:addButton("Refresh",function()
+Test1 = {}
+for i, v in ipairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
+        if v.Name == "aot_generic" then 
+            v:Destroy()
+        elseif tostring(v["_stats"].player.Value) == game.Players.LocalPlayer.Name then
+    table.insert(Test1,v.Name)
+section1:updateDropdown(redrop, "Refreshed", Test1)
+end
+end
+end)
+
+-- กันเวลา Refresh แล้วกด Toggle แล้วไม่ทำงาน
+redrop.Search.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
+drop1 = redrop.Search.TextBox.Text
+end)
+
+section2:addTextbox("UID Unit","",function(bool)
+    _G.UIDText = bool
+end)
+
+section2:addTextbox("Unit Name","",function(bool)
+    _G.UnitText = bool
+end)
+
+section2:addTextbox("Disctand Stack Name","",function(bool)
+    _G.DisctandText = bool
+end)
+
+section2:addButton("Set CFrame",function()
+    game.Players.LocalPlayer.PlayerGui.MessageGui.Enabled = false
+    X1 = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3,0)
+end)
+
+section2:addButton("Place Unit",function()
+    game.Players.LocalPlayer.PlayerGui.MessageGui.Enabled = false
+        local args = {
+    [1] = _G.UIDText,
+    [2] = X1
+}
+
+game:GetService("ReplicatedStorage").endpoints.client_to_server.spawn_unit:InvokeServer(unpack(args))
+end)
+
+section2:addButton("Stack Place Unit",function()
+    game.Players.LocalPlayer.PlayerGui.MessageGui.Enabled = false
+            for _,v in pairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
+                    if v.Name == _G.UnitText and tostring(v["_stats"].player.Value) ==  game.Players.LocalPlayer.Name then
+                        local args = {
+                            [1] = _G.UIDText,
+                            [2] = v.HumanoidRootPart.CFrame * CFrame.new(0,-_G.DisctandText,0)
+                        }
+
+                        game:GetService("ReplicatedStorage").endpoints.client_to_server.spawn_unit:InvokeServer(unpack(args))
+                    end 
+            end
+                
+end)
+
+section2:addButton("Insert erwin",function()
+for i, v in pairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
+    if v.Name == "erwin" and tostring(v["_stats"].player.Value) == game.Players.LocalPlayer.Name then
+        table.insert(Erwin1,v)
+    end
+end
+end)
+
+section2:addToggle("Auto Erwin Buff",nil,function(bool)
+    _G.ewrinbuff = bool
+    if bool then
+        ewrinbuff()
+    end
+end)
+
+
+-- second page
+local theme = venyx:addPage("Misc", 5012544693)
+local colors = theme:addSection("Misc")
+
+colors:addKeybind("Toggle Keybind", Enum.KeyCode.RightControl, function()
+venyx:toggle()
+end)
+
+colors:addButton("DestroyGui",function(bool)
+venyx.container:Destroy()
+end)
+
+-- load
+venyx:SelectPage(venyx.pages[1], true)
+
+--script/function
+
+
+function CopyUID()
+    spawn(function()
+        for i,v in pairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
+    if v.Name == drop1 then
+    setclipboard(tostring(v._stats.uuid.Value))
+    end
+end
+end)
+end
+
+function CopyName()
+    spawn(function()
+        for i,v in pairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
+    if v.Name == drop1 then
+    setclipboard(tostring(v.Name))
+    end
+end
+end)
+end
+
+function UpgrageSelect()
+    spawn(function()
+        while _G.UpgrageSelect == true do wait() pcall(function()
+for i,v in pairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
+    if v.Name == drop1 then
+        game.Players.LocalPlayer.PlayerGui.MessageGui.Enabled = false
+        game:GetService("ReplicatedStorage").endpoints.client_to_server.upgrade_unit_ingame:InvokeServer(v)
+end 
+end
+end)
+end
+end)
+end
+
+function Changtraget()
+    spawn(function()
+        while _G.Changtraget == true do wait() pcall(function()
+            for i,v in pairs(game:GetService("Workspace")["_UNITS"]:GetDescendants()) do
+                if v.Name == drop1 and v._stats.priority.Value ~= drop2 then
+                    repeat wait() 
+game:GetService("ReplicatedStorage").endpoints.client_to_server.cycle_priority:InvokeServer(v)
+
+                    until v._stats.priority.Value == drop2
+                end 
+            end
+        end)
+        end
+    end)
+end
+
+function ewrinbuff()
+    spawn(function()
+while _G.ewrinbuff do wait() pcall(function()
+if #Erwin1 >= 1  then
+    repeat wait(0.15)
+    game:GetService("ReplicatedStorage").endpoints.client_to_server.use_active_attack:InvokeServer(Erwin1[1])
+    wait(20)
+    game:GetService("ReplicatedStorage").endpoints.client_to_server.use_active_attack:InvokeServer(Erwin1[2])
+    until _G.ewrinbuff == false
+end
+end)
+end
+end)
+end
