@@ -24,7 +24,15 @@ function sex()
 
     -- global values
     getgenv().disableatuofarm = false
-
+    getgenv().shieldmode = false
+    getgenv().tankmode = false
+    getgenv().shortrangemode = false
+    getgenv().rejenmode = false
+    getgenv().doublecost = false
+    getgenv().HaveToDoChallenge = false
+    getgenv().MakeSureForIT = false
+    
+    
     getgenv().sellatwave = data.sellatwave 
     getgenv().autosell = data.autosell
     getgenv().AutoFarm = data.autofarm
@@ -52,6 +60,15 @@ function sex()
     getgenv().Idserver = data.idserver
     getgenv().BOOSTFPS = data.BOOSTFPS
     getgenv().Skillauto = data.Skillauto
+    getgenv().ChallengeDrop = data.challengedrop
+    getgenv().AutoChallenge = data.autochallege
+    getgenv().ModeChallenge = data.modechallenge
+    getgenv().ModeChallenge1 = data.modechallenge1
+    getgenv().ModeChallenge2 = data.modechallenge2
+    getgenv().ModeChallenge3 = data.modechallenge3
+    getgenv().ModeChallenge4 = data.modechallenge4 
+    getgenv().RewardChallenge = data.rewardchallenge
+    
     
     -- getgenv().unitname = data.unitname
     -- getgenv().unitid = data.unitid
@@ -67,6 +84,7 @@ function sex()
     getgenv().SpawnUnitPos = data.xspawnUnitPos
     getgenv().SelectedUnits = data.xselectedUnits
     getgenv().difficultycoop = data.difficultycoop
+    getgenv().SpawnUnitPosChallenge = data.xspawnUnitPosChallenge
 
     ---// updates the json file
     function updatejson()
@@ -95,6 +113,7 @@ function sex()
             door = getgenv().door,
             worldcoop = getgenv().worldcoop,
             xspawnUnitPos = getgenv().SpawnUnitPos,
+            xspawnUnitPosChallenge = getgenv().SpawnUnitPosChallenge,
             xselectedUnits = getgenv().SelectedUnits,
             underneath1 = getgenv().Underneath1,
             underneath2 = getgenv().Underneath2,
@@ -111,7 +130,15 @@ function sex()
             autojoinhost = getgenv().autojoinhost,
             hopserverifnotfindhost = getgenv().hopserverifnotfindhost,
             hopserverifnotfindplayer = getgenv().hopserverifnotfindplayer,
-            BOOSTFPS = getgenv().BOOSTFPS
+            BOOSTFPS = getgenv().BOOSTFPS,
+            challengedrop = getgenv().ChallengeDrop,
+            autochallege = getgenv().AutoChallenge,
+            modechallenge = getgenv().ModeChallenge,
+            modechallenge1 = getgenv().ModeChallenge1,
+            modechallenge2 = getgenv().ModeChallenge2,
+            modechallenge3 = getgenv().ModeChallenge3,
+            modechallenge4 = getgenv().ModeChallenge4,
+            rewardchallenge = getgenv().RewardChallenge
         }
 
         local json = HttpService:JSONEncode(xdata)
@@ -4371,13 +4398,18 @@ if game.PlaceId == 8304191830 then
         local page1main23 = main23:newpage()
         local page2main23 = main23:newpage()
 
-        local Coopplay = Window:Taps("CO-OP")
-        local page1Coopplay = Coopplay:newpage()
-        local page2Coopplay = Coopplay:newpage()
-        
         local unitselecttab = Window:Taps("Select Units")
         page1unitselecttab = unitselecttab:newpage()
         page2unitselecttab = unitselecttab:newpage()
+        
+        local ChallengeTab = Window:Taps("Challenge Mode")
+        page1Challenge = ChallengeTab:newpage()
+        page2Challenge = ChallengeTab:newpage()
+
+        local Coopplay = Window:Taps("CO-OP")
+        local page1Coopplay = Coopplay:newpage()
+        local page2Coopplay = Coopplay:newpage()
+    
         
         local autofarmtab = Window:Taps("Auto Farm")
         page1autofarmtab = autofarmtab:newpage()
@@ -4390,6 +4422,50 @@ if game.PlaceId == 8304191830 then
         game.Players.LocalPlayer.PlayerGui.MessageGui.Enabled = false
         game:GetService("ReplicatedStorage").packages.assets["ui_sfx"].error.Volume = 0
         game:GetService("ReplicatedStorage").packages.assets["ui_sfx"].error_old.Volume = 0
+        
+        
+        page1Challenge:Drop("Select Worl",false,{"namek : dbz","aot : aot","demonslayer : demonslayer","naruto : None","marineford : marine","tokyoghoul_ : tokyo_ghoul"},function(bool)
+        getgenv().ChallengeDrop = bool
+        updatejson()
+        end)
+        
+        page1Challenge:Drop("Select Reward",false,{"star_fruit_random","gold","gems"},function(bool)
+        getgenv().RewardChallenge = bool
+        updatejson()
+        end)        
+        
+        page1Challenge:Toggle("Auto Challenge",getgenv().AutoChallenge,function(bool)
+            getgenv().AutoChallenge = bool
+            updatejson()
+        end)
+        
+        page2Challenge:Label("Select Mode To Play")
+        
+        page2Challenge:Toggle("Tank Mode",getgenv().ModeChallenge,function(bool)
+            getgenv().ModeChallenge = bool
+            updatejson()
+        end)
+        
+        page2Challenge:Toggle("Shield Mode",getgenv().ModeChallenge1,function(bool)
+            getgenv().ModeChallenge1 = bool
+            updatejson()
+        end)
+        
+        page2Challenge:Toggle("Rejen Mode",getgenv().ModeChallenge2,function(bool)
+            getgenv().ModeChallenge2 = bool
+            updatejson()
+        end)
+        
+        page2Challenge:Toggle("Short Rang Mode",getgenv().ModeChallenge3,function(bool)
+            getgenv().ModeChallenge3 = bool
+            updatejson()
+        end)        
+
+        page2Challenge:Toggle("High Cost Mode",getgenv().ModeChallenge4,function(bool)
+            getgenv().ModeChallenge4 = bool
+            updatejson()
+        end)    
+        
         
         page1misc:Toggle("Auto Summon {Tickets}", getgenv().autosummontickets, function(bool)
             getgenv().autosummontickets = bool
@@ -4889,6 +4965,10 @@ if game.PlaceId ~= 8304191830 then
         local page1main23 = main23:newpage()
         local page2main23 = main23:newpage()
         
+        local ChallengeTab = Window:Taps("Challenge Mode")
+        page1Challenge = ChallengeTab:newpage()
+        page2Challenge = ChallengeTab:newpage()
+        
         local Coopplay = Window:Taps("CO-OP")
         page1Coopplay = Coopplay:newpage()
         page2Coopplay = Coopplay:newpage()        
@@ -4910,6 +4990,59 @@ if game.PlaceId ~= 8304191830 then
         game:GetService("ReplicatedStorage").packages.assets["ui_sfx"].error.Volume = 0
         game:GetService("ReplicatedStorage").packages.assets["ui_sfx"].error_old.Volume = 0
         
+        function MouseClickSetChallenge(UnitPos)
+            local connection
+            connection = UserInputService.InputBegan:Connect(
+                function(input, gameProcessed)
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                        connection:Disconnect()
+                        local a = Instance.new("Part", game.Workspace)
+                        a.Size = Vector3.new(1, 1, 1)
+                        a.Material = Enum.Material.Neon
+                        a.Position = mouse.hit.p
+                        task.wait()
+                        a.Anchored = true
+                        a.CanCollide = false
+                        for i = 0, 1, 0.1 do
+                            a.Transparency = i
+                            task.wait()
+                        end
+                        a:Destroy()
+                        SpawnUnitPosChallenge[UnitPos]["x"] = a.Position.X
+                        SpawnUnitPosChallenge[UnitPos]["y"] = a.Position.Y
+                        SpawnUnitPosChallenge[UnitPos]["z"] = a.Position.Z
+                        updatejson()
+                    end
+                end)
+        end
+
+        page1Challenge:Toggle("Auto Challenge",getgenv().AutoChallenge,function(bool)
+            getgenv().AutoChallenge = bool
+            updatejson()
+        end)
+
+        -- // Set Position
+        page2Challenge:Button("Set Unit 1 Postion", function()
+            MouseClickSetChallenge("Unit1")
+        end)
+
+        page2Challenge:Button("Set Unit 2 Postion", function()
+            MouseClickSetChallenge("Unit2")
+        end)
+        page2Challenge:Button("Set Unit 3 Postion", function()
+            MouseClickSetChallenge("Unit3")
+        end)
+        page2Challenge:Button("Set Unit 4 Postion", function()
+            MouseClickSetChallenge("Unit4")
+        end)
+        page2Challenge:Button("Set Unit 5 Postion", function()
+            MouseClickSetChallenge("Unit5")
+        end)
+        page2Challenge:Button("Set Unit 6 Postion", function()
+            MouseClickSetChallenge("Unit6")
+        end)
+        
+
        page1main23:TextBox("Underneath 1","", function(bool)
         getgenv().Underneath1 = bool
         updatejson()
@@ -5118,6 +5251,7 @@ end)
             MouseClick("UP6")
         end)
 
+
         page1ConfigTab:Button("Destroy Gui",function()
             UiLibToDestroy:Destroy()
         end)
@@ -5141,6 +5275,10 @@ end)
         page1ConfigTab:Label("Underneath5: " .. tostring(getgenv().Underneath5))
         page1ConfigTab:Label("Underneath6: " .. tostring(getgenv().Underneath6))
         page1ConfigTab:Label("DisctandUnder: " .. tostring(getgenv().DisctandUnder))
+        page1ConfigTab:Label("Select level Challenge: " .. tostring(getgenv().ChallengeDrop))
+        page1ConfigTab:Label("Select Reward Challenge: "..tostring(getgenv().RewardChallenge))
+        page1ConfigTab:Label("Auto Challenge: "..tostring(getgenv().AutoChallenge))
+        
         
         page2ConfigTab:Toggle("BoostFPS",getgenv().BOOSTFPS,function(bool)
             getgenv().BOOSTFPS = bool 
@@ -5152,6 +5290,11 @@ end)
 
 
         page2ConfigTab:Label("--- Saved Config ---")
+        page2ConfigTab:Label("Tank Mode: "..tostring(getgenv().ModeChallenge))
+        page2ConfigTab:Label("Shield Mode: "..tostring(getgenv().ModeChallenge1))
+        page2ConfigTab:Label("Rejen Mode: "..tostring(getgenv().ModeChallenge2))
+        page2ConfigTab:Label("Short Rang Mode: "..tostring(getgenv().ModeChallenge3))
+        page2ConfigTab:Label("High Cost Mode: "..tostring(getgenv().ModeChallenge4))
         page2ConfigTab:Label("Auto Skill: " .. tostring(getgenv().Skillauto ))
         page2ConfigTab:Label("Auto Place Underneath Unit 1: " .. tostring(getgenv().PlaceUnderneath1))
         page2ConfigTab:Label("Auto Place Underneath Unit 2: " .. tostring(getgenv().PlaceUnderneath2))
@@ -5195,7 +5338,15 @@ else
         difficultycoop = "",
         playenameforplay = "",
         levelcoop = "",
+        challengedrop = "",
+        rewardchallenge = "",
         sellatwave = 0,
+        autochallege = false,
+        modechallenge = false,
+        modechallenge1 = false,
+        modechallenge2 = false,
+        modechallenge3 = false,
+        modechallenge4 = false,
         hopserverifnotfindplayer = false,
         Skillauto = false,
         BOOSTFPS = false,
@@ -5252,6 +5403,42 @@ else
                 z = -707.9673461914062
             }
         },
+        xspawnUnitPosChallenge = {
+            Unit1 = {
+                x = -2952.81689453125,
+                y = 91.80620574951172,
+                z = -707.9673461914062
+            },
+
+            Unit2 = {
+                x = -2952.81689453125,
+                y = 91.80620574951172,
+                z = -707.9673461914062
+            },
+
+            Unit3 = {
+                x = -2952.81689453125,
+                y = 91.80620574951172,
+                z = -707.9673461914062
+            },
+
+            Unit4 = {
+                x = -2952.81689453125,
+                y = 91.80620574951172,
+                z = -707.9673461914062
+            },
+            Unit5 = {
+                x = -2952.81689453125,
+                y = 91.80620574951172,
+                z = -707.9673461914062
+            },
+            Unit6 = {
+                x = -2952.81689453125,
+                y = 91.80620574951172,
+                z = -707.9673461914062
+            }
+        },
+    
         xselectedUnits = {
             U1 = nil,
             U2 = nil,
@@ -5272,14 +5459,15 @@ end
 coroutine.resume(coroutine.create(function()
     while wait() do
         local _wave = game:GetService("Workspace"):WaitForChild("_wave_num")
-        
         if getgenv().AutoFarm and not getgenv().disableatuofarm then
+            if not getgenv().HaveToDoChallenge then
+            
             if game.PlaceId == 8349889591 then
 
                 for i = 1, 6 do
                     local unitinfo = getgenv().SelectedUnits["U" .. i]
                     if unitinfo ~= nil then
-
+                                                        
                         local unitinfo_ = unitinfo:split(" #")
                         local pos = getgenv().SpawnUnitPos["UP" .. i]
                         local args = {
@@ -5293,7 +5481,8 @@ coroutine.resume(coroutine.create(function()
                 end
             end
         end
-    end
+        end
+end
 end))
 
 ------// Auto Place Underneath 1\\------
@@ -5537,15 +5726,15 @@ end))
 
 ------// Auto Upgrade \\------
 coroutine.resume(coroutine.create(function()
-    while wait() do
+    while task.wait() do
         if getgenv().autoupgrade then
             if game.PlaceId == 8349889591 then
                 for i, v in ipairs(game:GetService("Workspace")["_UNITS"]:GetChildren()) do
                     if tostring(v["_stats"].player.Value) == game.Players.LocalPlayer.Name then
-                        repeat wait()
+                        repeat task.wait()
                             game:GetService("ReplicatedStorage").endpoints.client_to_server.upgrade_unit_ingame:InvokeServer(
                                 v)
-                            until getgenv().autoupgrade
+                            until getgenv().autoupgrade or game.PlaceId ~= 8349889591
                         end
                     end
                 end
@@ -5584,6 +5773,7 @@ coroutine.resume(coroutine.create(function()
     while wait() do
         if getgenv().autostart and getgenv().AutoFarm then
             if game.PlaceId == 8304191830 then
+                if not getgenv().MakeSureForIT then
                 for i, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
                     if v.Name == "Owner" and v.Value == nil then
                         getgenv().door = v.Parent.Name
@@ -5608,7 +5798,8 @@ coroutine.resume(coroutine.create(function()
 
             end
         end
-    end
+        end
+end
 end))
 
 
@@ -5617,6 +5808,7 @@ coroutine.resume(coroutine.create(function()
     while wait() do
    if getgenv().AutoStartCoop then
       if game.PlaceId == 8304191830 then
+          if not getgenv().MakeSureForIT then
 game:GetService("Workspace"):WaitForChild(getgenv().PlayerNameForPlay)
 game:GetService("Workspace")[getgenv().PlayerNameForPlay]:WaitForChild("HumanoidRootPart")
 for i, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
@@ -5644,7 +5836,7 @@ for i, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants(
                  
 end
    end 
-        
+        end
     end
 end))
 
@@ -5654,12 +5846,14 @@ end))
 while wait(3) do
    if getgenv().autostart then
       if game.PlaceId == 8304191830 then
+          if not getgenv().MakeSureForIT then
 for i, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
                     if v.Name == "Owner" and tostring(v.Value) == game.Players.LocalPlayer.Name then
                 game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(v.Parent.Name)
                     end
             
                     
+end
 end
 end
 end
@@ -5671,11 +5865,13 @@ end))
 while wait(3) do
    if getgenv().AutoStartCoop then
       if game.PlaceId == 8304191830 then
+          if not getgenv().MakeSureForIT then
 for i, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
                     if v.Name == "Value" and tostring(v.Value) == getgenv().PlayerNameForPlay then
                 game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(v.Parent.Parent.Name)
                     end
 end 
+end
 end
 end
 end
@@ -5746,6 +5942,232 @@ end
 end
 end))
 
+------/Challenge\------
+
+coroutine.resume(coroutine.create(function()
+while wait() do
+if getgenv().ModeChallenge then
+if game.PlaceId == 8304191830 then
+    local typechallge = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_challenge"]
+    if typechallge.Value == "tank_enemies" then
+        getgenv().tankmode = true
+    end
+end
+end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+while wait() do
+if getgenv().ModeChallenge1 then
+if game.PlaceId == 8304191830 then
+    local typechallge = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_challenge"]
+    if typechallge.Value == "shield_enemies" then
+        getgenv().shieldmode = true
+    end
+end
+end
+end
+end))
+
+
+coroutine.resume(coroutine.create(function()
+    while wait() do 
+        if getgenv().ModeChallenge2 then
+            if game.PlaceId == 8304191830 then
+                local typechallge = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_challenge"]
+            if typechallge.Value == "regen_enemies" then
+                getgenv().rejenmode = true
+            end
+        end
+        end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do 
+        if getgenv().ModeChallenge3 then
+            if game.PlaceId == 8304191830 then
+                local typechallge = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_challenge"]
+            if typechallge.Value == "short_range" then
+                getgenv().shortrangemode = true
+            end
+        end
+        end
+end
+end))
+
+
+coroutine.resume(coroutine.create(function()
+    while wait() do 
+        if getgenv().ModeChallenge4 then
+            if game.PlaceId == 8304191830 then
+                local typechallge = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_challenge"]
+            if typechallge.Value == "double_cost" then
+                getgenv().doublecost = true
+            end
+        end
+        end
+end
+end))
+
+
+coroutine.resume(coroutine.create(function()
+while wait() do
+    if getgenv().AutoChallenge then
+        if game.PlaceId == 8304191830 then
+for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
+    if v.Name == "SurfaceGui" then
+        for i,v in pairs(v:GetChildren()) do
+            if v.Name == "ChallengeCleared" and v.Visible == false then
+   getgenv().MakeSureForIT = true
+            end
+end
+end
+end
+end
+end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().AutoChallenge and getgenv().doublecost and getgenv().MakeSureForIT then
+            if game.PlaceId == 8304191830 then
+            local mapchallege = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_level_id"]
+            local challgeDropreward = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_reward"]
+            local ChallengeDropSelect = getgenv().ChallengeDrop:split(" : ")
+ if string.find(mapchallege.Value,ChallengeDropSelect[1]) and challgeDropreward.Value == RewardChallenge then
+
+game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer('_lobbytemplate329')
+
+end
+end
+end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().AutoChallenge and getgenv().tankmode and getgenv().MakeSureForIT then
+            if game.PlaceId == 8304191830 then
+                local mapchallege = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_level_id"]
+                local challgeDropreward = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_reward"]                
+            local ChallengeDropSelect = getgenv().ChallengeDrop:split(" : ")
+ if string.find(mapchallege.Value,ChallengeDropSelect[1]) and challgeDropreward.Value == RewardChallenge then
+
+game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer('_lobbytemplate329')
+
+end
+end
+end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().AutoChallenge and getgenv().shortrangemode and getgenv().MakeSureForIT then
+            if game.PlaceId == 8304191830 then
+                local mapchallege = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_level_id"]
+                local challgeDropreward = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_reward"]            
+            local ChallengeDropSelect = getgenv().ChallengeDrop:split(" : ")
+ if string.find(mapchallege.Value,ChallengeDropSelect[1]) and challgeDropreward.Value == RewardChallenge then
+
+game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer('_lobbytemplate329')
+
+end
+end
+end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().AutoChallenge and getgenv().rejenmode and getgenv().MakeSureForIT then
+            if game.PlaceId == 8304191830 then
+                local mapchallege = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_level_id"]
+                local challgeDropreward = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_reward"]            
+            local ChallengeDropSelect = getgenv().ChallengeDrop:split(" : ")
+ if string.find(mapchallege.Value,ChallengeDropSelect[1]) and challgeDropreward.Value == RewardChallenge then
+
+game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer('_lobbytemplate329')
+
+end
+end
+end
+end
+end))
+
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().AutoChallenge and getgenv().shieldmode and getgenv().MakeSureForIT then
+            if game.PlaceId == 8304191830 then
+                local mapchallege = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_level_id"]
+                local challgeDropreward = game:GetService("Workspace")["_LOBBIES"]["_DATA"]["_CHALLENGE"]["current_reward"]            
+            local ChallengeDropSelect = getgenv().ChallengeDrop:split(" : ")
+ if string.find(mapchallege.Value,ChallengeDropSelect[1]) and challgeDropreward.Value == RewardChallenge then
+
+game:GetService("ReplicatedStorage").endpoints.client_to_server.request_join_lobby:InvokeServer('_lobbytemplate329')
+
+end
+end
+end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().AutoChallenge then
+            if game.PlaceId == 8349889591 then
+                local IDK = getgenv().ChallengeDrop:split(" : ")
+               for i,v in next, workspace:GetChildren() do
+    if IDK[1] == "namek" and string.find(v.Name,IDK[2]) then
+        getgenv().HaveToDoChallenge = true
+    elseif IDK[1] == "aot" and string.find(v.Name,IDK[2]) then
+        getgenv().HaveToDoChallenge = true
+    elseif IDK[1] == "demonslayer" and string.find(v.Name,IDK[2]) then
+        getgenv().HaveToDoChallenge = true
+    elseif IDK[1] == "naruto" and string.find(v.Name,IDK[2]) then
+        getgenv().HaveToDoChallenge = true
+    elseif IDK[1] == "marineford" and string.find(v.Name,IDK[2]) then
+        getgenv().HaveToDoChallenge = true
+    elseif IDK[1] == "tokyoghoul_" and string.find(v.Name,IDK[2]) then
+        getgenv().HaveToDoChallenge = true
+    end
+               end
+end
+end
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+        if getgenv().AutoChallenge and getgenv().HaveToDoChallenge then
+            if game.PlaceId == 8349889591 then
+
+                for i = 1, 6 do
+                    local unitinfo = getgenv().SelectedUnits["U" .. i]
+                    if unitinfo ~= nil then
+                                                        
+                        local unitinfo_ = unitinfo:split(" #")
+                        local pos = getgenv().SpawnUnitPosChallenge["Unit" .. i]
+                        local args = {
+                            [1] = unitinfo_[2],
+                            [2] = CFrame.new(Vector3.new(pos["x"], pos["y"], pos["z"]), Vector3.new(0, 0, -1))
+                        }
+
+                        game:GetService("ReplicatedStorage").endpoints.client_to_server.spawn_unit:InvokeServer(unpack(args))
+
+                    end
+                end
+            end
+        end
+    end
+end))
+
+
+------/End Challenge\------
 
 local function AutoDoRejoinError()
     warn('Rejoin Is Working...')
@@ -5766,3 +6188,15 @@ end
 
 
 task.spawn(AutoDoRejoinError)
+
+
+--hide name
+task.spawn(function()  -- Hides name for yters (not sure if its Fe)
+    while task.wait() do
+        pcall(function()
+            if game.Players.LocalPlayer.Character.Head:FindFirstChild("_overhead") then
+               workspace[game.Players.LocalPlayer.Name].Head["_overhead"]:Destroy()
+            end
+        end)
+    end
+end)
