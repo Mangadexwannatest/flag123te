@@ -5893,14 +5893,12 @@ end))
 while wait(3) do
    if getgenv().autostart then
       if game.PlaceId == 8304191830 then
-          if not getgenv().MakeSureForIT then
 for i, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
                     if v.Name == "Owner" and tostring(v.Value) == game.Players.LocalPlayer.Name then
                 game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(v.Parent.Name)
                     end
             
                     
-end
 end
 end
 end
@@ -5912,13 +5910,11 @@ end))
 while wait(3) do
    if getgenv().AutoStartCoop then
       if game.PlaceId == 8304191830 then
-          if not getgenv().MakeSureForIT then
 for i, v in pairs(game:GetService("Workspace")["_LOBBIES"].Story:GetDescendants()) do
                     if v.Name == "Value" and tostring(v.Value) == getgenv().PlayerNameForPlay then
                 game:GetService("ReplicatedStorage").endpoints.client_to_server.request_start_game:InvokeServer(v.Parent.Parent.Name)
                     end
 end 
-end
 end
 end
 end
