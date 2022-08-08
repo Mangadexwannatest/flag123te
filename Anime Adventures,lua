@@ -6061,7 +6061,8 @@ end))
 
 coroutine.resume(coroutine.create(function()
 while wait() do
-    if getgenv().AutoChallenge then
+    if getgenv().AutoChallenge and getgenv().tankmode or getgenv().doublecost or getgenv().shortrangemode or getgenv().rejenmode
+    or getgenv().shieldmode then
         if game.PlaceId == 8304191830 then
 for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
     if v.Name == "SurfaceGui" then
