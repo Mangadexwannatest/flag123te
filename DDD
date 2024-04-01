@@ -239,16 +239,19 @@ task.spawn(function ()
                 if v.Name == "1" or v.Name == "2" or v.Name == "3" and not getgenv().InPorTal then
                         getgenv().STOP = true
 						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
+                        getgenv().EnterNow = true
                     end
                 elseif  getgenv().AboveTier == 2 and not getgenv().InPorTal then 
                     if v.Name == "2" or v.Name == "3" and not getgenv().InPorTal then
                         getgenv().STOP = true
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
+                        getgenv().EnterNow = true
                     end
                 elseif getgenv().AboveTier == 3 and not getgenv().InPorTal then 
                     if v.Name == "3" and not getgenv().InPorTal then
                         getgenv().STOP = true
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
+                        getgenv().EnterNow = true
                         
                     end
 					   end
@@ -264,11 +267,13 @@ task.spawn(function ()
         if getgenv().AutoPortal and game.PlaceId == 15049111150 then
             for i,v in pairs(game.Workspace.World.Portal:GetDescendants()) do
                 if v.Name == "Frame" and v:FindFirstChild(game.Players.LocalPlayer.Name) == nil then
-                    repeat wait()
+                    if getgenv().EnterNow then
+                    repeat wait(.95)
                         game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, nil)
                         game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, nil)
-                    until v:FindFirstChild(game.Players.LocalPlayer.Name) ~= nil or not getgenv().AutoPortal
+                    until v:FindFirstChild(game.Players.LocalPlayer.Name) ~= nil or not getgenv().AutoPortal or not getgenv().EnterNow
                     getgenv().InPorTal = true
+                   end
                 end
             end
         end
@@ -316,7 +321,7 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 150 then
+                    if dist <= 50 then
 			game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, true, game, 1)
                        end
                    end
@@ -377,7 +382,7 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 150 then
+                    if dist <= 50 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
                     end
@@ -394,7 +399,7 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 150 then
+                    if dist <= 50 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
                     end
@@ -411,7 +416,7 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 150 then
+                    if dist <= 50 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
                     end
@@ -428,7 +433,7 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 150 then
+                    if dist <= 50 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
                     end
