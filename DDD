@@ -121,7 +121,7 @@ PortalConfig:NewToggle("Auto Portal", nil, function(bool)
 end)
 
 PortalConfig:NewLabel("if you select tier 1 it will do every portal.")
-PortalConfig:NewLabel("if you select tier 2 it will do only uncommon , legendary portal.")
+PortalConfig:NewLabel("if you select tier 2 it will do uncommon , legendary portal.")
 PortalConfig:NewLabel("if you select tier 3 it will do only legendary portal.")
 
 ------ Skill Tab ------
@@ -274,10 +274,10 @@ task.spawn(function ()
                 if v.Name == "Frame" and v:FindFirstChild(game.Players.LocalPlayer.Name) == nil then
                     local clickThis = v.Parent.Parent.ProximityPrompt
                     if getgenv().EnterNow then
-                    repeat wait(.5)
                         fireproximityprompt(clickThis)
-                    until v:FindFirstChild(game.Players.LocalPlayer.Name) ~= nil or not getgenv().AutoPortal or not getgenv().EnterNow
+                    if v:FindFirstChild(game.Players.LocalPlayer.Name) ~= nil then
                     getgenv().InPorTal = true
+                    end
                    end
                 end
             end
