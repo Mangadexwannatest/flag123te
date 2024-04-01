@@ -365,6 +365,7 @@ task.spawn(function ()
                 or string.find(v.Name,"Choso") or string.find(v.Name,"Killua") and not getgenv().STOP then
                   if v.Humanoid.Health ~= 0 then
 					repeat wait()
+                        game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
 					until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoAllBoss
                        end
@@ -449,6 +450,7 @@ task.spawn(function ()
           if getclosest().Parent.Humanoid.Health ~= 0 then
             repeat 
                 task.wait()
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().CFrame * CFrame.new(0,0,4)
             until getclosest().Parent.Humanoid.Health == 0 or getclosest().Parent.Humanoid.Health < 0 or not getgenv().AutoPortal
               end
