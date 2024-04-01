@@ -1,13 +1,6 @@
 local webhooklink = "https://discord.com/api/webhooks/992760768196005960/2K8OAwaO1j98e24Ec9NZC3QT7HYiALPouh3BodHFzP0H454_-cwxOWxzUndIEYnAEdkj"
 
 function AddPart()
-    local PartAdd = Instance.new("Part" , v)
-    PartAdd.Name = "FIND ME"
-    PartAdd.CanCollide = false
-    PartAdd.Transparency = 0
-    PartAdd.Anchored = true
-    PartAdd.Size = Vector3.new(1,1,1)
-    PartAdd.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 end
 
 task.spawn(function ()
@@ -15,7 +8,13 @@ task.spawn(function ()
         for i,v in pairs(game.Workspace.World.Portal:GetChildren()) do
             if v.Name == "1" and v:FindFirstChild("FIND ME") == nil then
                 print("ADD")
-                AddPart()
+                local PartAdd = Instance.new("Part" , v)
+                PartAdd.Name = "FIND ME"
+                PartAdd.CanCollide = false
+                PartAdd.Transparency = 0
+                PartAdd.Anchored = true
+                PartAdd.Size = Vector3.new(1,1,1)
+                PartAdd.CFrame = v.CFrame
 local webhook = webhooklink
 local timeInfo = os.date("*t")
 
