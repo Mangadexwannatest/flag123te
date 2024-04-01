@@ -5,10 +5,12 @@ local Window = Library.CreateLib("Second Piece Last Update 31/03/2024", "DarkThe
 local Tab = Window:NewTab("Main")
 local PortalTab = Window:NewTab("Portal")
 local SkillTab = Window:NewTab("Skill")
+local TeleportTap = Window:NewTab("Teleport")
 local Misc = Window:NewTab("Misc")
 local Section = Tab:NewSection("Main")
 local PortalConfig = PortalTab:NewSection("Auto Portal")
 local SkillConfig = SkillTab:NewSection("Auto Skill")
+local TeleportConfig = TeleportTap:NewSection("Teleport")
 local MiscConfig = Misc:NewSection("Misc")
 local Weaponlist = {}
 
@@ -129,6 +131,20 @@ end)
 SkillConfig:NewToggle("V", nil, function(bool)
     getgenv().AutoSkillV = bool
     updatejson()
+end)
+
+--------- Teleport Tap -----------
+local TeleportList = {}
+for i,v in pairs(game.Workspace.Locations:GetChildren()) do
+  table.insert(TeleportList,v.Name)
+end
+
+TeleportConfig:NewDropdown("Select Locations", nil, TeleportList, function(bool)
+  getgenv().TeleportSelect = bool
+end)
+
+TeleportConfig:NewButton("Teleport", nil, function()
+  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getgenv().TeleportSelect.CFrame
 end)
 
 
