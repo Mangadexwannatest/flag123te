@@ -4,11 +4,13 @@ game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("H
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("Second Piece Last Update April/01/2024", "DarkTheme")
 local Tab = Window:NewTab("Main")
+local OtherTap = Window:NewTab("Other")
 local PortalTab = Window:NewTab("Portal")
 local SkillTab = Window:NewTab("Skill")
 local TeleportTap = Window:NewTab("Teleport")
 local Misc = Window:NewTab("Misc")
 local Section = Tab:NewSection("Main")
+local OtherConfig = OtherTap:NewSection("Other")
 local PortalConfig = PortalTab:NewSection("Auto Portal")
 local SkillConfig = SkillTab:NewSection("Auto Skill")
 local TeleportConfig = TeleportTap:NewSection("Teleport")
@@ -42,6 +44,8 @@ function sex()
     getgenv().AboveTier = data.AboveTier
     getgenv().RejoinWhenError = data.RejoinWhenError
     getgenv().White_Screen = data.White_Screen
+    getgenv().Quest = data.Quest
+    getgenv().AutoQuest = data.AutoQuest
 
     ---// updates the json file
     function updatejson()
@@ -63,7 +67,9 @@ function sex()
             AutoSpinFruits = getgenv().AutoSpinFruits,
             AboveTier = getgenv().AboveTier,
             RejoinWhenError = getgenv().RejoinWhenError,
-            White_Screen = getgenv().White_Screen
+            White_Screen = getgenv().White_Screen,
+            Quest = getgenv().Quest,
+            AutoQuest = getgenv().AutoQuest
         }
 
         local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -110,6 +116,25 @@ Section:NewToggle("Auto AllBoss", nil, function(bool)
     getgenv().AutoAllBoss = bool
     updatejson()
 end)
+
+------- Other Tab --------
+
+local QuestTable = {}
+for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
+    if v.Name == "Quest" then
+        table.insert(QuestTable,v.Value)
+    end
+end
+Section:NewDropdown("Select Quest", nil, QuestTable, function(bool)
+    getgenv().Quest = bool
+    updatejson()
+end)
+
+Section:NewToggle("Auto Quest",nil,function (bool)
+    getgenv().AutoQuest = bool
+    updatejson()
+end)
+
 
 ------ Portal Tab ------
 
@@ -215,6 +240,7 @@ else
         Weapon = nil,
         MethodSpin = nil,
         AboveTier = nil,
+        Quest = nil,
         AutoEquipTool = false,
         AutoAttack = false,
         AutoChest = false,
@@ -228,7 +254,8 @@ else
         AutoKenHaki = false,
         AutoSpinFruits = false,
         RejoinWhenError = false,
-        White_Screen = false
+        White_Screen = false,
+        AutoQuest = false
 
     }
     local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -375,12 +402,25 @@ task.spawn(function ()
 					repeat wait()
                         game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
+                    getgenv().DontAcceptQuest = true
 					until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoAllBoss
-                       end
+                    getgenv().DontAcceptQuest = false   
+                    end
                   end
               end
            end
        end)
+    end
+end)
+
+task.spawn(function ()
+    while wait() do pcall(function ()
+        for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+        if not getgenv().AutoAllBoss and getgenv().DontAcceptQuest then
+            getgenv().DontAcceptQuest = false
+           end
+        end 
+      end) 
     end
 end)
 
@@ -591,13 +631,90 @@ task.spawn(function()
                     task.spawn(function ()
                         pcall(function ()
                             Button.TouchTap:Connect(function()
-                                Library:ToggleUI()
+                                game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, nil)
+                                game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControlZ", false, nil)
                             end)
                              
                             Button.MouseButton1Click:Connect(function()
-                                Library:ToggleUI()
+                                game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, nil)
+                                game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControlZ", false, nil)
                             end)
                 
                         end)
                     end)
                     
+                    task.spawn(function ()
+                        while wait() do 
+                            pcall(function ()
+                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest then
+                                    for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
+                                        if v.Name == "Quest" and not getgenv().DontAcceptQuest then
+                                            if v.Value == getgenv().Quest and getgenv().NoQuest and not getgenv().DontAcceptQuest then
+                                                fireproximityprompt(v.Parent)
+                                            end
+                                        end
+                                    end
+                                end
+                            end)
+                        end
+                    end)
+                    
+                    task.spawn(function ()
+                        while wait() do
+                            pcall(function ()
+                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest  then
+                                    for i,v in pairs(game.Players.LocalPlayer:GetChildren()) do 
+                                        if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil then
+                                            getgenv().NoQuest = true
+                                        elseif v:FindFirstChild("QuestUI") ~= nil then
+                                            getgenv().NoQuest = false
+                                        end
+                                    end
+                                end
+                            end)
+                        end
+                    end)
+                    
+                    task.spawn(function ()
+                        while wait() do 
+                            pcall(function ()
+                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest then
+                                    for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
+                                        if v.Name == "Quest" and not getgenv().DontAcceptQuest then
+                                            if v.Value == getgenv().Quest and not getgenv().DontAcceptQuest then
+                                                if getgenv().NoQuest and not getgenv().DontAcceptQuest then
+                                                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end)
+                        end
+                    end)
+                    
+                    task.spawn(function ()
+                        while wait() do 
+                            pcall(function ()
+                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest then
+                                    for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
+                                        if v.Name == "Quest" and not getgenv().DontAcceptQuest then
+                                            if v.Value == getgenv().Quest and not getgenv().DontAcceptQuest then
+                                                if not getgenv().NoQuest and not getgenv().DontAcceptQuest then
+                                                    for _,mon in pairs(game.Workspace.Lives:GetChildren()) do
+                                                        if string.find(mon.Name,getgenv().Quest) and not getgenv().DontAcceptQuest then
+                                                            if mon.Humanoid.Health ~= 0 and not getgenv().NoQuest and not getgenv().DontAcceptQuest then
+                                                                repeat wait()
+                                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mon.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
+                                                            until mon.Humanoid.Health == 0 or mon.Humanoid.Health < 0 or not getgenv().AutoQuest or getgenv().NoQuest or getgenv().DontAcceptQuest
+                                                            end
+                                                        end
+                                                    end
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end)
+                        end
+                    end)
