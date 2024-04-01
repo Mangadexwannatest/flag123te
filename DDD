@@ -566,6 +566,7 @@ task.spawn(function ()
         if getgenv().GodMode and not getgenv().AlrInGodMode then
             if game.Players.LocalPlayer.Character then
                 GodMode()
+                game.Players.LocalPlayer.PlayerGui.MainUI.Interface.PlayerStatus.Hp.Frame.TextLabel.Text = "HP inf/inf"
                 wait(.85)
                 getgenv().AlrInGodMode = false
                 end
@@ -586,6 +587,7 @@ local function onCharacterAdded(character)
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                 wait(.5)
             GodMode()
+            game.Players.LocalPlayer.PlayerGui.MainUI.Interface.PlayerStatus.Hp.Frame.TextLabel.Text = "HP inf/inf"
             print("Activce GodMode")
             end)
         end
