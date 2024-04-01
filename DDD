@@ -42,7 +42,6 @@ function sex()
     getgenv().AutoBusoHaki = data.AutoBusoHaki
     getgenv().AutoKenHaki = data.AutoKenHaki
     getgenv().AboveTier = data.AboveTier
-    getgenv().GodMode = data.GodMode
     getgenv().RejoinWhenError = data.RejoinWhenError
 
     ---// updates the json file
@@ -64,7 +63,6 @@ function sex()
             AutoKenHaki  = getgenv().AutoKenHaki,
             AutoSpinFruits = getgenv().AutoSpinFruits,
             AboveTier = getgenv().AboveTier,
-            GodMode = getgenv().GodMode,
             RejoinWhenError = getgenv().RejoinWhenError
         }
 
@@ -167,20 +165,6 @@ TeleportConfig:NewButton("Teleport", nil, function()
   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[getgenv().TeleportSelect].CFrame
 end)
 
-------- Other Tap -----
-
-OtherConfig:NewToggle("Auto God Mode", nil, function(bool)
-    getgenv().GodMode = bool
-    updatejson()
-end)
-
-OtherConfig:NewToggle("Auto Rejoin When Disconnect", nil, function(bool)
-    getgenv().RejoinWhenError = bool
-    updatejson()
-end)
-
-
-
 -------Misc--------
 
 MiscConfig:NewDropdown("Select Methods", "Select Method to Spin", {"Gem", "Beli"}, function(bool)
@@ -201,6 +185,11 @@ end)
 
 MiscConfig:NewToggle("Auto Ken Haki", nil, function(bool)
     getgenv().AutoKenHaki = bool
+    updatejson()
+end)
+
+MiscConfig:NewToggle("Auto Rejoin When Disconnect", nil, function(bool)
+    getgenv().RejoinWhenError = bool
     updatejson()
 end)
 
@@ -233,7 +222,6 @@ else
         AutoBusoHaki = false,
         AutoKenHaki = false,
         AutoSpinFruits = false,
-        GodMode = false,
         RejoinWhenError = false
 
     }
@@ -255,21 +243,6 @@ function getclosest()
 		   end
 	   end
 	   return ClosestObject
-end
-
-function GodMode()
-    if game.Players.LocalPlayer.Character then
-        if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
-        game.Players.LocalPlayer.Character.Humanoid.Name = "1"
-        end
-        local l = game.Players.LocalPlayer.Character["1"]:Clone()
-        l.Parent = game.Players.LocalPlayer.Character
-        l.Name = "Humanoid"; wait(0.1)
-        game.Players.LocalPlayer.Character["1"]:Destroy()
-        workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
-        game.Players.LocalPlayer.Character.Animate.Disabled = true; wait(0.1)
-        game.Players.LocalPlayer.Character.Animate.Disabled = false
-    end
 end
 
 task.spawn(function ()
@@ -560,51 +533,6 @@ end)
 end
 end)
 
-
-task.spawn(function ()
-    while  wait() do pcall(function ()
-        if getgenv().GodMode and not getgenv().AlrInGodMode then
-            if game.Players.LocalPlayer.Character then
-                GodMode()
-                game.Players.LocalPlayer.PlayerGui.MainUI.Interface.PlayerStatus.Hp.Frame.TextLabel.Text = "HP inf/inf"
-                wait(.85)
-                getgenv().AlrInGodMode = false
-                end
-        end
-      end)
-    end
-end)
-
-local function onCharacterAdded(character)
-    local player = game:GetService("Players").LocalPlayer
-    local humanoid = character:WaitForChild("Humanoid", 5)
-    if not humanoid then
-        return
-    end
-    humanoid.Died:Connect(function()
-        if getgenv().GodMode then
-            game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
-                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                wait(.5)
-            GodMode()
-            game.Players.LocalPlayer.PlayerGui.MainUI.Interface.PlayerStatus.Hp.Frame.TextLabel.Text = "HP inf/inf"
-            print("Activce GodMode")
-            end)
-        end
-    end)
-end
-
-task.spawn(function ()
-    pcall(function ()
-game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
-do 
-    local alreadyExistingCharacter = game:GetService("Players").LocalPlayer.Character
-    if alreadyExistingCharacter then
-        onCharacterAdded(alreadyExistingCharacter )
-              end
-           end
-        end)
-end)
 
 task.spawn(function()
     while wait() do
