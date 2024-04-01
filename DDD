@@ -567,3 +567,37 @@ task.spawn(function()
                 end)
             end
         end)
+
+        task.spawn(function ()
+            pcall(function ()
+        local MobileTouchGui = Instance.new("ScreenGui")
+        local ImageButton = Instance.new("ImageButton")
+        
+        MobileTouchGui.Name = "MobileTouchGui"
+        MobileTouchGui.Parent = game:WaitForChild("CoreGui")
+        MobileTouchGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        
+        ImageButton.Parent = MobileTouchGui
+        ImageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        ImageButton.BorderSizePixel = 0
+        ImageButton.Position = UDim2.new(0.032913845, 0, 0.20441176, 0)
+        ImageButton.Size = UDim2.new(0.100000001, 0, 0.144117653, 0)
+        ImageButton.Image = "http://www.roblox.com/asset/?id=16966662086"
+        end)
+        end)
+        
+                    local Button = game.CoreGui:WaitForChild("MobileTouchGui"):WaitForChild("ImageButton")
+                    task.spawn(function ()
+                        pcall(function ()
+                            Button.TouchTap:Connect(function()
+                                Library:ToggleUI()
+                            end)
+                             
+                            Button.MouseButton1Click:Connect(function()
+                                Library:ToggleUI()
+                            end)
+                
+                        end)
+                    end)
+                    
