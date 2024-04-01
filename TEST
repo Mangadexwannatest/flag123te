@@ -1,4 +1,4 @@
---inint
+--inint d
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/4DailRyz/1yrsZHUB/main/kavo%20ui"))()
 local Window = Library.CreateLib("TITLE")
 
