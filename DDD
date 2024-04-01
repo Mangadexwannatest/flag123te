@@ -125,12 +125,12 @@ for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
         table.insert(QuestTable,v.Value)
     end
 end
-Section:NewDropdown("Select Quest", nil, QuestTable, function(bool)
+OtherConfig:NewDropdown("Select Quest", nil, QuestTable, function(bool)
     getgenv().Quest = bool
     updatejson()
 end)
 
-Section:NewToggle("Auto Quest",nil,function (bool)
+OtherConfig:NewToggle("Auto Quest",nil,function (bool)
     getgenv().AutoQuest = bool
     updatejson()
 end)
@@ -632,13 +632,11 @@ task.spawn(function()
                         pcall(function ()
                             Button.TouchTap:Connect(function()
                                 game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, nil)
-                                game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControlZ", false, nil)
                             end)
                              
-                            Button.MouseButton1Click:Connect(function()
+                            --[[Button.MouseButton1Click:Connect(function()
                                 game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, nil)
-                                game:GetService("VirtualInputManager"):SendKeyEvent(false, "LeftControlZ", false, nil)
-                            end)
+                            end)--]]
                 
                         end)
                     end)
