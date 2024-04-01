@@ -1,16 +1,19 @@
 repeat wait() until game:IsLoaded()
 repeat task.wait() until game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name)
+game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("Second Piece Last Update April/01/2024", "DarkTheme")
 local Tab = Window:NewTab("Main")
 local PortalTab = Window:NewTab("Portal")
 local SkillTab = Window:NewTab("Skill")
 local TeleportTap = Window:NewTab("Teleport")
+local OtherTap = Window:NewTab("Other")
 local Misc = Window:NewTab("Misc")
 local Section = Tab:NewSection("Main")
 local PortalConfig = PortalTab:NewSection("Auto Portal")
 local SkillConfig = SkillTab:NewSection("Auto Skill")
 local TeleportConfig = TeleportTap:NewSection("Teleport")
+local OtherConfig = OtherTap:NewSection("Other")
 local MiscConfig = Misc:NewSection("Misc")
 local Weaponlist = {}
 
@@ -39,6 +42,7 @@ function sex()
     getgenv().AutoBusoHaki = data.AutoBusoHaki
     getgenv().AutoKenHaki = data.AutoKenHaki
     getgenv().AboveTier = data.AboveTier
+    getgenv().GodMode = data.GodMode
 
     ---// updates the json file
     function updatejson()
@@ -58,7 +62,8 @@ function sex()
             AutoBusoHaki  = getgenv().AutoBusoHaki,
             AutoKenHaki  = getgenv().AutoKenHaki,
             AutoSpinFruits = getgenv().AutoSpinFruits,
-            AboveTier = getgenv().AboveTier
+            AboveTier = getgenv().AboveTier,
+            GodMode = getgenv().GodMode
         }
 
         local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -121,7 +126,7 @@ PortalConfig:NewToggle("Auto Portal", nil, function(bool)
 end)
 
 PortalConfig:NewLabel("if you select tier 1 it will do every portal.")
-PortalConfig:NewLabel("if you select tier 2 it will do uncommon , legendary portal.")
+PortalConfig:NewLabel("if you select tier 2 it will do uncommon,legendary portal.")
 PortalConfig:NewLabel("if you select tier 3 it will do only legendary portal.")
 
 ------ Skill Tab ------
@@ -158,6 +163,13 @@ end)
 
 TeleportConfig:NewButton("Teleport", nil, function()
   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[getgenv().TeleportSelect].CFrame
+end)
+
+------- Other Tap -----
+
+OtherConfig:NewToggle("Auto God Mode", nil, function(bool)
+    getgenv().GodMode = bool
+    updatejson()
 end)
 
 
@@ -212,7 +224,8 @@ else
         AutoPortal = false,
         AutoBusoHaki = false,
         AutoKenHaki = false,
-        AutoSpinFruits = false
+        AutoSpinFruits = false,
+        GodMode = false
 
     }
     local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -235,6 +248,20 @@ function getclosest()
 	   return ClosestObject
 end
 
+function GodMode()
+    if game.Players.LocalPlayer.Character then
+        if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+        game.Players.LocalPlayer.Character.Humanoid.Name = "1"
+        end
+        local l = game.Players.LocalPlayer.Character["1"]:Clone()
+        l.Parent = game.Players.LocalPlayer.Character
+        l.Name = "Humanoid"; wait(0.1)
+        game.Players.LocalPlayer.Character["1"]:Destroy()
+        workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+        game.Players.LocalPlayer.Character.Animate.Disabled = true; wait(0.1)
+        game.Players.LocalPlayer.Character.Animate.Disabled = false
+    end
+end
 
 task.spawn(function ()
 	while task.wait() do pcall(function ()
@@ -326,7 +353,7 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 50 then
+                    if dist <= 25 then
 			game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, true, game, 1)
                        end
                    end
@@ -355,10 +382,10 @@ task.spawn(function ()
         if getgenv().AutoAllBoss and not getgenv().STOP then
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo") and not getgenv().STOP then
-                  if v.Humanoid.Health >= 0 then
+                  if v.Humanoid.Health ~= 0 then
 					repeat wait()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
-					until v.Humanoid.Health <= 0 or getgenv().STOP or not getgenv().AutoAllBoss
+					until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoAllBoss
                        end
                   end
               end
@@ -373,7 +400,7 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 50 then
+                    if dist <= 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
                     end
@@ -390,7 +417,7 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 50 then
+                    if dist <= 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
                     end
@@ -407,7 +434,7 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 50 then
+                    if dist <= 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
                     end
@@ -424,7 +451,7 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 50 then
+                    if dist <= 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
                     end
@@ -438,11 +465,11 @@ end)
 task.spawn(function ()
     while task.wait() do pcall(function ()
         if getgenv().AutoPortal and game.PlaceId ~= 15049111150 then
-          if getclosest().Parent.Humanoid.Health >= 0 then
+          if getclosest().Parent.Humanoid.Health ~= 0 then
             repeat 
                 task.wait()
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().CFrame * CFrame.new(0,0,4)
-            until not getgenv().AutoPortal or getclosest().Parent.Humanoid.Health <= 0
+            until getclosest().Parent.Humanoid.Health == 0 or getclosest().Parent.Humanoid.Health < 0 or not getgenv().AutoPortal
               end
            end
         end)  
@@ -458,19 +485,6 @@ task.spawn(function ()
             getgenv().Started = true
         end
     end) 
-    end
-end)
-
-
-task.spawn(function ()
-    while task.wait() do pcall(function ()
-        if getgenv().AutoPortal or getgenv().AutoAllBoss then
-            setfflag("HumanoidParallelRemoveNoPhysics", "false")
-            setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "false")
-            game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
-        end
-        
-    end)
     end
 end)
 
@@ -534,4 +548,48 @@ while wait() do pcall(function ()
     end
 end)
 end
+end)
+
+
+task.spawn(function ()
+    while  wait() do pcall(function ()
+        if getgenv().GodMode and not getgenv().AlrInGodMode then
+            if game.Players.LocalPlayer.Character then
+                GodMode()
+                wait(.85)
+                getgenv().AlrInGodMode = false
+                end
+        end
+      end)
+    end
+end)
+
+local function onCharacterAdded(character)
+    local player = game:GetService("Players").LocalPlayer
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    if not humanoid then
+        return
+    end
+    humanoid.Died:Connect(function()
+        if getgenv().GodMode then
+            game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                wait(.5)
+            GodMode()
+            print("Activce GodMode")
+            end)
+        end
+    end)
+end
+
+task.spawn(function ()
+    pcall(function ()
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
+do 
+    local alreadyExistingCharacter = game:GetService("Players").LocalPlayer.Character
+    if alreadyExistingCharacter then
+        onCharacterAdded(alreadyExistingCharacter )
+              end
+           end
+        end)
 end)
