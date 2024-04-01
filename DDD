@@ -116,15 +116,17 @@ Section:NewToggle("Auto AllBoss", nil, function(bool)
     getgenv().AutoAllBoss = bool
     updatejson()
 end)
-
-------- Other Tab --------
-
 local QuestTable = {}
+------- Other Tab --------
+task.spawn(function ()
+    pcall(function ()
 for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
     if v.Name == "Quest" then
         table.insert(QuestTable,v.Value)
-    end
-end
+             end
+           end
+    end)
+end)
 OtherConfig:NewDropdown("Select Quest", nil, QuestTable, function(bool)
     getgenv().Quest = bool
     updatejson()
