@@ -1,0 +1,74 @@
+--inint
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/4DailRyz/1yrsZHUB/main/kavo%20ui"))()
+local Window = Library.CreateLib("TITLE")
+
+
+local Tab = Window:NewTab("TabName")
+local Section = Tab:NewSection("Section Name")
+
+local QuestTable = {}
+for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
+    if v.Name == "Quest" then
+        table.insert(QuestTable,v.Value)
+    end
+end
+Section:NewDropdown("Select Quest", nil, QuestTable, function(bool)
+    getgenv().Quest = bool
+end)
+
+Section:NewToggle("Auto Quest",nil,function (bool)
+    getgenv().AutoQuest = bool
+end)
+
+task.spawn(function ()
+    while wait() do 
+        pcall(function ()
+            if getgenv().AutoQuest then
+                for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
+                    if v.Name == "Quest" then
+                        if v.Value == getgenv().Quest then
+                            fireproximityprompt(v.Parent)
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+task.spawn(function ()
+    while wait() do
+        pcall(function ()
+            if getgenv().AutoQuest then
+                for i,v in pairs(game.Players.LocalPlayer:GetChildren()) do 
+                    if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil then
+                        getgenv().NoQuest = true
+                    else
+                        getgenv().NoQuest = false
+                    end
+                end
+            end
+            
+        end)
+        
+    end
+    
+end)
+
+task.spawn(function ()
+    while wait() do 
+        pcall(function ()
+            if getgenv().AutoQuest then
+                for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
+                    if v.Name == "Quest" then
+                        if v.Value == getgenv().Quest then
+                            if getgenv().NoQuest then
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame * CFrame.new(0,5,0)
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
