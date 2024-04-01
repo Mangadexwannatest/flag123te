@@ -41,20 +41,15 @@ task.spawn(function ()
         pcall(function ()
             if getgenv().AutoQuest then
                 for i,v in pairs(game.Players.LocalPlayer:GetChildren()) do 
-                    if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil and getgenv().NoQuest then
+                    if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil then
                         getgenv().NoQuest = true
-                        print("Quest:nil")
-                    elseif v:FindFirstChild("QuestUI") ~= nil and not getgenv().NoQuest then
+                    elseif v:FindFirstChild("QuestUI") ~= nil then
                         getgenv().NoQuest = false
-                        print("Quest:"..getgenv().Quest)
                     end
                 end
             end
-            
         end)
-        
     end
-    
 end)
 
 task.spawn(function ()
@@ -66,6 +61,32 @@ task.spawn(function ()
                         if v.Value == getgenv().Quest then
                             if getgenv().NoQuest then
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+task.spawn(function ()
+    while wait() do 
+        pcall(function ()
+            if getgenv().AutoQuest then
+                for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
+                    if v.Name == "Quest" then
+                        if v.Value == getgenv().Quest then
+                            if not getgenv().NoQuest then
+                                for _,mon in pairs(game.Workspace.Lives:GetChildren()) do
+                                    if string.find(mon.Name,getgenv().Quest) then
+                                        if mon.Humanoid.Health ~= 0 and not getgenv().NoQuest then
+                                            repeat wait()
+                                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mon.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
+                                        until mon.Humanoid.Health == 0 or mon.Humanoid.Health < 0 or not getgenv().AutoQuest or getgenv().NoQuest
+                                        end
+                                    end
+                                end
                             end
                         end
                     end
