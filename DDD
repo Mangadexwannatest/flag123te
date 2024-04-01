@@ -7,13 +7,11 @@ local Tab = Window:NewTab("Main")
 local PortalTab = Window:NewTab("Portal")
 local SkillTab = Window:NewTab("Skill")
 local TeleportTap = Window:NewTab("Teleport")
-local OtherTap = Window:NewTab("Other")
 local Misc = Window:NewTab("Misc")
 local Section = Tab:NewSection("Main")
 local PortalConfig = PortalTab:NewSection("Auto Portal")
 local SkillConfig = SkillTab:NewSection("Auto Skill")
 local TeleportConfig = TeleportTap:NewSection("Teleport")
-local OtherConfig = OtherTap:NewSection("Other")
 local MiscConfig = Misc:NewSection("Misc")
 local Weaponlist = {}
 
