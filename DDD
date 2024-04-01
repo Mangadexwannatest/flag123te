@@ -374,8 +374,8 @@ task.spawn(function ()
 end)
 
 task.spawn(function ()
-	while task.wait(0.75) do pcall(function()
-		if getgenv().AutoAttack and game.Players.LocalPlayer.Character:FindFirstChild(getgenv().Weapon) and not getgenv().STOP then
+	while task.wait(.45) do pcall(function()
+		if getgenv().AutoAttack then
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
@@ -440,7 +440,7 @@ end)
 
 task.spawn(function ()
 	while task.wait(.5) do pcall(function()
-		if getgenv().AutoSkillZ and not getgenv().STOP then
+		if getgenv().AutoSkillZ then
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
@@ -457,7 +457,7 @@ end)
 
 task.spawn(function ()
 	while task.wait(.75) do pcall(function()
-		if getgenv().AutoSkillX and not getgenv().STOP then
+		if getgenv().AutoSkillX then
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
@@ -474,7 +474,7 @@ end)
 
 task.spawn(function ()
 	while task.wait(.55) do pcall(function()
-		if getgenv().AutoSkillC and not getgenv().STOP then
+		if getgenv().AutoSkillC then
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
@@ -491,7 +491,7 @@ end)
 
 task.spawn(function ()
 	while task.wait(.75) do pcall(function()
-		if getgenv().AutoSkillV and not getgenv().STOP then
+		if getgenv().AutoSkillV then
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
