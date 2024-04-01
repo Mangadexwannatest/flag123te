@@ -560,9 +560,9 @@ task.spawn(function()
         while wait() do
             pcall(function()
                 if getgenv().White_Screen then
-                    game:GetService("RunService"):Set3dRenderingEnabled(true)
-                    else
                     game:GetService("RunService"):Set3dRenderingEnabled(false)
+                    else
+                    game:GetService("RunService"):Set3dRenderingEnabled(true)
                     end
                 end)
             end
