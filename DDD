@@ -383,9 +383,8 @@ task.spawn(function ()
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
                     if dist < 25 then
-                        X, Y = Mouse.X, Mouse.Y + 10
-			game:GetService("VirtualInputManager"):SendMouseButtonEvent(X, Y, 0, true, game, 1)
-            game:GetService("VirtualInputManager"):SendMouseButtonEvent(X, Y, 0, false, game, 1)
+	    game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, true, game, 1)
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, false, game, 1)
                        end
                    end
                end
@@ -393,7 +392,6 @@ task.spawn(function ()
 	   end)
 	end
 end)
-
 
 task.spawn(function ()
     while task.wait() do pcall(function ()
