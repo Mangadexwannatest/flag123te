@@ -1,7 +1,8 @@
 for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
     if v.ClassName == "Frame" then
         for _,v2 in pairs(v:GetDescendants()) do
-            if v2.Name == "WorldModel" and _.Name == "RarityText" then
+            for o,Rari in pairs(v:GetDescendants()) do
+            if v2.Name == "WorldModel" and Rari.Name == "RarityText" then
                 for l,v3 in pairs(v2:GetChildren()) do
                     local webhook = "https://discord.com/api/webhooks/1052724854899609671/90V7hWloUwyKxI-C80srm9WviSfEPHSDifW9Cb7BIRXgZvhmWObaRT7dZTB6Nlzn4f42"
                     local timeInfo = os.date("*t")
@@ -26,7 +27,7 @@ for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.Item
                               
                                              {
                                     ["name"] = "Reward",
-                                    ["value"] = "Item : "..v3.Name.."Rarity : ".._.Text,
+                                    ["value"] = "Item : "..v3.Name.."Rarity : "..Rari.Text,
                                     ["inline"] = false
                                       
                                   },
@@ -42,7 +43,7 @@ for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.Item
                       },
                       Body = BBody
                     })    
-
+                   end
                 end
             end
         end
