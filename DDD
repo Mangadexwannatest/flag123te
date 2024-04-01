@@ -381,7 +381,8 @@ task.spawn(function ()
     while task.wait() do pcall(function ()
         if getgenv().AutoAllBoss and not getgenv().STOP then
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo") and not getgenv().STOP then
+                if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo") 
+                or string.find(v.Name,"Choso") or string.find(v.Name,"Killua") and not getgenv().STOP then
                   if v.Humanoid.Health ~= 0 then
 					repeat wait()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
