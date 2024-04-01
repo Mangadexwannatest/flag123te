@@ -41,6 +41,7 @@ function sex()
     getgenv().AutoKenHaki = data.AutoKenHaki
     getgenv().AboveTier = data.AboveTier
     getgenv().RejoinWhenError = data.RejoinWhenError
+    getgenv().White_Screen = data.White_Screen
 
     ---// updates the json file
     function updatejson()
@@ -61,7 +62,8 @@ function sex()
             AutoKenHaki  = getgenv().AutoKenHaki,
             AutoSpinFruits = getgenv().AutoSpinFruits,
             AboveTier = getgenv().AboveTier,
-            RejoinWhenError = getgenv().RejoinWhenError
+            RejoinWhenError = getgenv().RejoinWhenError,
+            White_Screen = getgenv().White_Screen
         }
 
         local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -191,6 +193,11 @@ MiscConfig:NewToggle("Auto Rejoin When Disconnect", nil, function(bool)
     updatejson()
 end)
 
+MiscConfig:NewToggle("Auto White Screen", nil, function(bool)
+    getgenv().White_Screen = bool
+    updatejson()
+end)
+
 
 MiscConfig:NewKeybind("Hid Gui", nil, Enum.KeyCode.LeftControl, function()
 	Library:ToggleUI()
@@ -220,7 +227,8 @@ else
         AutoBusoHaki = false,
         AutoKenHaki = false,
         AutoSpinFruits = false,
-        RejoinWhenError = false
+        RejoinWhenError = false,
+        White_Screen = false
 
     }
     local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -547,3 +555,15 @@ task.spawn(function()
             end)
         end
     end)
+
+    task.spawn(function()
+        while wait() do
+            pcall(function()
+                if getgenv().White_Screen then
+                    game:GetService("RunService"):Set3dRenderingEnabled(true)
+                    else
+                    game:GetService("RunService"):Set3dRenderingEnabled(false)
+                    end
+                end)
+            end
+        end)
