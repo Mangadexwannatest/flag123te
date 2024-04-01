@@ -38,6 +38,7 @@ function sex()
     getgenv().AutoPortal = data.AutoPortal
     getgenv().AutoBusoHaki = data.AutoBusoHaki
     getgenv().AutoKenHaki = data.AutoKenHaki
+    getgenv().AboveTier = data.AboveTier
 
     ---// updates the json file
     function updatejson()
@@ -56,7 +57,8 @@ function sex()
             AutoPortal = getgenv().AutoPortal,
             AutoBusoHaki  = getgenv().AutoBusoHaki,
             AutoKenHaki  = getgenv().AutoKenHaki,
-            AutoSpinFruits = getgenv().AutoSpinFruits
+            AutoSpinFruits = getgenv().AutoSpinFruits,
+            AboveTier = getgenv().AboveTier
         }
 
         local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -106,6 +108,12 @@ end)
 
 ------ Portal Tab ------
 
+PortalConfig:NewSlider("Select Tier", "Above Tier", 3, 0, function(bool) -- 500 (MaxValue) | 0 (MinValue)
+  getgenv().AboveTier = bool
+  updatejson()
+end)
+
+
 PortalConfig:NewToggle("Auto Portal", nil, function(bool)
     getgenv().AutoPortal = bool
     updatejson()
@@ -144,7 +152,7 @@ TeleportConfig:NewDropdown("Select Locations", nil, TeleportList, function(bool)
 end)
 
 TeleportConfig:NewButton("Teleport", nil, function()
-  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getgenv().TeleportSelect.CFrame
+  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[getgenv().TeleportSelect].CFrame
 end)
 
 
@@ -187,6 +195,7 @@ else
     local xdata = {
         Weapon = nil,
         MethodSpin = nil,
+        AboveTier = nil,
         AutoEquipTool = false,
         AutoAttack = false,
         AutoChest = false,
@@ -310,11 +319,12 @@ task.spawn(function ()
     while task.wait() do pcall(function ()
         if getgenv().AutoAllBoss and not getgenv().STOP then
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo")
-				and v.Humanoid.Health > 0 and not getgenv().STOP then
+                if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo") and not getgenv().STOP then
+                  if v.Humanoid.Health >= 0 then
 					repeat wait()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
-					until v.Humanoid.Health <= 0 or getgenv().STOP
+					until v.Humanoid.Health <= 0 or getgenv().STOP or not getgenv().AutoAllBoss
+                       end
                   end
               end
            end
@@ -364,11 +374,13 @@ end)
 
 task.spawn(function ()
     while task.wait() do pcall(function ()
-        if getgenv().AutoPortal and game.PlaceId ~= 15049111150 and getclosest().Parent.Humanoid.Health > 0 then
+        if getgenv().AutoPortal and game.PlaceId ~= 15049111150 then
+          if getclosest().Parent.Humanoid.Health >= 0 then
             repeat 
                 task.wait()
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().CFrame * CFrame.new(0,0,4)
-            until getclosest().Parent.Humanoid.Health <= 0
+            until not getgenv().AutoPortal or getclosest().Parent.Humanoid.Health <= 0
+              end
            end
         end)  
     end
