@@ -16,6 +16,8 @@ local SkillConfig = SkillTab:NewSection("Auto Skill")
 local TeleportConfig = TeleportTap:NewSection("Teleport")
 local MiscConfig = Misc:NewSection("Misc")
 local Weaponlist = {}
+local Mouse = game.Players.LocalPlayer:GetMouse()
+local X, Y = 0, 0
 local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
 
 
@@ -380,15 +382,18 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist < 50 then
-			game:GetService("VirtualInputManager"):SendMouseButtonEvent(500, 10, 0, true, game, 1)
+                    if dist < 25 then
+                        X, Y = Mouse.X, Mouse.Y + 10
+			game:GetService("VirtualInputManager"):SendMouseButtonEvent(X, Y, 0, true, game, 1)
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(X, Y, 0, false, game, 1)
                        end
                    end
                end
-		   end
+            end
 	   end)
 	end
 end)
+
 
 task.spawn(function ()
     while task.wait() do pcall(function ()
