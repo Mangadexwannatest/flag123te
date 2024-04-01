@@ -43,6 +43,7 @@ function sex()
     getgenv().AutoKenHaki = data.AutoKenHaki
     getgenv().AboveTier = data.AboveTier
     getgenv().GodMode = data.GodMode
+    getgenv().RejoinWhenError = data.RejoinWhenError
 
     ---// updates the json file
     function updatejson()
@@ -63,7 +64,8 @@ function sex()
             AutoKenHaki  = getgenv().AutoKenHaki,
             AutoSpinFruits = getgenv().AutoSpinFruits,
             AboveTier = getgenv().AboveTier,
-            GodMode = getgenv().GodMode
+            GodMode = getgenv().GodMode,
+            RejoinWhenError = getgenv().RejoinWhenError
         }
 
         local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -172,6 +174,12 @@ OtherConfig:NewToggle("Auto God Mode", nil, function(bool)
     updatejson()
 end)
 
+OtherConfig:NewToggle("Auto Rejoin When Disconnect", nil, function(bool)
+    getgenv().RejoinWhenError = bool
+    updatejson()
+end)
+
+
 
 -------Misc--------
 
@@ -225,7 +233,8 @@ else
         AutoBusoHaki = false,
         AutoKenHaki = false,
         AutoSpinFruits = false,
-        GodMode = false
+        GodMode = false,
+        RejoinWhenError = false
 
     }
     local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -594,3 +603,17 @@ do
            end
         end)
 end)
+
+task.spawn(function()
+    while wait() do
+        pcall(function()
+            if getgenv().RejoinWhenError then
+                for i,v in pairs(game:GetService("CoreGui").RobloxPromptGui:GetDescendants()) do
+                 if v.Name == 'ErrorPrompt' then
+            game:GetService("TeleportService"):Teleport(15049111150)
+                       end
+                   end
+                end
+            end)
+        end
+    end)
