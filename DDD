@@ -108,9 +108,10 @@ end)
 
 ------ Portal Tab ------
 
-PortalConfig:NewSlider("Select Tier", "Above Tier", 3, 0, function(bool) -- 500 (MaxValue) | 0 (MinValue)
-  getgenv().AboveTier = bool
-  updatejson()
+
+PortalConfig:NewDropdown("Select Tier", nil, {"1", "2", "3"}, function(bool)
+    getgenv().AboveTier = bool
+    updatejson()
 end)
 
 
@@ -118,6 +119,10 @@ PortalConfig:NewToggle("Auto Portal", nil, function(bool)
     getgenv().AutoPortal = bool
     updatejson()
 end)
+
+PortalConfig:NewLabel("if you select tier 1 it will do every portal.")
+PortalConfig:NewLabel("if you select tier 2 it will do only uncommon , legendary portal.")
+PortalConfig:NewLabel("if you select tier 3 it will do only legendary portal.")
 
 ------ Skill Tab ------
 
@@ -235,19 +240,19 @@ task.spawn(function ()
 	while task.wait() do pcall(function ()
 		if getgenv().AutoPortal and game.PlaceId == 15049111150 and not getgenv().InPorTal then
 			for i,v in pairs(game.Workspace.World.Portal:GetChildren()) do
-				if getgenv().AboveTier == 1 and not getgenv().InPorTal then 
+				if getgenv().AboveTier == "1" and not getgenv().InPorTal then 
                 if v.Name == "1" or v.Name == "2" or v.Name == "3" and not getgenv().InPorTal then
                         getgenv().STOP = true
 						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
                         getgenv().EnterNow = true
                     end
-                elseif  getgenv().AboveTier == 2 and not getgenv().InPorTal then 
+                elseif  getgenv().AboveTier == "2" and not getgenv().InPorTal then 
                     if v.Name == "2" or v.Name == "3" and not getgenv().InPorTal then
                         getgenv().STOP = true
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
                         getgenv().EnterNow = true
                     end
-                elseif getgenv().AboveTier == 3 and not getgenv().InPorTal then 
+                elseif getgenv().AboveTier == "3" and not getgenv().InPorTal then 
                     if v.Name == "3" and not getgenv().InPorTal then
                         getgenv().STOP = true
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
@@ -267,17 +272,17 @@ task.spawn(function ()
         if getgenv().AutoPortal and game.PlaceId == 15049111150 then
             for i,v in pairs(game.Workspace.World.Portal:GetDescendants()) do
                 if v.Name == "Frame" and v:FindFirstChild(game.Players.LocalPlayer.Name) == nil then
+                    local clickThis = v.Parent.Parent.ProximityPrompt
                     if getgenv().EnterNow then
-                    repeat wait(.95)
-                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, nil)
-                        game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, nil)
+                    repeat wait(.5)
+                        fireproximityprompt(clickThis)
                     until v:FindFirstChild(game.Players.LocalPlayer.Name) ~= nil or not getgenv().AutoPortal or not getgenv().EnterNow
                     getgenv().InPorTal = true
                    end
                 end
             end
-        end
-    end)
+         end
+     end)
     end
 end)
 
@@ -335,23 +340,9 @@ task.spawn(function ()
     while task.wait() do pcall(function ()
         if getgenv().AutoChest and not getgenv().STOP then
             for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
-                if v.ClassName == "ProximityPrompt" and not getgenv().STOP then
-                    v.HoldDuration = 0
-                   end
-                end            
-             end
-         end)  
-    end 
-end)
-
-task.spawn(function ()
-    while task.wait() do pcall(function ()
-        if getgenv().AutoChest and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
-                if v.ClassName == "ProximityPrompt" and not getgenv().STOP then
+                if v.Name == "ProximityPrompt" and not getgenv().STOP then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame * CFrame.new(0,0,0)
-                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, nil)
-                    game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, nil)
+                    fireproximityprompt(v)
                    end
                 end            
              end
@@ -522,10 +513,8 @@ task.spawn(function ()
         if getgenv().AutoSpinFruits and not getgenv().STOP then      
             for i,v in pairs(game.Workspace.Shop:GetDescendants()) do
                 if getgenv().AutoSpinFruits and v.Name == "Object" and getgenv().MethodSpin == "Gem" and v.Value == "RandomDemonFruit" and game.PlaceId == 15049111150 and not getgenv().STOP then
-                    v.Parent.HoldDuration = 0
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame * CFrame.new(0,0,0)
-                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, nil)
-                    game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, nil)
+                    fireproximityprompt(v.Parent)
                 end
             end
         end
@@ -538,10 +527,8 @@ while wait() do pcall(function ()
     if getgenv().AutoSpinFruits and not getgenv().STOP then      
         for i,v in pairs(game.Workspace.Shop:GetDescendants()) do
             if getgenv().AutoSpinFruits and v.Name == "Object" and getgenv().MethodSpin == "Beli" and v.Value == "RandomDemonFruitBeli" and game.PlaceId == 15049111150 and not getgenv().STOP then
-                v.Parent.HoldDuration = 0
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame * CFrame.new(0,0,0)
-                game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, nil)
-                game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, nil)
+                fireproximityprompt(v.Parent)
             end
         end
     end
