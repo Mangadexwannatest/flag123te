@@ -115,10 +115,6 @@ Section:NewToggle("Auto Chests", nil, function(bool)
     updatejson()
 end)
 
-Section:NewToggle("Auto AllBoss", nil, function(bool)
-    getgenv().AutoAllBoss = bool
-    updatejson()
-end)
 local QuestTable = {}
 ------- Other Tab --------
 task.spawn(function ()
@@ -142,6 +138,11 @@ end)
 
 OtherConfig:NewToggle("Auto Farm Gem",nil,function (bool)
     getgenv().AutoGem = bool
+    updatejson()
+end)
+
+OtherConfig:NewToggle("Auto AllBoss", nil, function(bool)
+    getgenv().AutoAllBoss = bool
     updatejson()
 end)
 
@@ -374,13 +375,15 @@ task.spawn(function ()
 end)
 
 task.spawn(function ()
-	while task.wait(.45) do pcall(function()
+	while task.wait() do pcall(function()
 		if getgenv().AutoAttack then
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 25 then
+                    if dist <= 40 then
+                        repeat wait(.35)
 			game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, true, game, 1)
+            until dist > 40 or not getgenv().AutoAttack
                        end
                    end
                end
