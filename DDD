@@ -380,10 +380,8 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
                 if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 40 then
-                        repeat wait(.35)
-			game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, true, game, 1)
-            until dist > 40 or not getgenv().AutoAttack
+                    if dist < 50 then
+			game:GetService("VirtualInputManager"):SendMouseButtonEvent(500, 10, 0, true, game, 1)
                        end
                    end
                end
