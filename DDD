@@ -16,6 +16,7 @@ local SkillConfig = SkillTab:NewSection("Auto Skill")
 local TeleportConfig = TeleportTap:NewSection("Teleport")
 local MiscConfig = Misc:NewSection("Misc")
 local Weaponlist = {}
+local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
 
 
 getgenv().savefilename = "Second_Piece_"..game.Players.LocalPlayer.Name..".txt"
@@ -46,6 +47,7 @@ function sex()
     getgenv().White_Screen = data.White_Screen
     getgenv().Quest = data.Quest
     getgenv().AutoQuest = data.AutoQuest
+    getgenv().AutoGem = data.AutoGem
 
     ---// updates the json file
     function updatejson()
@@ -69,7 +71,8 @@ function sex()
             RejoinWhenError = getgenv().RejoinWhenError,
             White_Screen = getgenv().White_Screen,
             Quest = getgenv().Quest,
-            AutoQuest = getgenv().AutoQuest
+            AutoQuest = getgenv().AutoQuest,
+            AutoGem = getgenv().AutoGem
         }
 
         local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -134,6 +137,11 @@ end)
 
 OtherConfig:NewToggle("Auto Quest",nil,function (bool)
     getgenv().AutoQuest = bool
+    updatejson()
+end)
+
+OtherConfig:NewToggle("Auto Farm Gem",nil,function (bool)
+    getgenv().AutoGem = bool
     updatejson()
 end)
 
@@ -257,7 +265,8 @@ else
         AutoSpinFruits = false,
         RejoinWhenError = false,
         White_Screen = false,
-        AutoQuest = false
+        AutoQuest = false,
+        AutoGem = false
 
     }
     local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -385,7 +394,6 @@ task.spawn(function ()
         if getgenv().AutoChest and not getgenv().STOP then
             for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
                 if v.Name == "ProximityPrompt" and not getgenv().STOP then
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame * CFrame.new(0,0,0)
                     fireproximityprompt(v)
                    end
                 end            
@@ -396,7 +404,7 @@ end)
 
 task.spawn(function ()
     while task.wait() do pcall(function ()
-        if getgenv().AutoAllBoss and not getgenv().STOP then
+        if getgenv().AutoAllBoss and game.PlaceId == 15049111150 and not getgenv().STOP then
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo") 
                 or string.find(v.Name,"Choso") or string.find(v.Name,"Killua") and not getgenv().STOP then
@@ -405,8 +413,10 @@ task.spawn(function ()
                         game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                     getgenv().DontAcceptQuest = true
-					until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoAllBoss
+                    getgenv().StopFarmGem = true
+					until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoAllBoss or game.PlaceId ~= 15049111150
                     getgenv().DontAcceptQuest = false   
+                    getgenv().StopFarmGem = false
                     end
                   end
               end
@@ -420,6 +430,8 @@ task.spawn(function ()
         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
         if not getgenv().AutoAllBoss and getgenv().DontAcceptQuest then
             getgenv().DontAcceptQuest = false
+        elseif not getgenv().AutoAllBoss and getgenv().StopFarmGem then
+            getgenv().StopFarmGem = false
            end
         end 
       end) 
@@ -635,18 +647,13 @@ task.spawn(function()
                             Button.TouchTap:Connect(function()
                                 game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, nil)
                             end)
-                             
-                            --[[Button.MouseButton1Click:Connect(function()
-                                game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, nil)
-                            end)--]]
-                
                         end)
                     end)
                     
                     task.spawn(function ()
                         while wait() do 
                             pcall(function ()
-                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest then
+                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest and game.PlaceId == 15049111150 and not getgenv().STOP then
                                     for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                                         if v.Name == "Quest" and not getgenv().DontAcceptQuest then
                                             if v.Value == getgenv().Quest and getgenv().NoQuest and not getgenv().DontAcceptQuest then
@@ -662,7 +669,7 @@ task.spawn(function()
                     task.spawn(function ()
                         while wait() do
                             pcall(function ()
-                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest  then
+                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest  and game.PlaceId == 15049111150 and not getgenv().STOP then
                                     for i,v in pairs(game.Players.LocalPlayer:GetChildren()) do 
                                         if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil then
                                             getgenv().NoQuest = true
@@ -678,7 +685,7 @@ task.spawn(function()
                     task.spawn(function ()
                         while wait() do 
                             pcall(function ()
-                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest then
+                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest and game.PlaceId == 15049111150 and not getgenv().STOP  then
                                     for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                                         if v.Name == "Quest" and not getgenv().DontAcceptQuest then
                                             if v.Value == getgenv().Quest and not getgenv().DontAcceptQuest then
@@ -696,7 +703,7 @@ task.spawn(function()
                     task.spawn(function ()
                         while wait() do 
                             pcall(function ()
-                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest then
+                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest and game.PlaceId == 15049111150 and not getgenv().STOP then
                                     for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                                         if v.Name == "Quest" and not getgenv().DontAcceptQuest then
                                             if v.Value == getgenv().Quest and not getgenv().DontAcceptQuest then
@@ -716,5 +723,26 @@ task.spawn(function()
                                     end
                                 end
                             end)
+                        end
+                    end)
+
+                    task.spawn(function () 
+                        while wait() do pcall(function ()
+                            if getgenv().AutoGem and not getgenv().StopFarmGem and game.PlaceId == 15049111150 and not getgenv().STOP then
+                                for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+                                    if string.find(v.Name,BossTable[1]) or string.find(v.Name,BossTable[2]) 
+                                    or string.find(v.Name,BossTable[3]) or string.find(v.Name,BossTable[4]) then
+                                        if v.Humanoid.Health ~= 0 then
+                                            repeat
+                                                task.wait()
+                                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
+                                                getgenv().DontAcceptQuest = true
+                                            until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or not getgenv().AutoGem or getgenv().StopFarmGem or game.PlaceId ~= 15049111150
+                                            getgenv().DontAcceptQuest = false
+                                        end
+                                    end
+                                end
+                            end
+                          end)
                         end
                     end)
