@@ -40,21 +40,19 @@ task.spawn(function ()
     while wait() do
         pcall(function ()
             if getgenv().AutoQuest then
+                getgenv().NoQuest = nil
                 for i,v in pairs(game.Players.LocalPlayer:GetChildren()) do 
-                    if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil and not getgenv().NoQuest then
+                    if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil and getgenv().NoQuest == false then
                         getgenv().NoQuest = true
-                        print("Quest:nil")
-                    elseif v:FindFirstChild("QuestUI") ~= nil and getgenv().NoQuest then
+                        print("Quest : Not Have")
+                    elseif v:FindFirstChild("QuestUI") ~= nil and getgenv().NoQuest == true then
                         getgenv().NoQuest = false
-                        print("Quest:"..getgenv().Quest)
+                        print("Quest : Have")
                     end
                 end
             end
-            
         end)
-        
     end
-    
 end)
 
 task.spawn(function ()
