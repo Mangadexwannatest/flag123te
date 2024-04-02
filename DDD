@@ -840,7 +840,7 @@ task.spawn(function()
                                                       
                                                                      {
                                                             ["name"] = "Reward",
-                                                            ["value"] = "Item : "..v3.Name,
+                                                            ["value"] = "Item : "..v3.Name.."\n UserName : "..game.Players.LocalPlayer.Name,
                                                             ["inline"] = false
                                                               
                                                           },
