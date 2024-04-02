@@ -1,51 +1,71 @@
-for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
-    if v.ClassName == "Frame" then
-        for _,v2 in pairs(v:GetDescendants()) do
-            for o,Rari in pairs(v:GetDescendants()) do
-            if v2.Name == "WorldModel" and Rari.Name == "RarityText" then
-                for l,v3 in pairs(v2:GetChildren()) do
-                    local webhook = "https://discord.com/api/webhooks/1052724854899609671/90V7hWloUwyKxI-C80srm9WviSfEPHSDifW9Cb7BIRXgZvhmWObaRT7dZTB6Nlzn4f42"
-                    local timeInfo = os.date("*t")
-                    
-                    BBody = game:GetService("HttpService"):JSONEncode({
-                          content = "||**@everyone**||",
-                          embeds = {{
-                              ["author"] = {
-                                  ["name"] = "Second Piece Notify",
-                                  ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
-                              },
-                              ["title"] = "Second Piece", 
-                              ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png",
-                              ["footer"] = {
-                                  ["text"] = "Dungeon Quest : " .. timeInfo.hour .. ":" .. timeInfo.min,
-                                  ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
-                             
-                              },
-                              ["color"] = tonumber(0xFFD700),
-                              ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
-                              ["fields"] = {
-                              
-                                             {
-                                    ["name"] = "Reward",
-                                    ["value"] = "Item : "..v3.Name.."Rarity : "..Rari.Text,
-                                    ["inline"] = false
-                                      
-                                  },
-                                
-                              }
-                              }}
-                          })
-                      local response = syn.request({
-                      Url = webhook,
-                      Method = "POST",
-                      Headers = {
-                          ["Content-Type"] = "application/json"
-                      },
-                      Body = BBody
-                    })    
-                   end
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/4DailRyz/1yrsZHUB/main/kavo%20ui"))()
+local Window = Library.CreateLib("TITLE")
+local Tab = Window:NewTab("TabName")
+local Section = Tab:NewSection("Section Name")
+
+Section:NewToggle("Auto Bounty Hunter", nil, function(bool)
+    getgenv().AutoBountyHunter = bool
+end)
+
+
+---------------- Auto Bounty Hunter V1 -----------------
+task.spawn(function ()
+    while wait() do pcall(function ()
+        if getgenv().AutoBountyHunter and not getgenv().QuestHuntOnCoolDown and not getgenv().OnInBoss then
+            for i,v in pairs(game.Workspace.NPC.Kuru:GetDescendants()) do
+                if v.ClassName == "ProximityPrompt" and not getgenv().QuestHuntOnCoolDown 
+                and not getgenv().OnInQuest and not getgenv().OnInBoss then
+                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
+                    fireproximityprompt(v)
+                    getgenv().OnInQuest = true
+                    getgenv().DontAcceptQuest = true
                 end
+            end 
+          end
+        end)
+     end
+end)
+
+task.spawn(function ()
+    while wait() do pcall(function ()
+        if getgenv().AutoBountyHunter and getgenv().OnInQuest then
+        for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+            if string.find(v.Name,"Criminal") and v.Humanoid.Health ~= 0 and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
+                repeat task.wait()
+                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
+                    getgenv().OnInBoss = true
+                until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoBountyHunter or game.PlaceId ~= 15049111150 or game.Players.LocalPlayer.Character.Humanoid.Health == 0 
+                or not getgenv().OnInQuest
+                getgenv().OnInBoss = false
+                getgenv().OnInQuest = false
+            
             end
         end
+        end
+    end)
     end
-end
+end)
+
+task.spawn(function ()
+    while wait() do pcall(function ()
+        if getgenv().AutoBountyHunter then
+            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
+                if v.ClassName == "Frame" then
+                    getgenv().QuestHuntOnCoolDown = true
+                    getgenv().OnInQuest = false
+                    getgenv().DontAcceptQuest = false
+                    wait(30)
+                    getgenv().QuestHuntOnCoolDown = false
+                    getgenv().OnInQuest = true
+                    getgenv().DontAcceptQuest = true
+                end
+            end
+          end
+       end) 
+    end
+end)
+
+
+-------------------------------------------------------------------------
