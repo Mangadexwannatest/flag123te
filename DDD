@@ -450,16 +450,11 @@ task.spawn(function ()
 end)
 
 task.spawn(function ()
-	while task.wait() do pcall(function()
-		if getgenv().AutoAttack then
+	while task.wait(.35) do pcall(function()
+		if getgenv().AutoAttack and not getgenv().STOP then
             for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist < 25 then
 			game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, true, game, 1)
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, false, game, 1)
-                       end
-                   end
                end
             end
 	   end)
