@@ -351,6 +351,19 @@ function getclosest()
 	   return ClosestObject
 end
 
+function getfar()
+    local ClosestObject1
+    for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
+        local MinDistance1 = math.huge
+        if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
+            local dist1 = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+            if dist1 < MinDistance1 then
+                MinDistance1, ClosestObject1 = dist1, v
+            end
+        end
+    end
+    return ClosestObject1
+ end
 
 
 task.spawn(function ()
@@ -574,12 +587,12 @@ end)
 task.spawn(function ()
     while task.wait() do pcall(function ()
         if getgenv().AutoPortal and game.PlaceId ~= 15049111150 then
-          if getclosest().Parent.Humanoid.Health ~= 0 and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
+          if getfar().Parent.Humanoid.Health ~= 0 and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
             repeat 
                 task.wait()
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().CFrame * CFrame.new(0,0,4)
-            until getclosest().Parent.Humanoid.Health == 0 or getclosest().Parent.Humanoid.Health < 0 or game.Players.LocalPlayer.Character.Humanoid.Health == 0
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getfar().CFrame * CFrame.new(0,0,4)
+            until getfar().Parent.Humanoid.Health == 0 or getfar().Parent.Humanoid.Health < 0 or game.Players.LocalPlayer.Character.Humanoid.Health == 0
               end
            end
         end)  
