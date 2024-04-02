@@ -12,7 +12,7 @@ Section:NewToggle("Auto Bounty Hunter", nil, function(bool)
     getgenv().AutoBountyHunter = bool
 end)
 
-Section:NewKeybind("Hid Gui", nil, Enum.KeyCode.F, function()
+Section:NewKeybind("Hid Gui", nil, Enum.KeyCode.LeftControl, function()
 	Library:ToggleUI()
 end)
 
@@ -45,7 +45,7 @@ task.spawn(function ()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= getgenv().HealthAmout then
             getgenv().STOP = true
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild("Safe Part").CFrame * CFrame.new(0,10,0)
-        elseif game.Players.LocalPlayer.Character.Humanoid.Health > getgenv().HealthAmout then
+        else
             getgenv().STOP = false
             end
        end)
