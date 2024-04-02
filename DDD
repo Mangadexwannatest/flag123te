@@ -868,7 +868,7 @@ task.spawn(function()
                     task.spawn(function ()
                         pcall(function () 
                         game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
-                            wait(1.5)
+                            wait(1.35)
                             if getgenv().AutoPortalReward then
                             Webhook()
                                   end
