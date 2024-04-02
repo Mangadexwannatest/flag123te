@@ -3,24 +3,52 @@ local Window = Library.CreateLib("TITLE")
 local Tab = Window:NewTab("TabName")
 local Section = Tab:NewSection("Section Name")
 
+Section:NewTextBox("Health Detech", nil, function(bool)
+	getgenv().HealthAmout = bool
+end)
+
+
 Section:NewToggle("Auto Bounty Hunter", nil, function(bool)
     getgenv().AutoBountyHunter = bool
 end)
 
-Section:NewKeybind("Hid Gui", nil, Enum.KeyCode.F, function()
+Section:NewKeybind("Hid Gui", nil, Enum.KeyCode.LeftControl, function()
 	Library:ToggleUI()
 end)
 
 
 ---------------- Auto Bounty Hunter V1 -----------------
+
+task.spawn(function ()
+    while wait() do pcall(function ()
+        if not game.Workspace:FindFirstChild("Safe Part") then
+            local SafePart = Instance.new("Part" , Workspace)
+            SafePart.Name = "Safe Part"
+            SafePart.CanCollide = true
+            SafePart.Transparency = 0
+            SafePart.Anchored = true
+            SafePart.Size = Vector3.new(10,2,10)
+            SafePart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,1000,0)
+            end
+      end)
+    end
+end)
+
+
 task.spawn(function ()
     while task.wait() do pcall(function ()
-        if getgenv().AutoBountyHunter and not getgenv().InBossHunt then
+        if getgenv().AutoBountyHunter and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
             for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                 if v.Name == "Kuru" then
                 local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                if dist >= 30 then
+                if dist >= 30 and not getgenv().STOP then
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                        game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
+                else
+                        game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, nil)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, nil)
+                        
                             end
                        end
                     end
@@ -30,25 +58,26 @@ task.spawn(function ()
 end)
 
 task.spawn(function ()
-    while task.wait() do pcall(function ()
-        if getgenv().AutoBountyHunter() then
-            fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-        end
-     end)
+    while wait() do pcall(function ()
+        if game.Players.LocalPlayer.Character.Humanoid.Health <= tonumber(getgenv().HealthAmout) then
+            getgenv().STOP = true
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild("Safe Part").CFrame * CFrame.new(0,10,0)
+        else
+            getgenv().STOP = false
+            end
+       end)
     end
 end)
 
-
 task.spawn(function ()
     while task.wait() do pcall(function ()
-        if getgenv().AutoBountyHunter then
+        if getgenv().AutoBountyHunter and not getgenv().STOP then
         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-            if string.find(v.Name,"Criminal") and v.Humanoid.Health ~= 0  then
+            if string.find(v.Name,"Criminal") and v.Humanoid.Health ~= 0 and not getgenv().STOP then
+                getgenv().InBossHunt = true
                 repeat task.wait()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
-                    getgenv().InBossHunt = true
                 until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoBountyHunter or game.PlaceId ~= 15049111150
-                or game.Workspace.Lives:FindFirstChild(v) == nil
                 getgenv().InBossHunt = false
                 end
             end
@@ -67,4 +96,49 @@ task.spawn(function ()
              end
          end)  
     end 
+end)
+
+task.spawn(function ()
+    while wait() do pcall(function ()
+        if getgenv().AutoBountyHunter then
+            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
+                if v.ClassName == "Frame" then
+                    getgenv().QuestHuntOnCoolDown = true
+                    wait(30)
+                    getgenv().QuestHuntOnCoolDown = false
+                end
+            end
+          end
+       end) 
+    end
+end)
+
+local function onCharacterAdded(character)
+    local player = game:GetService("Players").LocalPlayer
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    if not humanoid then
+        return
+    end
+    humanoid.Died:Connect(function()
+        if getgenv().AutoBountyHunter then
+            game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                wait(.5)
+                getgenv().InBossHunt = false
+                getgenv().QuestHuntOnCoolDown = false
+            end)
+        end
+    end)
+end
+
+task.spawn(function ()
+    pcall(function ()
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
+do 
+    local alreadyExistingCharacter = game:GetService("Players").LocalPlayer.Character
+    if alreadyExistingCharacter then
+        onCharacterAdded(alreadyExistingCharacter )
+              end
+           end
+        end)
 end)
