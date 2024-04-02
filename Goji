@@ -1,25 +1,13 @@
----------------- Auto Bounty Hunter V1 -----------------
 task.spawn(function ()
     while task.wait() do pcall(function ()
-        if getgenv().AutoBountyHunter and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown then
+        if getgenv().AutoBountyHunter and not getgenv().InBossHunt then
             for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                 if v.Name == "Kuru" then
                 local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                 if dist >= 30 then
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                         fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                        wait(3)
                         fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                        fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                        fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                        fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                        fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                        fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                        fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                        fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                        fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                        wait(3)
-                        getgenv().JustAcceptQuest = true
                             end
                        end
                     end
@@ -31,16 +19,14 @@ end)
 
 task.spawn(function ()
     while task.wait() do pcall(function ()
-        if getgenv().AutoBountyHunter and getgenv().JustAcceptQuest and not getgenv().QuestHuntOnCoolDown then
-            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("HumanoidRootPart")
+        if getgenv().AutoBountyHunter then
         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-            if string.find(v.Name,"Criminal") and v.Humanoid.Health ~= 0 then
+            if string.find(v.Name,"Criminal") and v.Humanoid.Health ~= 0  then
                 repeat task.wait()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                     getgenv().InBossHunt = true
                 until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoBountyHunter or game.PlaceId ~= 15049111150
                 or game.Workspace.Lives:FindFirstChild(v) == nil
-                getgenv().JustAcceptQuest = false
                 getgenv().InBossHunt = false
                 end
             end
@@ -49,20 +35,14 @@ task.spawn(function ()
     end
 end)
 
---[[task.spawn(function ()
-    while wait() do pcall(function ()
-        if getgenv().AutoBountyHunter then
-            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
-                if v.ClassName == "Frame" then
-                    getgenv().QuestHuntOnCoolDown = true
-                    getgenv().JustAcceptQuest = false
-                    getgenv().InBossHunt = false
-                    wait(30)
-                    getgenv().QuestHuntOnCoolDown = false
-                    getgenv().InBossHunt = false
-                end
-            end
-          end
-       end) 
-    end
-end)--]]
+
+task.spawn(function ()
+    while task.wait() do pcall(function ()
+            for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
+                if v.Name == "ProximityPrompt" and not getgenv().STOP then
+                    fireproximityprompt(v)
+                end            
+             end
+         end)  
+    end 
+end)
