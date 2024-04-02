@@ -443,6 +443,7 @@ end)
 task.spawn(function ()
 	while task.wait() do pcall(function()
 		if getgenv().AutoEquipTool and not game.Players.LocalPlayer.Character:FindFirstChild(getgenv().Weapon) and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(getgenv().Weapon))
 		   end
 	   end)
@@ -450,9 +451,26 @@ task.spawn(function ()
 end)
 
 task.spawn(function ()
-	while task.wait(.35) do pcall(function()
+    while wait() do pcall(function ()
+        for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+        if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
+            local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+            if dist < 25 then
+                getgenv().DistNear = true
+            elseif dist > 25 then
+                getgenv().DistNear = false
+                 end
+              end
+           end
+      end)        
+    end
+end)
+
+task.spawn(function ()
+	while task.wait(.45) do pcall(function()
 		if getgenv().AutoAttack and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
+                if getgenv().DistNear then
+                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, true, game, 1)
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, false, game, 1)
                end
@@ -513,16 +531,12 @@ end)
 
 task.spawn(function ()
 	while task.wait(.5) do pcall(function()
-		if getgenv().AutoSkillZ then
-            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 25 then
+		if getgenv().AutoSkillZ and not getgenv().STOP then
+            if getgenv().DistNear then
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
-                    end
-                end
-              end
+               end
 		   end
 	   end)
 	end
@@ -530,15 +544,11 @@ end)
 
 task.spawn(function ()
 	while task.wait(.75) do pcall(function()
-		if getgenv().AutoSkillX then
-            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 25 then
+		if getgenv().AutoSkillX and not getgenv().STOP then
+            if getgenv().DistNear then
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
-                    end
-                end
             end
 		   end
 	   end)
@@ -547,15 +557,12 @@ end)
 
 task.spawn(function ()
 	while task.wait(.55) do pcall(function()
-		if getgenv().AutoSkillC then
-            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 25 then
+		if getgenv().AutoSkillC and not getgenv().STOP then
+            if getgenv().DistNear then
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
-                    end
-                end
+
             end
 		   end
 	   end)
@@ -564,15 +571,11 @@ end)
 
 task.spawn(function ()
 	while task.wait(.75) do pcall(function()
-		if getgenv().AutoSkillV then
-            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-                    if dist <= 25 then
+		if getgenv().AutoSkillV and not getgenv().STOP then
+            if getgenv().DistNear then
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
-                    end
-                end
             end
 		   end
 	   end)
@@ -587,7 +590,7 @@ task.spawn(function ()
                 task.wait()
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getfar().CFrame * CFrame.new(0,0,4)
-            until getfar().Parent.Humanoid.Health == 0 or getfar().Parent.Humanoid.Health < 0 or game.Players.LocalPlayer.Character.Humanoid.Health == 0
+            until getfar().Parent.Humanoid.Health == 0 or getfar().Parent.Humanoid.Health < 0 or game.Players.LocalPlayer.Character.Humanoid.Health == 0 or game.Players.LocalPlayer.Character == nil
               end
            end
         end)  
@@ -613,7 +616,9 @@ task.spawn(function ()
             for i,v in pairs(game.Lighting:GetChildren()) do
                 if v.Name == "KenHaki" then
                     if v.Enabled == false then
+                        game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                         repeat
+                            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             local args = {[1] = "KenHaki"}game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer(unpack(args))
             wait(1.35)    
         until v.Enabled == true
@@ -628,8 +633,10 @@ end)
 task.spawn(function ()
     while task.wait() do pcall(function ()
         if getgenv().AutoBusoHaki then
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             for i,v in pairs(game.Workspace.Lives[game.Players.LocalPlayer.Name]:GetChildren()) do
                 if v.Name == "Right Arm" and v:FindFirstChild("Haki") == nil then 
+                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             local args = {[1] = "BusoHaki"}game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer(unpack(args))
             
                 end
@@ -644,6 +651,7 @@ task.spawn(function ()
     while wait() do pcall(function ()
         if getgenv().AutoSpinFruits and not getgenv().STOP then      
             for i,v in pairs(game.Workspace.Shop:GetDescendants()) do
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                 if getgenv().AutoSpinFruits and v.Name == "Object" and getgenv().MethodSpin == "Gem" and v.Value == "RandomDemonFruit" and game.PlaceId == 15049111150 and not getgenv().STOP then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame * CFrame.new(0,0,0)
                     fireproximityprompt(v.Parent)
@@ -658,6 +666,7 @@ task.spawn(function ()
 while wait() do pcall(function ()
     if getgenv().AutoSpinFruits and not getgenv().STOP then      
         for i,v in pairs(game.Workspace.Shop:GetDescendants()) do
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             if getgenv().AutoSpinFruits and v.Name == "Object" and getgenv().MethodSpin == "Beli" and v.Value == "RandomDemonFruitBeli" and game.PlaceId == 15049111150 and not getgenv().STOP then
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame * CFrame.new(0,0,0)
                 fireproximityprompt(v.Parent)
@@ -688,7 +697,7 @@ task.spawn(function()
             pcall(function()
                 if getgenv().White_Screen then
                     game:GetService("RunService"):Set3dRenderingEnabled(false)
-                    else
+                elseif not getgenv().White_Screen then
                     game:GetService("RunService"):Set3dRenderingEnabled(true)
                     end
                 end)
@@ -763,6 +772,7 @@ task.spawn(function()
                                         if v.Name == "Quest" and not getgenv().DontAcceptQuest then
                                             if v.Value == getgenv().Quest and not getgenv().DontAcceptQuest then
                                                 if getgenv().NoQuest and not getgenv().DontAcceptQuest then
+                                                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                                                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame
                                                 end
                                             end
@@ -784,7 +794,9 @@ task.spawn(function()
                                                     for _,mon in pairs(game.Workspace.Lives:GetChildren()) do
                                                         if string.find(mon.Name,getgenv().Quest) and not getgenv().DontAcceptQuest then
                                                             if mon.Humanoid.Health ~= 0 and not getgenv().NoQuest and not getgenv().DontAcceptQuest then
+                                                                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                                                                 repeat wait()
+                                                                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                                                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mon.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                                             until mon.Humanoid.Health == 0 or mon.Humanoid.Health < 0 or not getgenv().AutoQuest or getgenv().NoQuest or getgenv().DontAcceptQuest
                                                             end
@@ -802,12 +814,14 @@ task.spawn(function()
                     task.spawn(function () 
                         while wait() do pcall(function ()
                             if getgenv().AutoGem and not getgenv().StopFarmGem and game.PlaceId == 15049111150 and not getgenv().STOP then
+                                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                                 for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                                     if string.find(v.Name,BossTable[1]) or string.find(v.Name,BossTable[2]) 
                                     or string.find(v.Name,BossTable[3]) or string.find(v.Name,BossTable[4]) then
                                         if v.Humanoid.Health ~= 0 then
                                             repeat
                                                 task.wait()
+                                                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                                 getgenv().DontAcceptQuest = true
                                             until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or not getgenv().AutoGem or getgenv().StopFarmGem or game.PlaceId ~= 15049111150
@@ -848,7 +862,7 @@ task.spawn(function()
                                                       
                                                                      {
                                                             ["name"] = "Reward",
-                                                            ["value"] = "Item : "..v3.Name.."\n UserName : "..game.Players.LocalPlayer.Name,
+                                                            ["value"] = "Item : "..v3.Name.."\n Wave : "..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text.."\n UserName : "..game.Players.LocalPlayer.Name,
                                                             ["inline"] = false
                                                               
                                                           },
