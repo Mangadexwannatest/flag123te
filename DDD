@@ -429,8 +429,8 @@ end)
 
 task.spawn(function ()
 	while task.wait() do pcall(function()
-		if getgenv().AutoEquipTool and not game.Players.LocalPlayer.Character:FindFirstChild(getgenv().Weapon) then
-			print("Equiping . . .")
+		if getgenv().AutoEquipTool and not game.Players.LocalPlayer.Character:FindFirstChild(getgenv().Weapon) 
+        and not game.Players.LocalPlayer.Character.Humanoid.Health <= 0 then
 			game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(getgenv().Weapon))
 		   end
 	   end)
@@ -474,13 +474,13 @@ task.spawn(function ()
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo") 
                 or string.find(v.Name,"Choso") or string.find(v.Name,"Killua") and not getgenv().STOP then
-                  if v.Humanoid.Health ~= 0 then
+                  if v.Humanoid.Health ~= 0 and not game.Players.LocalPlayer.Character.Humanoid.Health <= 0 then
 					repeat wait()
                         game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                     getgenv().DontAcceptQuest = true
                     getgenv().StopFarmGem = true
-					until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoAllBoss or game.PlaceId ~= 15049111150
+					until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoAllBoss or game.PlaceId ~= 15049111150 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
                     getgenv().DontAcceptQuest = false   
                     getgenv().StopFarmGem = false
                     end
@@ -575,12 +575,12 @@ end)
 task.spawn(function ()
     while task.wait() do pcall(function ()
         if getgenv().AutoPortal and game.PlaceId ~= 15049111150 then
-          if getclosest().Parent.Humanoid.Health ~= 0 then
+          if getclosest().Parent.Humanoid.Health ~= 0 and not game.Players.LocalPlayer.Character.Humanoid.Health <= 0 then
             repeat 
                 task.wait()
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().CFrame * CFrame.new(0,0,4)
-            until getclosest().Parent.Humanoid.Health == 0 or getclosest().Parent.Humanoid.Health < 0 or not getgenv().AutoPortal
+            until getclosest().Parent.Humanoid.Health == 0 or getclosest().Parent.Humanoid.Health < 0 or not getgenv().AutoPortal or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
               end
            end
         end)  
@@ -868,8 +868,8 @@ task.spawn(function()
                     task.spawn(function ()
                         pcall(function () 
                         game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
+                            wait(1.5)
                             if getgenv().AutoPortalReward then
-                            wait(1)
                             Webhook()
                                   end
                               end)
