@@ -7,19 +7,49 @@ Section:NewToggle("Auto Bounty Hunter", nil, function(bool)
     getgenv().AutoBountyHunter = bool
 end)
 
+Section:NewKeybind("Hid Gui", nil, Enum.KeyCode.LeftControl, function()
+	Library:ToggleUI()
+end)
+Lable1 = Section:NewLabel("Accept Quest Hunt : ")
+Lable2 = Section:NewLabel("In Boss Hunt : ")
+Lable3 = Section:NewLabel("Quest Cool Down : ")
+
+task.spawn(function ()
+    while wait() do pcall(function ()
+        Lable1:UpdateLabel("Accept Quest Hunt : "..getgenv().JustAcceptQuest)
+        Lable2:UpdateLabel("In Boss Hunt : "..getgenv().InBossHunt)
+        Lable3:UpdateLabel("Quest Cool Down : "..getgenv().QuestHuntOnCoolDown)
+       end)
+    end
+end)
 
 ---------------- Auto Bounty Hunter V1 -----------------
 task.spawn(function ()
-    while wait() do pcall(function ()
-        if getgenv().AutoBountyHunter and not getgenv().QuestHuntOnCoolDown and not getgenv().OnInBoss then
+    while task.wait() do pcall(function ()
+        if getgenv().AutoBountyHunter and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown then
+            for i,v in pairs(game.Workspace.NPC:GetChildren()) do
+                if v.Name == "Kuru" then
+                local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                if dist >= 30 then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                        wait(5)
+                        getgenv().JustAcceptQuest = true
+                            end
+                       end
+                    end
+               end
+        end)
+     end
+end)
+
+task.spawn(function ()
+    while task.wait() do pcall(function ()
+        if getgenv().AutoBountyHunter and not getgenv().QuestHuntOnCoolDown then
             for i,v in pairs(game.Workspace.NPC.Kuru:GetDescendants()) do
-                if v.ClassName == "ProximityPrompt" and not getgenv().QuestHuntOnCoolDown 
-                and not getgenv().OnInQuest and not getgenv().OnInBoss then
-                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
+                if v.ClassName == "ProximityPrompt" then
+                    repeat task.wait()
                     fireproximityprompt(v)
-                    getgenv().OnInQuest = true
-                    getgenv().DontAcceptQuest = true
+                    until not getgenv().AutoBountyHunter
                 end
             end 
           end
@@ -27,24 +57,24 @@ task.spawn(function ()
      end
 end)
 
+
 task.spawn(function ()
-    while wait() do pcall(function ()
-        if getgenv().AutoBountyHunter and getgenv().OnInQuest then
+    while task.wait() do pcall(function ()
+        if getgenv().AutoBountyHunter and getgenv().JustAcceptQuest and not getgenv().QuestHuntOnCoolDown then
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("HumanoidRootPart")
         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
             if string.find(v.Name,"Criminal") and v.Humanoid.Health ~= 0 and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
                 repeat task.wait()
-                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
-                    getgenv().OnInBoss = true
+                    getgenv().InBossHunt = true
                 until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoBountyHunter or game.PlaceId ~= 15049111150 or game.Players.LocalPlayer.Character.Humanoid.Health == 0 
-                or not getgenv().OnInQuest
-                getgenv().OnInBoss = false
-                getgenv().OnInQuest = false
-            
+                or game.Workspace.Lives:FindFirstChild(v) == nil
+                getgenv().JustAcceptQuest = false
+                getgenv().InBossHunt = false
+                end
             end
-        end
-        end
-    end)
+         end
+      end)
     end
 end)
 
@@ -54,18 +84,14 @@ task.spawn(function ()
             for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
                 if v.ClassName == "Frame" then
                     getgenv().QuestHuntOnCoolDown = true
-                    getgenv().OnInQuest = false
-                    getgenv().DontAcceptQuest = false
+                    getgenv().JustAcceptQuest = false
+                    getgenv().InBossHunt = false
                     wait(30)
                     getgenv().QuestHuntOnCoolDown = false
-                    getgenv().OnInQuest = true
-                    getgenv().DontAcceptQuest = true
+                    getgenv().InBossHunt = false
                 end
             end
           end
        end) 
     end
 end)
-
-
--------------------------------------------------------------------------
