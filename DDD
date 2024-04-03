@@ -1093,9 +1093,7 @@ task.spawn(function()
                                             game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
                                     else
                                             game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
-                                            game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, nil)
-                                            game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, nil)
-                                            
+                                            fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
                                                 end
                                            end
                                         end
@@ -1144,7 +1142,7 @@ task.spawn(function()
                                     if v.ClassName == "Frame" then
                                         getgenv().QuestHuntOnCoolDown = true
                                         getgenv().InBossHunt = false
-                                        wait(31.5)
+                                        wait(30.5)
                                         getgenv().QuestHuntOnCoolDown = false
                                     end
                                 end
