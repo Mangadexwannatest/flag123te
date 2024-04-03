@@ -59,6 +59,7 @@ function sex()
     getgenv().HealthAmout = data.HealthAmout
     getgenv().HealthDetech = data.HealthDetech
     getgenv().AutoBountyHunter = data.AutoBountyHunter
+    getgenv().AutoQuestTaskHunterReawrd = data.AutoQuestTaskHunterReawrd
 
     ---// updates the json file
     function updatejson()
@@ -88,7 +89,8 @@ function sex()
             AutoPortalReward = getgenv().AutoPortalReward,
             HealthAmout = getgenv().HealthAmout,
             HealthDetech = getgenv().HealthDetech,
-            AutoBountyHunter = getgenv().AutoBountyHunter
+            AutoBountyHunter = getgenv().AutoBountyHunter,
+            AutoQuestTaskHunterReawrd = getgenv().AutoQuestTaskHunterReawrd
         }
 
         local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -171,6 +173,11 @@ end)
 
 WebhookConfig:NewToggle("Auto Portal Reward", nil, function(bool)
     getgenv().AutoPortalReward = bool
+    updatejson()
+end)
+
+WebhookConfig:NewToggle("Auto Quest Task Hunter Reward", nil, function(bool)
+    getgenv().AutoQuestTaskHunterReawrd = bool
     updatejson()
 end)
 
@@ -358,7 +365,8 @@ else
         AutoGem = false,
         AutoPortalReward = false,
         HealthDetech = false,
-        AutoBountyHunter = false
+        AutoBountyHunter = false,
+        AutoQuestTaskHunterReawrd = false
 
     }
     local json = game:GetService("HttpService"):JSONEncode(xdata)
@@ -483,29 +491,12 @@ task.spawn(function ()
 	end
 end)
 
-task.spawn(function ()
-    while wait() do pcall(function ()
-        for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-        if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-            local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
-            if dist <= 25 then
-                getgenv().DistNear = true
-            else
-                getgenv().DistNear = false
-                 end
-              end
-           end
-      end)        
-    end
-end)
 
 task.spawn(function ()
 	while task.wait(.45) do pcall(function()
 		if getgenv().AutoAttack and not getgenv().STOP then
-                    if getgenv().DistNear then
 			game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, true, game, 1)
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, false, game, 1)
-                    end
             end
 	   end)
 	end
@@ -565,9 +556,14 @@ end)
 task.spawn(function ()
 	while task.wait(.5) do pcall(function()
 		if getgenv().AutoSkillZ and not getgenv().STOP then
-            if getgenv().DistNear then
+            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
+                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+                    if dist < 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
+                    end
+                end
                end
 		   end
 	   end)
@@ -577,9 +573,14 @@ end)
 task.spawn(function ()
 	while task.wait(.75) do pcall(function()
 		if getgenv().AutoSkillX and not getgenv().STOP then
-            if getgenv().DistNear then
+            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
+                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+                    if dist < 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
+                    end
+                end
             end
 		   end
 	   end)
@@ -589,9 +590,14 @@ end)
 task.spawn(function ()
 	while task.wait(.55) do pcall(function()
 		if getgenv().AutoSkillC and not getgenv().STOP then
-            if getgenv().DistNear then
+            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
+                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+                    if dist < 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
+                    end
+                end
 
             end
 		   end
@@ -602,9 +608,14 @@ end)
 task.spawn(function ()
 	while task.wait(.75) do pcall(function()
 		if getgenv().AutoSkillV and not getgenv().STOP then
-            if getgenv().DistNear then
+            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
+                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+                    if dist < 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
+                    end
+                end
             end
 		   end
 	   end)
@@ -913,6 +924,68 @@ task.spawn(function()
                                 end
                             end
                         end
+
+                        function WebhookQuestTask()
+                            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
+                                if v.ClassName == "Frame" then
+                                    for _,v2 in pairs(v:GetDescendants()) do
+                                        if v2.Name == "WorldModel" then
+                                            for l,v3 in pairs(v2:GetChildren()) do
+                                                local timeInfo = os.date("*t")
+                                                
+                                                BBody = game:GetService("HttpService"):JSONEncode({
+                                                      content = nil,
+                                                      embeds = {{
+                                                          ["author"] = {
+                                                              ["name"] = "Second Piece Notify",
+                                                              ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
+                                                          },
+                                                          ["title"] = "Second Piece", 
+                                                          ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png",
+                                                          ["footer"] = {
+                                                              ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                                                              ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
+                                                         
+                                                          },
+                                                          ["color"] = tonumber(0xFFD700),
+                                                          ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                                                          ["fields"] = {
+                                                          
+                                                                         {
+                                                                ["name"] = "Quest Hunter Reward",
+                                                                ["value"] = "Item : "..v3.Name.."\n UserName : "..game.Players.LocalPlayer.Name,
+                                                                ["inline"] = false
+                                                                  
+                                                              },
+                                                            
+                                                          }
+                                                          }}
+                                                      })
+                                                  local response = syn.request({
+                                                  Url = getgenv().WebHook,
+                                                  Method = "POST",
+                                                  Headers = {
+                                                      ["Content-Type"] = "application/json"
+                                                  },
+                                                  Body = BBody
+                                                })    
+                                               end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                    
+                    task.spawn(function ()
+                        pcall(function ()
+                            game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
+                                wait(.35)
+                            if getgenv().AutoQuestTaskHunterReawrd then
+                                WebhookQuestTask()
+                                end
+                            end)
+                        end)
+                    end)
                         
                     
                     task.spawn(function ()
