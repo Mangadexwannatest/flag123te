@@ -502,11 +502,10 @@ end)
 task.spawn(function ()
 	while task.wait(.45) do pcall(function()
 		if getgenv().AutoAttack and not getgenv().STOP then
-                if getgenv().DistNear then
-                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                    if getgenv().DistNear then
 			game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, true, game, 1)
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, false, game, 1)
-               end
+                    end
             end
 	   end)
 	end
@@ -567,7 +566,6 @@ task.spawn(function ()
 	while task.wait(.5) do pcall(function()
 		if getgenv().AutoSkillZ and not getgenv().STOP then
             if getgenv().DistNear then
-                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
                end
@@ -580,7 +578,6 @@ task.spawn(function ()
 	while task.wait(.75) do pcall(function()
 		if getgenv().AutoSkillX and not getgenv().STOP then
             if getgenv().DistNear then
-                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
             end
@@ -593,7 +590,6 @@ task.spawn(function ()
 	while task.wait(.55) do pcall(function()
 		if getgenv().AutoSkillC and not getgenv().STOP then
             if getgenv().DistNear then
-                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
 
@@ -607,7 +603,6 @@ task.spawn(function ()
 	while task.wait(.75) do pcall(function()
 		if getgenv().AutoSkillV and not getgenv().STOP then
             if getgenv().DistNear then
-                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
             end
