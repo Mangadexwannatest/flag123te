@@ -980,7 +980,7 @@ task.spawn(function()
                         pcall(function ()
                             game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
                                 wait(.35)
-                            if getgenv().AutoQuestTaskHunterReawrd then
+                            if getgenv().AutoQuestTaskHunterReawrd and game.PlaceId == 15049111150 then
                                 WebhookQuestTask()
                                 end
                             end)
@@ -992,7 +992,7 @@ task.spawn(function()
                         pcall(function () 
                         game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
                             wait(1.5)
-                            if getgenv().AutoPortalReward then
+                            if getgenv().AutoPortalReward and game.PlaceId ~= 15049111150 then
                             Webhook()
                                   end
                               end)
