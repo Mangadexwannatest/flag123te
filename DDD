@@ -2,7 +2,7 @@ repeat wait() until game:IsLoaded()
 repeat task.wait() until game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Second Piece Last Update April/03/2024", "DarkTheme")
+local Window = Library.CreateLib("Second Piece Last Update April/03/2024 [Test]", "DarkTheme")
 local Tab = Window:NewTab("Main")
 local OtherTap = Window:NewTab("Other")
 local WebhookTap = Window:NewTab("Webhook")
@@ -495,8 +495,15 @@ end)
 task.spawn(function ()
 	while task.wait(.45) do pcall(function()
 		if getgenv().AutoAttack and not getgenv().STOP then
-			game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, true, game, 1)
-            game:GetService("VirtualInputManager"):SendMouseButtonEvent(600, 10, 0, false, game, 1)
+            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
+                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+                    if dist < 25 then
+            game:GetService'VirtualUser':CaptureController()
+            game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
+                    end
+                end
+            end
             end
 	   end)
 	end
@@ -1137,7 +1144,7 @@ task.spawn(function()
                                     if v.ClassName == "Frame" then
                                         getgenv().QuestHuntOnCoolDown = true
                                         getgenv().InBossHunt = false
-                                        wait(30)
+                                        wait(31.5)
                                         getgenv().QuestHuntOnCoolDown = false
                                     end
                                 end
