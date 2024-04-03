@@ -2,7 +2,7 @@ repeat wait() until game:IsLoaded()
 repeat task.wait() until game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Second Piece Last Update April/01/2024", "DarkTheme")
+local Window = Library.CreateLib("Second Piece Last Update April/03/2024", "DarkTheme")
 local Tab = Window:NewTab("Main")
 local OtherTap = Window:NewTab("Other")
 local WebhookTap = Window:NewTab("Webhook")
@@ -902,7 +902,7 @@ task.spawn(function()
                                                       
                                                                      {
                                                             ["name"] = "Portal Reward",
-                                                            ["value"] = "Item : "..v3.Name.."\n Wave : "..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text.."\n UserName : "..game.Players.LocalPlayer.Name,
+                                                            ["value"] = "Item : "..v3.Name.."\n Wave : "..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text.."\n UserName : ".."||**"..game.Players.LocalPlayer.Name.."**||",
                                                             ["inline"] = false
                                                               
                                                           },
@@ -953,7 +953,7 @@ task.spawn(function()
                                                           
                                                                          {
                                                                 ["name"] = "Quest Hunter Reward",
-                                                                ["value"] = "Item : "..v3.Name.."\n UserName : "..game.Players.LocalPlayer.Name,
+                                                                ["value"] = "Item : "..v3.Name.."\n UserName : ".."||**"..game.Players.LocalPlayer.Name.."**||",
                                                                 ["inline"] = false
                                                                   
                                                               },
