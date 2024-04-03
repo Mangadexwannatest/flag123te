@@ -25,7 +25,7 @@ local X, Y = 0, 0
 local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
 
 
-getgenv().savefilename = "Second_Piece_Obfuscator_"..game.Players.LocalPlayer.Name..".txt"
+getgenv().savefilename = "Second_Piece_InTesting_"..game.Players.LocalPlayer.Name..".txt"
 
 function sex()
     -- reads jsonfile
@@ -1183,11 +1183,10 @@ task.spawn(function()
                                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                                     if dist >= 10 and not getgenv().STOP then
                                         repeat 
-                                            task.wait()
+                                           wait(.75)
                                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-                                            game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
                                             fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                                            until getgenv().InBossHunt == true or not getgenv().AutoBountyHunter or getgenv().QuestHuntOnCoolDown 
+                                            until getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown or not getgenv().AutoBountyHunter 
                                                 end
                                            end
                                         end
