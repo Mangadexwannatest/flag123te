@@ -2,7 +2,7 @@ repeat wait() until game:IsLoaded()
 repeat task.wait() until game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Second Piece Last Update April/03/2024 [Test]", "DarkTheme")
+local Window = Library.CreateLib("Second Piece Last Update April/03/2024 [Test] @edek1004", "DarkTheme")
 local Tab = Window:NewTab("Main")
 local OtherTap = Window:NewTab("Other")
 local WebhookTap = Window:NewTab("Webhook")
@@ -25,7 +25,7 @@ local X, Y = 0, 0
 local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
 
 
-getgenv().savefilename = "Second_Piece_TEST_"..game.Players.LocalPlayer.Name..".txt"
+getgenv().savefilename = "Second_Piece_ReleaseTest_"..game.Players.LocalPlayer.Name..".txt"
 
 function sex()
     -- reads jsonfile
@@ -1084,20 +1084,38 @@ task.spawn(function()
                         end
                     end)
                     
+                    task.spawn(function ()
+                        while task.wait() do pcall(function ()
+                            if getgenv().AutoBountyHunter then
+                                for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
+                                    if v.Name == "NotifyText" then
+                                        if string.find(v.Text.Text,"on cooldown") then
+                                            getgenv().RedTask = true
+                                            getgenv().InBossHunt = false
+                                            getgenv().QuestHuntOnCoolDown = falsew
+                                            wait(30)
+                                            getgenv().RedTask = false
+                                        end
+                                    end
+                                end
+                              end
+                           end)  
+                        end
+                    end)
                     
                     task.spawn(function ()
                         while task.wait() do pcall(function ()
-                            if getgenv().AutoBountyHunter and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
+                            if getgenv().AutoBountyHunter and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP and not getgenv().RedTask then
                                 for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                                     if v.Name == "Kuru" then
                                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                                    if dist >= 10 and not getgenv().STOP then
+                                    if dist >= 10 and not getgenv().STOP and not getgenv().RedTask then
                                         repeat 
                                             task.wait()
                                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                                             game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
                                             fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                                            until getgenv().InBossHunt == true or not getgenv().AutoBountyHunter or getgenv().QuestHuntOnCoolDown
+                                            until getgenv().InBossHunt == true or not getgenv().AutoBountyHunter or getgenv().QuestHuntOnCoolDown or getgenv().RedTask
                                                 end
                                            end
                                         end
