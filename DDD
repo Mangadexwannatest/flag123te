@@ -1056,7 +1056,7 @@ task.spawn(function()
                         while task.wait() do pcall(function ()
                             if getgenv().AutoBountyHunter and not getgenv().STOP then
                             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                                if string.find(v.Name,"Criminal") and v.Humanoid.Health ~= 0 and not getgenv().STOP then
+                                if string.find(v.Name,"Criminal") and v.Humanoid.Health ~= 0 and v.TaskBy.Value == game.Players.LocalPlayer.Name and not getgenv().STOP then
                                     getgenv().InBossHunt = true
                                     repeat task.wait()
                                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
@@ -1072,26 +1072,18 @@ task.spawn(function()
                     
                     task.spawn(function ()
                         while task.wait() do pcall(function ()
-                                for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
-                                    if v.Name == "ProximityPrompt" then
-                                        fireproximityprompt(v)
-                                    end            
-                                 end
-                             end)  
-                        end 
-                    end)
-                    
-                    task.spawn(function ()
-                        pcall(function ()
-                            game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
-                            if getgenv().AutoBountyHunter and game.PlaceId == 15049111150 then
-                                genv().QuestHuntOnCoolDown = true
-                                getgenv().InBossHunt = false
-                                wait(28)
-                                getgenv().QuestHuntOnCoolDown = false
+                            if getgenv().AutoBountyHunter then
+                                for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
+                                    if v.ClassName == "Frame" then
+                                        getgenv().QuestHuntOnCoolDown = true
+                                        getgenv().InBossHunt = false
+                                        wait(28)
+                                        getgenv().QuestHuntOnCoolDown = false
+                                    end
                                 end
-                            end)
-                        end)
+                              end
+                           end) 
+                        end
                     end)
 
                     local function onCharacterAdded(character)
