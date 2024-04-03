@@ -25,7 +25,7 @@ local X, Y = 0, 0
 local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
 
 
-getgenv().savefilename = "Second_Piece_TEST"..game.Players.LocalPlayer.Name..".txt"
+getgenv().savefilename = "Second_Piece_TEST_"..game.Players.LocalPlayer.Name..".txt"
 
 function sex()
     -- reads jsonfile
@@ -553,7 +553,7 @@ task.spawn(function ()
                                 getgenv().DontAcceptQuest = true
                                 getgenv().StopFarmGem = true
                                 until v.Humanoid.Health <= 0 or getgenv().STOP or not getgenv().AutoAllBoss or not getgenv().AutoBountyHunter or game.PlaceId ~= 15049111150 or getgenv().InBossHunt
-                                and not getgenv().QuestHuntOnCoolDown
+                                or not getgenv().QuestHuntOnCoolDown
                                 getgenv().DontAcceptQuest = false   
                                 getgenv().StopFarmGem = false
                         end
@@ -747,8 +747,11 @@ task.spawn(function()
         pcall(function()
             if getgenv().RejoinWhenError then
                 for i,v in pairs(game:GetService("CoreGui").RobloxPromptGui:GetDescendants()) do
-                 if v.Name == 'ErrorPrompt' then
+                 if v.Name == 'ErrorPrompt' and v.Visible then
+                    repeat 
+                        wait()
             game:GetService("TeleportService"):Teleport(15049111150)
+            until not v.Visible or not getgenv().RejoinWhenError
                        end
                    end
                 end
@@ -889,7 +892,7 @@ task.spawn(function()
                                                                 repeat wait()
                                                                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mon.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                                             until mon.Humanoid.Health == 0 or mon.Humanoid.Health < 0 or not getgenv().AutoQuest or getgenv().NoQuest or getgenv().DontAcceptQuest
-                                                            or getgenv().InBossHunt or getgenv().STOP or not getgenv().AutoBountyHunter and not getgenv().QuestHuntOnCoolDown
+                                                            or getgenv().InBossHunt or getgenv().STOP or not getgenv().AutoBountyHunter or not getgenv().QuestHuntOnCoolDown
                                                             end
                                                         end
                                                     end
@@ -931,7 +934,7 @@ task.spawn(function()
                                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                                 getgenv().DontAcceptQuest = true
                                          until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or not getgenv().AutoGem or getgenv().StopFarmGem or game.PlaceId ~= 15049111150 or getgenv().InBossHunt or getgenv().STOP
-                                         or not getgenv().AutoBountyHunter and not getgenv().QuestHuntOnCoolDown
+                                         or not getgenv().AutoBountyHunter or not getgenv().QuestHuntOnCoolDown
                                             getgenv().DontAcceptQuest = false
                                         end
                                     end
@@ -1089,13 +1092,11 @@ task.spawn(function()
                                     if v.Name == "Kuru" then
                                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                                     if dist >= 10 and not getgenv().STOP then
+                                        repeat 
+                                            task.wait()
                                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                                             game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
-                                    else
-                                            game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
-                                            repeat
-                                                wait()
-                                                fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
+                                            fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
                                             until getgenv().InBossHunt == true or not getgenv().AutoBountyHunter or getgenv().QuestHuntOnCoolDown
                                                 end
                                            end
