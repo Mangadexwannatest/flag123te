@@ -1025,12 +1025,11 @@ task.spawn(function()
                                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                                             game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
                                     else
-                                            game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
+                                            fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
                                             game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, nil)
                                             game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, nil)
-                                            wait(.15)
-                                            game:GetService("VirtualInputManager"):SendKeyEvent(true, "E", false, nil)
-                                            game:GetService("VirtualInputManager"):SendKeyEvent(false, "E", false, nil)
+                                            fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
+                                            wait(.45)
                                             getgenv().SpawnBossHunt = true
                                             
                                                 end
@@ -1086,22 +1085,20 @@ task.spawn(function()
                     end)
                     
                     task.spawn(function ()
-                        while wait() do pcall(function ()
-                            if getgenv().AutoBountyHunter then
-                                for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
-                                    if v.ClassName == "Frame" then
-                                        getgenv().QuestHuntOnCoolDown = true
-                                        getgenv().InBossHunt = false
-                                        getgenv().SpawnBossHunt = false
-                                        wait(30)
-                                        getgenv().QuestHuntOnCoolDown = false
-                                    end
+                        pcall(function ()
+                            game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
+                            if getgenv().AutoBountyHunter and game.PlaceId == 15049111150 then
+                                wait(.65)
+                                genv().QuestHuntOnCoolDown = true
+                                getgenv().InBossHunt = false
+                                getgenv().SpawnBossHunt = false
+                                wait(30)
+                                getgenv().QuestHuntOnCoolDown = false
                                 end
-                              end
-                           end) 
-                        end
+                            end)
+                        end)
                     end)
-                    
+
                     local function onCharacterAdded(character)
                         local player = game:GetService("Players").LocalPlayer
                         local humanoid = character:WaitForChild("Humanoid", 5)
