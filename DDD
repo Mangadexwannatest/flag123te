@@ -25,7 +25,7 @@ local X, Y = 0, 0
 local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
 
 
-getgenv().savefilename = "Second_Piece_"..game.Players.LocalPlayer.Name..".txt"
+getgenv().savefilename = "Second_Piece_TEST"..game.Players.LocalPlayer.Name..".txt"
 
 function sex()
     -- reads jsonfile
@@ -378,9 +378,9 @@ end
 function getclosest()
 	local MinDistance = math.huge
 	   local ClosestObject
-	   for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-			if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-			   local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+	   for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+			if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name and v.Humanoid.Health > 0 then
+			   local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
 			   if dist < MinDistance then
 				   MinDistance, ClosestObject = dist, v
 			   end
@@ -391,10 +391,10 @@ end
 
 function getfar()
     local ClosestObject1
-    for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
+    for i,v in pairs(game.Workspace.Lives:GetChildren()) do
         local MinDistance1 = math.huge
-        if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-            local dist1 = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+        if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name and v.Humanoid.Health > 0 then
+            local dist1 = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
             if dist1 < MinDistance1 then
                 MinDistance1, ClosestObject1 = dist1, v
             end
@@ -495,9 +495,9 @@ end)
 task.spawn(function ()
 	while task.wait(.45) do pcall(function()
 		if getgenv().AutoAttack and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                     if dist < 25 then
             game:GetService'VirtualUser':CaptureController()
             game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
@@ -531,12 +531,12 @@ task.spawn(function ()
                 if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo") 
                 or string.find(v.Name,"Choso") or string.find(v.Name,"Killua")  or string.find(v.Name,"Chxmei") or string.find(v.Name,"Cid")
                 and not getgenv().STOP then
-                  if v.Humanoid.Health ~= 0 then
+                  if v.Humanoid.Health > 0  then
 					repeat task.wait()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                     getgenv().DontAcceptQuest = true
                     getgenv().StopFarmGem = true
-					until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoAllBoss or game.PlaceId ~= 15049111150
+					until v.Humanoid.Health <= 0 or getgenv().STOP or not getgenv().AutoAllBoss or game.PlaceId ~= 15049111150
                     getgenv().DontAcceptQuest = false   
                     getgenv().StopFarmGem = false
                     end
@@ -547,12 +547,12 @@ task.spawn(function ()
                 for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                     if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo") 
                     or string.find(v.Name,"Choso") or string.find(v.Name,"Killua")  or string.find(v.Name,"Chxmei") or string.find(v.Name,"Cid") and not getgenv().STOP and not getgenv().InBossHunt then
-                        if v.Humanoid.Health ~= 0 and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown then
+                        if v.Humanoid.Health > 0 and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown then
                             repeat task.wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                 getgenv().DontAcceptQuest = true
                                 getgenv().StopFarmGem = true
-                                until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or getgenv().STOP or not getgenv().AutoAllBoss or not getgenv().AutoBountyHunter or game.PlaceId ~= 15049111150 or getgenv().InBossHunt
+                                until v.Humanoid.Health <= 0 or getgenv().STOP or not getgenv().AutoAllBoss or not getgenv().AutoBountyHunter or game.PlaceId ~= 15049111150 or getgenv().InBossHunt
                                 and not getgenv().QuestHuntOnCoolDown
                                 getgenv().DontAcceptQuest = false   
                                 getgenv().StopFarmGem = false
@@ -580,9 +580,9 @@ end)
 task.spawn(function ()
 	while task.wait(.5) do pcall(function()
 		if getgenv().AutoSkillZ and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                     if dist < 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
@@ -597,9 +597,9 @@ end)
 task.spawn(function ()
 	while task.wait(.75) do pcall(function()
 		if getgenv().AutoSkillX and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                     if dist < 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
@@ -614,9 +614,9 @@ end)
 task.spawn(function ()
 	while task.wait(.55) do pcall(function()
 		if getgenv().AutoSkillC and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                     if dist < 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
@@ -632,9 +632,9 @@ end)
 task.spawn(function ()
 	while task.wait(.75) do pcall(function()
 		if getgenv().AutoSkillV and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetDescendants()) do
-                if v.Name == "HumanoidRootPart" and v.Parent.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).Magnitude
+            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                     if dist < 25 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
@@ -649,12 +649,12 @@ end)
 task.spawn(function ()
     while task.wait() do pcall(function ()
         if getgenv().AutoPortal and game.PlaceId ~= 15049111150 then
-          if getfar().Parent.Humanoid.Health ~= 0 and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
+          if getfar().Humanoid.Health > 0 and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
             repeat 
                 task.wait()
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getfar().CFrame * CFrame.new(0,0,4)
-            until getfar().Parent.Humanoid.Health == 0 or getfar().Parent.Humanoid.Health < 0 or game.Players.LocalPlayer.Character.Humanoid.Health == 0 or game.Players.LocalPlayer.Character == nil
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getfar().HumanoidRootPart.CFrame * CFrame.new(0,0,4)
+            until getfar().Humanoid.Health <= 0 or not getgenv().AutoPortal
               end
            end
         end)  
@@ -1057,8 +1057,8 @@ task.spawn(function()
                     
                     task.spawn(function ()
                         pcall(function () 
-                        game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
-                            wait(1.5)
+                            game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
+                                wait(.35)
                             if getgenv().AutoPortalReward and game.PlaceId ~= 15049111150 then
                             Webhook()
                                   end
@@ -1093,7 +1093,10 @@ task.spawn(function()
                                             game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
                                     else
                                             game.Workspace.NPC.Kuru.HumanoidRootPart.Task.HoldDuration = 0
-                                            fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
+                                            repeat
+                                                wait()
+                                                fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
+                                            until getgenv().InBossHunt == true or not getgenv().AutoBountyHunter or getgenv().QuestHuntOnCoolDown
                                                 end
                                            end
                                         end
