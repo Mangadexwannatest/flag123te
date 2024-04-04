@@ -23,6 +23,7 @@ local Weaponlist = {}
 local Mouse = game.Players.LocalPlayer:GetMouse()
 local X, Y = 0, 0
 local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
+local TimeCheck = 0
 
 
 getgenv().savefilename = "Second_Piece_InTesting_"..game.Players.LocalPlayer.Name..".txt"
@@ -1181,6 +1182,27 @@ task.spawn(function()
                            end)  
                         end
                     end)
+
+                    task.spawn(function ()
+                        while wait() do pcall(function ()
+                            if getgenv().AutoBountyHunter and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown  then
+                                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
+                                    if dist >= 10  then
+                                        TimeCheck = TimeCheck + 1
+                                        if tonumber(TimeCheck) >= tonumber(30) then
+                                        game.Players.LocalPlayer.Character.Humanoid.Health = 0
+                                        TimeCheck = 0
+                                        return;
+                                           end
+                                        end
+                                    elseif getgenv().AutoBountyHunter and getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown  then
+                                        if TimeCheck ~= 0 then
+                                            TimeCheck = 0
+                                        end
+                                   end
+                            end)
+                         end
+                      end)
                     
                     task.spawn(function ()
                         while task.wait() do pcall(function ()
