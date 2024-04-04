@@ -957,7 +957,7 @@ coroutine.resume(coroutine.create(function()
 
                     function Webhook()
                                             local timeInfo = os.date("*t")
-                                            local Full = table.concat(RewardCollage,"\n[+1]")
+                                            local Full = table.concat(RewardCollage,"\n[+1] ")
                                             BBody = game:GetService("HttpService"):JSONEncode({
                                                   content = nil,
                                                   embeds = {{
@@ -978,7 +978,7 @@ coroutine.resume(coroutine.create(function()
                                                       
                                                                      {
                                                             ["name"] = "Dungeon Reward",
-                                                            ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1]"..Full.."\n"..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
+                                                            ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1] "..Full.."\n"..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
                                                             ["inline"] = false
                                                               
                                                           },
@@ -1025,7 +1025,7 @@ coroutine.resume(coroutine.create(function()
                                                           
                                                                          {
                                                                 ["name"] = "Quest Hunter Reward",
-                                                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1]"..v3.Name,
+                                                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1] "..v3.Name,
                                                                 ["inline"] = false
                                                                   
                                                               },
