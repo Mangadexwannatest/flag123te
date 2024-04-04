@@ -26,7 +26,7 @@ local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
 local TimeCheck = 0
 
 
-getgenv().savefilename = "Second_Piece_FixEdLaging_"..game.Players.LocalPlayer.Name..".txt"
+getgenv().savefilename = "Second_Piece_KavoGuiVer_"..game.Players.LocalPlayer.Name..".txt"
 
 function sex()
     -- reads jsonfile
@@ -542,13 +542,12 @@ coroutine.resume(coroutine.create(function()
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo") 
                 or string.find(v.Name,"Choso") or string.find(v.Name,"Killua")  or string.find(v.Name,"Chxmei") or string.find(v.Name,"Cid") and not getgenv().STOP and not getgenv().InBossHunt then
-                    if v.Humanoid.Health > 0 and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown then
+                    if v.Humanoid.Health > 0 and getgenv().QuestHuntOnCoolDown then
                         repeat task.wait()
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                             getgenv().DontAcceptQuest = true
                             getgenv().StopFarmGem = true
-                            until v.Humanoid.Health <= 0 or getgenv().STOP or not getgenv().AutoAllBoss or not getgenv().AutoBountyHunter or game.PlaceId ~= 15049111150 or getgenv().InBossHunt
-                            or not getgenv().QuestHuntOnCoolDown
+                            until v.Humanoid.Health <= 0 or getgenv().STOP or not getgenv().AutoAllBoss or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown
                             getgenv().DontAcceptQuest = false   
                             getgenv().StopFarmGem = false
                     end
@@ -822,7 +821,7 @@ coroutine.resume(coroutine.create(function()
                     coroutine.resume(coroutine.create(function()
                         while wait() do 
                             pcall(function ()
-                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest and game.PlaceId == 15049111150 and not getgenv().STOP then
+                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest and game.PlaceId == 15049111150 and not getgenv().STOP and getgenv().QuestHuntOnCoolDown then
                                     for i,v in pairs(game.Workspace.Quest:GetChildren()) do
                                         if v.Name == "QuestPart" and not getgenv().DontAcceptQuest  then
                                             if v.ProximityPrompt.Quest.Value == getgenv().Quest and getgenv().NoQuest and not getgenv().DontAcceptQuest  then
@@ -838,7 +837,7 @@ coroutine.resume(coroutine.create(function()
                     coroutine.resume(coroutine.create(function()
                         while wait() do
                             pcall(function ()
-                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest  and game.PlaceId == 15049111150 and not getgenv().STOP  then
+                                if getgenv().AutoQuest and not getgenv().DontAcceptQuest  and game.PlaceId == 15049111150 and not getgenv().STOP and getgenv().QuestHuntOnCoolDown then
                                     for i,v in pairs(game.Players.LocalPlayer:GetChildren()) do 
                                         if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil then
                                             getgenv().NoQuest = true
@@ -857,7 +856,7 @@ coroutine.resume(coroutine.create(function()
                                 for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                                     if v.Name == "Quest" and not getgenv().DontAcceptQuest and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown  then
                                         if v.Value == getgenv().Quest and not getgenv().DontAcceptQuest and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown  then
-                                            if getgenv().NoQuest and not getgenv().DontAcceptQuest and not getgenv().InBossHunt and getgenv().AutoQuest and getgenv().QuestHuntOnCoolDown  then
+                                            if getgenv().NoQuest and not getgenv().DontAcceptQuest and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown  then
                                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame
                                             end
                                         end
@@ -872,17 +871,15 @@ coroutine.resume(coroutine.create(function()
                         while  wait() do pcall(function ()
                             if getgenv().AutoQuest and not getgenv().DontAcceptQuest and game.PlaceId == 15049111150 and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown  then
                                 for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
-                                    if v.Name == "Quest" and not getgenv().DontAcceptQuest and getgenv().QuestHuntOnCoolDown  then
-                                        if v.Value == getgenv().Quest and not getgenv().DontAcceptQuest and getgenv().QuestHuntOnCoolDown  then
-                                            if not getgenv().NoQuest and not getgenv().DontAcceptQuest and getgenv().QuestHuntOnCoolDown  then
+                                    if v.Name == "Quest"  then
+                                        if v.Value == getgenv().Quest and not getgenv().NoQuest then
                                                 for _,mon in pairs(game.Workspace.Lives:GetChildren()) do
-                                                    if string.find(mon.Name,getgenv().Quest) and not getgenv().DontAcceptQuest and getgenv().QuestHuntOnCoolDown  then
-                                                        if mon.Humanoid.Health ~= 0 and not getgenv().NoQuest and not getgenv().DontAcceptQuest and getgenv().AutoQuest and getgenv().QuestHuntOnCoolDown  then
-                                                            repeat wait()
+                                                    if string.find(mon.Name,getgenv().Quest) and getgenv().QuestHuntOnCoolDown  then
+                                                        if mon.Humanoid.Health > 0 then
+                                                            repeat task.wait()
                                                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mon.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
-                                                        until mon.Humanoid.Health == 0 or mon.Humanoid.Health < 0 or not getgenv().AutoQuest or getgenv().NoQuest or getgenv().DontAcceptQuest
-                                                        or getgenv().InBossHunt or getgenv().STOP or not getgenv().AutoBountyHunter or not getgenv().QuestHuntOnCoolDown
-                                                        end
+                                                        until mon.Humanoid.Health <= 0 or not getgenv().AutoQuest or getgenv().NoQuest or getgenv().DontAcceptQuest
+                                                        or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown
                                                     end
                                                 end
                                             end
@@ -902,14 +899,13 @@ coroutine.resume(coroutine.create(function()
                                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                                 for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                                     if string.find(v.Name,BossTable[1]) or string.find(v.Name,BossTable[2]) 
-                                    or string.find(v.Name,BossTable[3]) or string.find(v.Name,BossTable[4]) and getgenv().QuestHuntOnCoolDown  then
-                                        if v.Humanoid.Health ~= 0 and getgenv().AutoGem and getgenv().QuestHuntOnCoolDown  then
+                                    or string.find(v.Name,BossTable[3]) or string.find(v.Name,BossTable[4])  then
+                                        if v.Humanoid.Health > 0 and getgenv().QuestHuntOnCoolDown  then
                                             repeat
                                                 task.wait()
                                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                                 getgenv().DontAcceptQuest = true
-                                         until v.Humanoid.Health == 0 or v.Humanoid.Health < 0 or not getgenv().AutoGem or getgenv().StopFarmGem or game.PlaceId ~= 15049111150 or getgenv().InBossHunt or getgenv().STOP
-                                         or not getgenv().AutoBountyHunter or not getgenv().QuestHuntOnCoolDown
+                                         until v.Humanoid.Health <= 0 or not getgenv().AutoGem or getgenv().StopFarmGem or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown
                                             getgenv().DontAcceptQuest = false
                                         end
                                     end
