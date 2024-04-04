@@ -27,7 +27,7 @@ local TimeCheck = 0
 local RewardCollage = {}
 
 
-getgenv().savefilename = "Second_Piece_KavoGuiVer_"..game.Players.LocalPlayer.Name..".txt"
+getgenv().savefilename = "CrazyDayConfig\\"..game.Players.LocalPlayer.Name.."Second_Piece.txt"
 
 function sex()
     -- reads jsonfile
@@ -98,6 +98,7 @@ function sex()
         }
 
         local json = game:GetService("HttpService"):JSONEncode(xdata)
+        makefolder("CrazyDayConfig")
         writefile(savefilename, json)
 
 end
@@ -381,6 +382,7 @@ else
 
     }
     local json = game:GetService("HttpService"):JSONEncode(xdata)
+    makefolder("CrazyDayConfig")
     writefile(savefilename, json)
 
     sex()
