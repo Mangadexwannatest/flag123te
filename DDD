@@ -937,7 +937,7 @@ coroutine.resume(coroutine.create(function()
                         pcall(function ()
                             game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
                               if getgenv().AutoPortal and game.PlaceId ~= 15049111150 then
-                                wait(.1)
+                                wait(.15)
                             for i,v in next,game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren() do
                                 if v.ClassName == "Frame" then
                                     for a,b in next,v:GetDescendants() do
@@ -957,7 +957,7 @@ coroutine.resume(coroutine.create(function()
 
                     function Webhook()
                                             local timeInfo = os.date("*t")
-                                            local Full = table.concat(RewardCollage, "\n Item : ")
+                                            local Full = table.concat(RewardCollage,"\n[+1] Item : ")
                                             BBody = game:GetService("HttpService"):JSONEncode({
                                                   content = nil,
                                                   embeds = {{
@@ -978,7 +978,7 @@ coroutine.resume(coroutine.create(function()
                                                       
                                                                      {
                                                             ["name"] = "Portal Reward",
-                                                            ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\nItem : "..Full.." [+1]".."\nWave : "..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
+                                                            ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1] Item : "..Full.."\nWave : "..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
                                                             ["inline"] = false
                                                               
                                                           },
@@ -1062,11 +1062,10 @@ coroutine.resume(coroutine.create(function()
                     
                     coroutine.resume(coroutine.create(function()
                         pcall(function () 
-                            game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
-                                wait(.35)
+                            game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
                             if getgenv().AutoPortalReward and game.PlaceId ~= 15049111150 then
                                 if string.find(game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,"Ended") then
-                                    wait(1)
+                                wait(1)
                                Webhook()
                                 end
                                   end
