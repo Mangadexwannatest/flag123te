@@ -978,7 +978,7 @@ coroutine.resume(coroutine.create(function()
                                                       
                                                                      {
                                                             ["name"] = "Dungeon Reward",
-                                                            ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1]"..Full.."\nWave : "..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
+                                                            ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1]"..Full.."\n"..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
                                                             ["inline"] = false
                                                               
                                                           },
