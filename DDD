@@ -2,7 +2,7 @@ repeat wait() until game:IsLoaded()
 repeat task.wait() until game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Second Piece Last Update April/03/2024 [Test] @edek1004", "DarkTheme")
+local Window = Library.CreateLib("Second Piece Last Update April/05/2024 [Test] @edek1004", "DarkTheme")
 local Tab = Window:NewTab("Main")
 local OtherTap = Window:NewTab("Other")
 local WebhookTap = Window:NewTab("Webhook")
@@ -1114,21 +1114,21 @@ coroutine.resume(coroutine.create(function()
 
                     coroutine.resume(coroutine.create(function()
                         while wait() do pcall(function ()
-                            if getgenv().AutoBountyHunter and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown  then
+                            if getgenv().AutoBountyHunter  then
                                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
                                     if dist <= 10  and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
                                         TimeCheck = TimeCheck + 1
-                                        if tonumber(TimeCheck) >= tonumber(60) and not getgenv().STOP then
+                                        if tonumber(TimeCheck) >= tonumber(60) and not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown then
                                         game.Players.LocalPlayer.Character.Humanoid.Health = 0
+                                        TimeCheck = 0
+                                elseif getgenv().AutoBountyHunter and getgenv().InBossHunt then
+                                        TimeCheck = 0
+                                elseif getgenv().AutoBountyHunter and getgenv().QuestHuntOnCoolDown then
+                                        TimeCheck = 0
+                                elseif  getgenv().AutoBountyHunter and getgenv().STOP then
                                         TimeCheck = 0
                                            end
                                         end
-                                    elseif getgenv().AutoBountyHunter and getgenv().InBossHunt then
-                                            TimeCheck = 0
-                                    elseif getgenv().AutoBountyHunter and getgenv().QuestHuntOnCoolDown then
-                                            TimeCheck = 0
-                                    elseif  getgenv().AutoBountyHunter and getgenv().STOP then
-                                        TimeCheck = 0
                                    end
                             end)
                          end
