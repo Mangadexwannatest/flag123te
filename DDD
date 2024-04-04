@@ -1116,7 +1116,7 @@ coroutine.resume(coroutine.create(function()
                                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
                                     if dist <= 10  and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
                                         TimeCheck = TimeCheck + 1
-                                        if tonumber(TimeCheck) >= tonumber(30) and not getgenv().STOP then
+                                        if tonumber(TimeCheck) >= tonumber(60) and not getgenv().STOP then
                                         game.Players.LocalPlayer.Character.Humanoid.Health = 0
                                         TimeCheck = 0
                                            end
