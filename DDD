@@ -957,7 +957,7 @@ coroutine.resume(coroutine.create(function()
 
                     function Webhook()
                                             local timeInfo = os.date("*t")
-                                            local Full = table.concat(RewardCollage,"\n[+1] Item : ")
+                                            local Full = table.concat(RewardCollage,"\n[+1]")
                                             BBody = game:GetService("HttpService"):JSONEncode({
                                                   content = nil,
                                                   embeds = {{
@@ -977,8 +977,8 @@ coroutine.resume(coroutine.create(function()
                                                       ["fields"] = {
                                                       
                                                                      {
-                                                            ["name"] = "Portal Reward",
-                                                            ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1] Item : "..Full.."\nWave : "..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
+                                                            ["name"] = "Dungeon Reward",
+                                                            ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1]"..Full.."\nWave : "..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
                                                             ["inline"] = false
                                                               
                                                           },
@@ -1025,7 +1025,7 @@ coroutine.resume(coroutine.create(function()
                                                           
                                                                          {
                                                                 ["name"] = "Quest Hunter Reward",
-                                                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\nItem : "..v3.Name,
+                                                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1]"..v3.Name,
                                                                 ["inline"] = false
                                                                   
                                                               },
@@ -1114,7 +1114,7 @@ coroutine.resume(coroutine.create(function()
                         while wait() do pcall(function ()
                             if getgenv().AutoBountyHunter and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown  then
                                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
-                                    if dist >= 10  and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
+                                    if dist <= 10  and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
                                         TimeCheck = TimeCheck + 1
                                         if tonumber(TimeCheck) >= tonumber(30) and not getgenv().STOP then
                                         game.Players.LocalPlayer.Character.Humanoid.Health = 0
