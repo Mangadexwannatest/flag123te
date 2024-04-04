@@ -206,8 +206,8 @@ WebhookConfig:NewButton("Test Webhook", nil, function()
               ["fields"] = {
               
                              {
-                    ["name"] = "Test",
-                    ["value"] = "Item : ".."Test",
+                    ["name"] = "Webhook!",
+                    ["value"] = "Webhook!",
                     ["inline"] = false
                       
                   },
@@ -661,21 +661,18 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        if getgenv().AutoPortal and game.PlaceId ~= 15049111150 then
+game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
+    if getgenv().AutoPortal and game.PlaceId ~= 15049111150 then
         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
             if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                 if v.Humanoid.Health <= 0 then
-                v:Destroy()
-                break
-                   end
-                end
+                    v:Destroy()
             end
         end
-    end)
     end
+    end
+end)
 end))
-
 
 
 coroutine.resume(coroutine.create(function()
@@ -1028,7 +1025,7 @@ coroutine.resume(coroutine.create(function()
                                                           
                                                                          {
                                                                 ["name"] = "Quest Hunter Reward",
-                                                                ["value"] = "Item : "..v3.Name.."\n UserName : ".."||**"..game.Players.LocalPlayer.Name.."**||",
+                                                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\nItem : "..v3.Name,
                                                                 ["inline"] = false
                                                                   
                                                               },
@@ -1069,6 +1066,7 @@ coroutine.resume(coroutine.create(function()
                                 wait(.35)
                             if getgenv().AutoPortalReward and game.PlaceId ~= 15049111150 then
                                 if string.find(game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,"Ended") then
+                                    wait(1)
                                Webhook()
                                 end
                                   end
