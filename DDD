@@ -23,7 +23,6 @@ local Weaponlist = {}
 local Mouse = game.Players.LocalPlayer:GetMouse()
 local X, Y = 0, 0
 local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
-local TimeCheck = 0
 local RewardCollage = {}
 
 
@@ -831,6 +830,7 @@ coroutine.resume(coroutine.create(function()
                         pcall(function ()
                             Button.TouchTap:Connect(function()
                                 game:GetService("VirtualInputManager"):SendKeyEvent(true, "LeftControl", false, nil)
+                                Library:ToggleUI()
                             end)
                         end)
                     end))
@@ -1112,27 +1112,6 @@ coroutine.resume(coroutine.create(function()
                         end
                     end))
 
-                    coroutine.resume(coroutine.create(function()
-                        while wait() do pcall(function ()
-                            if getgenv().AutoBountyHunter  then
-                                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
-                                    if dist <= 10  and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
-                                        TimeCheck = TimeCheck + 1
-                                        if tonumber(TimeCheck) >= tonumber(60) and not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown then
-                                        game.Players.LocalPlayer.Character.Humanoid.Health = 0
-                                        TimeCheck = 0
-                                elseif getgenv().AutoBountyHunter and getgenv().InBossHunt then
-                                        TimeCheck = 0
-                                elseif getgenv().AutoBountyHunter and getgenv().QuestHuntOnCoolDown then
-                                        TimeCheck = 0
-                                elseif  getgenv().AutoBountyHunter and getgenv().STOP then
-                                        TimeCheck = 0
-                                           end
-                                        end
-                                   end
-                            end)
-                         end
-                      end))
                     
                       coroutine.resume(coroutine.create(function()
                         while task.wait() do pcall(function ()
