@@ -696,6 +696,9 @@ task.spawn(function ()
               end
            end
         end)  
+        if getgenv().AutoPortal and game.PlaceId ==  15049111150 then
+            break
+        end
     end
 end)
 
@@ -706,8 +709,9 @@ task.spawn(function ()
             repeat wait() until game:IsLoaded()
             wait(.5)
             getgenv().Started = true
-        end
-    end) 
+            end
+       end) 
+    break
     end
 end)
 
@@ -1153,6 +1157,9 @@ task.spawn(function()
                                 SafePart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,1000,0)
                                 end
                           end)
+                          if game.Workspace:FindFirstChild("Safe Part") and game.PlaceId == 15049111150 then
+                            break
+                        end
                         end
                     end)
                     
@@ -1178,17 +1185,13 @@ task.spawn(function()
                     task.spawn(function ()
                         while task.wait() do pcall(function ()
                             if getgenv().AutoBountyHunter and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
-                                for i,v in pairs(game.Workspace.NPC:GetChildren()) do
-                                    if v.Name == "Kuru" then
-                                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
                                     if dist >= 10 and not getgenv().STOP then
                                         repeat 
                                            wait(.75)
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                                             fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
                                             until getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown or not getgenv().AutoBountyHunter 
-                                                end
-                                           end
                                         end
                                    end
                             end)
