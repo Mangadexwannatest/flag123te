@@ -99,8 +99,6 @@ do
 
      Tabs.Main:AddToggle("AutoAttack", {Title = "Auto Attack", Default = false })
      Tabs.Main:AddToggle("AutoChests", {Title = "Auto Chest", Default = false })
-     Tabs.Main:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
-     Tabs.Main:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
 
      Tabs.Main:AddSection("Portal")
 
@@ -117,7 +115,7 @@ do
 
     Tabs.Main:AddSection("Bounty Task")
 
-    Tab:AddSlider("HealthDetech", 
+    Tabs.Main:AddSlider("HealthDetech", 
 {
     Title = "Health % ",
     Description = "Calculated as the max percentage of health",
@@ -134,6 +132,8 @@ do
 
     Tabs.Main:AddSection("Other")
 
+    Tabs.Main:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
+    Tabs.Main:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
     Tabs.Main:AddToggle("AutoRejoinError", {Title = "Auto Rejoin When Disconnect ", Default = false })
     Tabs.Main:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
 
