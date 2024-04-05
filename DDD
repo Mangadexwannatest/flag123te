@@ -1120,24 +1120,19 @@ coroutine.resume(coroutine.create(function()
                                 local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
                                 if dist < 15 and getgenv().AutoBountyHunter and not getgenv().QuestHuntOnCoolDown and not getgenv().InBossHunt and not getgenv().STOP then
                                     TimeChecker = TimeChecker + 1
-                                    print("+ Time")
                                     if tonumber(TimeChecker) >= tonumber(40) then
-                                        print("SET : "..TimeChecker)
                                         TimeChecker = 0
                                         game.Players.LocalPlayer.Character.Humanoid.Health = 0
                                     end
                                  end
                                      if getgenv().InBossHunt and TimeChecker ~= 0 then
-                                         TimeCheck = 0
-                                         print("SET : 0")
+                                        TimeChecker = 0
                                      end
                                     if getgenv().QuestHuntOnCoolDown and TimeChecker ~= 0 then
-                                        TimeCheck = 0
-                                        print("SET : 0")
+                                        TimeChecker = 0
                                     end
                                     if getgenv().STOP and TimeChecker ~= 0 then
-                                        TimeCheck = 0
-                                        print("SET : 0")
+                                        TimeChecker = 0
                                         end
                                  end
                             end) 
