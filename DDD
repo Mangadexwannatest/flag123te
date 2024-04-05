@@ -294,7 +294,7 @@ function getclosest()
        local ClosestObject
        for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                local PlayersTable = table.find(GetPlayers,v.Name)
-               if not PlayersTable then
+               if not PlayersTable and v.Humanoid.Health > 0 then
                local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                if dist < MinDistance then
                    MinDistance, ClosestObject = dist, v
@@ -303,7 +303,6 @@ function getclosest()
        end
        return ClosestObject
 end
-
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
@@ -561,6 +560,19 @@ coroutine.resume(coroutine.create(function()
               print("Not In Dungeon. . .")
                 break
             end
+        end
+    end))
+
+    coroutine.resume(coroutine.create(function()
+        while wait(2.5) do pcall(function ()
+            if Options.AutoPortal.Value and game.PlaceId ~= 15049111150 and not getgenv().Started then
+                game:GetService("ReplicatedStorage").Remotes.Ready:FireServer()
+                repeat wait() until game:IsLoaded()
+                wait(.5)
+                getgenv().Started = true
+                end
+           end) 
+        break
         end
     end))
 
