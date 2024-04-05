@@ -1071,26 +1071,35 @@ coroutine.resume(coroutine.create(function()
         end)
         end))
         
-        local CrazyDayScreen = game.CoreGui:WaitForChild("CrazyDay")
         local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
         
         coroutine.resume(coroutine.create(function()
-        game.CoreGui:WaitForChild("ScreenGui")
+            while wait() do pcall(function ()
+        if game.CoreGui:FindFirstChild("CrazyDay") == nil then
         for i,v in pairs(game.CoreGui:GetChildren()) do
             if v.Name == "ScreenGui" then
                 for _,k in next, v:GetDescendants() do
                     if k.Name == "TextLabel" and string.find(k.Text,"Second Piece") then
                         k.Parent.Parent.Parent.Parent.Name = "CrazyDay"
-                        warn("Found Ui. . .")
+                        warn("Found Ui. . .")  
+                       end
                     end
                 end
             end
         end
-        end))
+    end)
+    if game.CoreGui:FindFirstChild("CrazyDay") ~= nil then
+        print("break")
+        break
+    end
+end
+end))
+
+
         coroutine.resume(coroutine.create(function()
             pcall(function ()
         Button.TouchTap:Connect(function()
-        for i,v in pairs(CrazyDayScreen:GetChildren()) do
+        for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
                 if v.Name == "Frame" and i == 2 then
                     v.Visible = not v.Visible
                             end
