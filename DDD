@@ -1,6 +1,10 @@
 repeat wait() until game:IsLoaded()
 repeat task.wait() until game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+
+if game.CoreGui:FindFirstChild("ScreenGui") == nil then
+    warn("Loading Gui..")
+
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
@@ -1080,3 +1084,5 @@ coroutine.resume(coroutine.create(function()
                 end)
             end)
         end))
+
+    end
