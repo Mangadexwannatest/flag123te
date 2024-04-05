@@ -25,14 +25,11 @@ local Options = Fluent.Options
 local SwordWeapon = 
 {
 }
-local MeeleeWeapon = 
-{
-"Hakari","Natsu","Jiren","Choso","Gilgamesh","Itadori","Gon","Killua",
-"Sukuna","Sukuna[Half Power]","Tatsumaki","Uraume","Gojo","Gojo[Unleashed]",
-"Naruto"
-}
-local FruitsWeapon = 
-{
+local MeeleeWeapon = {
+    "Hakari","Natsu","Jiren","Choso","Gilgamesh","Itadori","Gon","Killua",
+    "Sukuna","Sukuna [Half Power]","Tatsumaki","Uraume","Gojo","Gojo [Unleashed]",
+    "Naruto"}
+local FruitsWeapon = {
 "Bomb","Smoke","Light","Sand","Flame","Quake",
 "GodLight","Operation","Solar"
 }
@@ -271,7 +268,7 @@ do
     })
 
     Tabs.Webhook:AddButton({
-        Title = "Test",
+        Title = "Teleport",
         Description = nil,
         Callback = function()
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[Options.SelectLocation.Value].CFrame
@@ -308,6 +305,39 @@ function getclosest()
 end
 
 coroutine.resume(coroutine.create(function()
+    pcall(function ()
+local CloseOpen = Instance.new("ScreenGui")
+local TextButton = Instance.new("TextButton")
+CloseOpen.Name = "Close/Open"
+CloseOpen.Parent = game:WaitForChild("CoreGui")
+CloseOpen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+TextButton.Parent = CloseOpen
+TextButton.BackgroundColor3 = Color3.fromRGB(140, 140, 140)
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.0174563117, 0, 0.286864668, 0)
+TextButton.Size = UDim2.new(0.100000001, 0, 0.0633569732, 0)
+TextButton.Font = Enum.Font.ArialBold
+TextButton.Text = "Close/Open"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextScaled = true
+TextButton.TextSize = 14.000
+TextButton.TextWrapped = true
+end)
+end))
+
+local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+        Button.TouchTap:Connect(function()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true,Window.MinimizeKey, false, nil)
+        end)
+    end)
+end))
+
+
+coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
             for i,v in next, BackPackGet do
                 local MeleeTable = table.find(MeeleeWeapon,v.Name)
@@ -318,9 +348,11 @@ coroutine.resume(coroutine.create(function()
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - c.HumanoidRootPart.Position).Magnitude
                 if Options.Weapon.Value == "Melee" and MeleeTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
-                elseif  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
+                end
+                if  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
-                elseif  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
+                end
+                if  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                         end
                     end
