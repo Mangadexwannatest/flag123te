@@ -2,7 +2,7 @@ repeat wait() until game:IsLoaded()
 repeat task.wait() until game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 
-if game.CoreGui:FindFirstChild("ScreenGui") == nil then
+if game.CoreGui:FindFirstChild("CrazyDay") == nil then
     warn("Loading Gui..")
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -32,7 +32,7 @@ local SwordWeapon =
 local MeeleeWeapon = {
     "Hakari","Natsu","Jiren","Choso","Gilgamesh","Itadori","Gon","Killua",
     "Sukuna","Sukuna [Half Power]","Tatsumaki","Uraume","Gojo","Gojo [Unleashed]",
-    "Naruto"}
+    "Naruto","Combat"}
 local FruitsWeapon = {
 "Bomb","Smoke","Light","Sand","Flame","Quake",
 "GodLight","Operation","Solar"
@@ -213,7 +213,7 @@ do
     Tabs.Webhook:AddToggle("AutoWebhookBountyTask", {Title = "Auto Bounty Task Reward", Default = false })
 
     Tabs.Webhook:AddButton({
-        Title = "Test",
+        Title = "Webhook",
         Description = nil,
         Callback = function()
             local timeInfo = os.date("*t")                                    
@@ -1071,12 +1071,26 @@ coroutine.resume(coroutine.create(function()
         end)
         end))
         
-        local WaitScreen = game.CoreGui:WaitForChild("ScreenGui")
+        local CrazyDayScreen = game.CoreGui:WaitForChild("CrazyDay")
         local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
+        
+        coroutine.resume(coroutine.create(function()
+        game.CoreGui:WaitForChild("ScreenGui")
+        for i,v in pairs(game.CoreGui:GetChildren()) do
+            if v.Name == "ScreenGui" then
+                for _,k in next, v:GetDescendants() do
+                    if k.Name == "TextLabel" and string.find(k.Text,"Second Piece") then
+                        k.Parent.Parent.Parent.Parent.Name = "CrazyDay"
+                        warn("Found Ui. . .")
+                    end
+                end
+            end
+        end
+        end))
         coroutine.resume(coroutine.create(function()
             pcall(function ()
         Button.TouchTap:Connect(function()
-        for i,v in pairs(WaitScreen:GetChildren()) do
+        for i,v in pairs(CrazyDayScreen:GetChildren()) do
                 if v.Name == "Frame" and i == 2 then
                     v.Visible = not v.Visible
                             end
@@ -1084,5 +1098,4 @@ coroutine.resume(coroutine.create(function()
                 end)
             end)
         end))
-
-    end
+    end -- End Of If
