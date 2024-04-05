@@ -7,12 +7,12 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Second Piece",
-    SubTitle = "Last Update April/05/2024",
+    SubTitle = "Last Update April/05/2024 [edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
     Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl 
+    MinimizeKey = Enum.KeyCode.RightShift 
 })
 
 local Tabs = {
@@ -303,38 +303,6 @@ function getclosest()
        end
        return ClosestObject
 end
-
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-local CloseOpen = Instance.new("ScreenGui")
-local TextButton = Instance.new("TextButton")
-CloseOpen.Name = "Close/Open"
-CloseOpen.Parent = game:WaitForChild("CoreGui")
-CloseOpen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-TextButton.Parent = CloseOpen
-TextButton.BackgroundColor3 = Color3.fromRGB(140, 140, 140)
-TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton.BorderSizePixel = 0
-TextButton.Position = UDim2.new(0.0174563117, 0, 0.286864668, 0)
-TextButton.Size = UDim2.new(0.100000001, 0, 0.0633569732, 0)
-TextButton.Font = Enum.Font.ArialBold
-TextButton.Text = "Close/Open"
-TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton.TextScaled = true
-TextButton.TextSize = 14.000
-TextButton.TextWrapped = true
-end)
-end))
-
-local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-        Button.TouchTap:Connect(function()
-            game:GetService("VirtualInputManager"):SendKeyEvent(true,Window.MinimizeKey, false, nil)
-        end)
-    end)
-end))
 
 
 coroutine.resume(coroutine.create(function()
@@ -1062,4 +1030,41 @@ coroutine.resume(coroutine.create(function()
                     end
                 end)
             end
+        end))
+
+        coroutine.resume(coroutine.create(function()
+            pcall(function ()
+        local CloseOpen = Instance.new("ScreenGui")
+        local TextButton = Instance.new("TextButton")
+        CloseOpen.Name = "Close/Open"
+        CloseOpen.Parent = game:WaitForChild("CoreGui")
+        CloseOpen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        
+        TextButton.Parent = CloseOpen
+        TextButton.BackgroundColor3 = Color3.fromRGB(140, 140, 140)
+        TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        TextButton.BorderSizePixel = 0
+        TextButton.Position = UDim2.new(0.0174563117, 0, 0.286864668, 0)
+        TextButton.Size = UDim2.new(0.100000001, 0, 0.0633569732, 0)
+        TextButton.Font = Enum.Font.ArialBold
+        TextButton.Text = "Close/Open"
+        TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TextButton.TextScaled = true
+        TextButton.TextSize = 14.000
+        TextButton.TextWrapped = true
+        end)
+        end))
+        
+        local WaitScreen = game.CoreGui:WaitForChild("ScreenGui")
+        local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
+        coroutine.resume(coroutine.create(function()
+            pcall(function ()
+        Button.TouchTap:Connect(function()
+        for i,v in pairs(WaitScreen:GetChildren()) do
+                if v.Name == "Frame" and i == 2 then
+                    v.Visible = not v.Visible
+                            end
+                        end
+                end)
+            end)
         end))
