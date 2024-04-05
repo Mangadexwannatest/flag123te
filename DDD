@@ -213,7 +213,7 @@ do
     Tabs.Webhook:AddToggle("AutoWebhookBountyTask", {Title = "Auto Bounty Task Reward", Default = false })
 
     Tabs.Webhook:AddButton({
-        Title = "Webhook",
+        Title = "Test",
         Description = nil,
         Callback = function()
             local timeInfo = os.date("*t")                                    
@@ -1050,6 +1050,7 @@ coroutine.resume(coroutine.create(function()
 
         coroutine.resume(coroutine.create(function()
             pcall(function ()
+                if game.CoreGui:FindFirstChild("Close/Open") == nil then
         local CloseOpen = Instance.new("ScreenGui")
         local TextButton = Instance.new("TextButton")
         CloseOpen.Name = "Close/Open"
@@ -1068,6 +1069,7 @@ coroutine.resume(coroutine.create(function()
         TextButton.TextScaled = true
         TextButton.TextSize = 14.000
         TextButton.TextWrapped = true
+                end
         end)
         end))
         
