@@ -28,7 +28,7 @@ local SwordWeapon =
 local MeeleeWeapon = 
 {
 "Hakari","Natsu","Jiren","Choso","Gilgamesh","Itadori","Gon","Killua",
-"Sukuna","Sukuna [Half Power]","Tatsumaki","Uraume","Gojo","Gojo [Unleashed]",
+"Sukuna","Sukuna[Half Power]","Tatsumaki","Uraume","Gojo","Gojo[Unleashed]",
 "Naruto"
 }
 local FruitsWeapon = 
@@ -119,13 +119,11 @@ do
 {
     Title = "Health % ",
     Description = "Calculated as the max percentage of health",
-    Default = 50,
+    Default = 60,
     Min = 10,
     Max = 100,
-    Rounding = 1,
-    Callback = function(Value)
-        getgenv().HealthDetech = Value
-    end})
+    Rounding = 0,
+    })
 
     Tabs.Main:AddToggle("AutoBountyHunter", {Title = "Auto Bounty Task", Default = false })
 
@@ -256,6 +254,33 @@ do
             })    
         end
     })
+
+    if game.PlaceId == 15049111150 then
+    Tabs.Webhook:AddSection("Locations")
+
+    local TeleportList = {}
+     for i,v in pairs(game.Workspace.Locations:GetChildren()) do
+     table.insert(TeleportList,v.Name)
+     end
+TeleportConfig:NewButton("Teleport", nil, function()
+  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[getgenv().TeleportSelect].CFrame
+end)
+
+    Tabs.Webhook:AddDropdown("SelectLocation", {
+        Title = "Select Location",
+        Values = TeleportList,
+        Multi = false,
+        Default = nil,
+    })
+
+    Tabs.Webhook:AddButton({
+        Title = "Test",
+        Description = nil,
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[Options.SelectLocation.Value].CFrame
+        end})
+
+    end
 
 end -- End Of Do
 
@@ -568,7 +593,7 @@ coroutine.resume(coroutine.create(function()
                                 repeat 
                                     wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame
-                                fireproximityprompt(v.Parent.Name)
+                                fireproximityprompt(v.Parent)
                                 until not Options.AutoQuest.Value or not getgenv().NoQuest or getgenv().DontAcceptQuest or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown
                             end
                         end
@@ -684,7 +709,7 @@ coroutine.resume(coroutine.create(function()
             if Options.AutoBountyHunter.Value and game.PlaceId == 15049111150 and not getgenv().StopHealthDetech  then
                 local HPTax = game.Players.LocalPlayer.PlayerGui.MainUI.Interface.PlayerStatus.Hp.Frame.TextLabel.Text
                 local HpSplit = string.split(HPTax, "/")
-            local HealthPercent = HpSplit[2]/getgenv().HealthDetech  
+            local HealthPercent = HpSplit[2]/Options.HealthDetech.Value  
             if game.Players.LocalPlayer.Character.Humanoid.Health <= tonumber(HealthPercent) then
                 getgenv().STOP = true
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild("Safe Part").CFrame * CFrame.new(0,3,0)
