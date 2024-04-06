@@ -213,7 +213,7 @@ do
     Tabs.Webhook:AddToggle("AutoWebhookBountyTask", {Title = "Auto Bounty Task Reward", Default = false })
 
     Tabs.Webhook:AddButton({
-        Title = "Test",
+        Title = "Webhook",
         Description = nil,
         Callback = function()
             local timeInfo = os.date("*t")                                    
@@ -722,7 +722,7 @@ coroutine.resume(coroutine.create(function()
             if Options.AutoBountyHunter.Value and game.PlaceId == 15049111150 and not getgenv().StopHealthDetech  then
                 local HPTax = game.Players.LocalPlayer.PlayerGui.MainUI.Interface.PlayerStatus.Hp.Frame.TextLabel.Text
                 local HpSplit = string.split(HPTax, "/")
-            local HealthPercent = HpSplit[2]/Options.HealthDetech.Value  
+                local HealthPercent = Options.HealthDetech.Value * (HpSplit[2] / 100)  
             if game.Players.LocalPlayer.Character.Humanoid.Health <= tonumber(HealthPercent) then
                 getgenv().STOP = true
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild("Safe Part").CFrame * CFrame.new(0,3,0)
@@ -786,8 +786,7 @@ end))
       coroutine.resume(coroutine.create(function()
         while task.wait() do pcall(function ()
             if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
-                    if dist >= 10 and not getgenv().STOP then
+                    if not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown then
                         repeat 
                            wait(.85)
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
