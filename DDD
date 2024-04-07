@@ -1546,7 +1546,7 @@ end))
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-        if Options.AutoSpawnPortal.Value and game.PalceId == 15049111150 and not getgenv().EnterNow then
+        if Options.AutoSpawnPortal.Value and game.PlaceId == 15049111150 and not getgenv().EnterNow then
             for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainUI.Interface.Inventory.ItemsFrame:GetChildren()) do
                 if getgenv().Legendary and string.find(v.Legendary,"Legendary") then
                 getgenv().SpawnLegend = true getgenv().SpawnLegendDetech = true getgenv().NoEquip = true
