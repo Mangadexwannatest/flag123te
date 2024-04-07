@@ -1,1 +1,57 @@
+repeat wait() until game:IsLoaded()
+repeat task.wait() until game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name)
+game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+local Window = Fluent:CreateWindow({
+    Title = "Fluent " .. Fluent.Version,
+    SubTitle = "by dawid",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+})
+local Options = Fluent.Options
 
+-- Fluent provides Lucide Icons, they are optional
+local Tabs = {
+    Main = Window:AddTab({ Title = "Main", Icon = "" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+}
+local Section = Tabs.Main:AddSection("Section Name")
+
+Tabs.Main:AddToggle("AutoExecute", {Title = "Auto Execute", Default = false })
+
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+Window:SelectTab(1)
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+        repeat wait() until game:IsLoaded()
+        repeat wait() until Options.AutoExecute.Value
+        warn("Active Auto Execute")
+        local queue_teleport = queueonteleport or queue_on_teleport
+        local script = 
+        [[
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/flag123te/main/TEST'))()
+        ]]
+        if (queue_teleport) then
+            queue_teleport(script)
+         end
+         local success = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/flag123te/main/TEST"))()
+         end)
+         
+         print(success)
+         if not success then
+            wait(20)
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/flag123te/main/TEST"))()
+         end
+    end)
+end))
