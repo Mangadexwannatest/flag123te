@@ -1094,6 +1094,8 @@ end
 function WebhookMerchant()
     for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
         if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") then
+            local Split_V = string.split(v.Text.Text, ">")
+            local Split_A = string.split(Split_V[2], "<")
     local timeInfo = os.date("*t")
     BBody = game:GetService("HttpService"):JSONEncode({
           content = nil,
@@ -1115,7 +1117,7 @@ function WebhookMerchant()
               
                              {
                     ["name"] = "Traveling Merchant",
-                    ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n"..v.Text.Text,
+                    ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\nYou received : "..Split_A[1],
                     ["inline"] = false
                       
                   },
