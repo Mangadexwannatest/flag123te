@@ -1548,7 +1548,8 @@ end))
         while wait() do pcall(function ()
         if Options.AutoSpawnPortal.Value and game.PlaceId == 15049111150 and not getgenv().EnterNow then
             for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainUI.Interface.Inventory.ItemsFrame:GetChildren()) do
-                if getgenv().Legendary and string.find(v.Legendary,"Legendary") then
+                for _,k in pairs(game.Players.LocalPlayer:GetChildren()) do 
+                if getgenv().Legendary and string.find(v.Name,"Legendary") then
                 getgenv().SpawnLegend = true getgenv().SpawnLegendDetech = true getgenv().NoEquip = true
                 game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket"))
                 if game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket") == nil and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket") then
@@ -1578,21 +1579,27 @@ end))
                     getgenv().SpawnRareDetech =false
                 end
     
-                if getgenv().Legendary and getgenv().SpawnLegend and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket") and not getgenv().EnterNow then
+                if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") == nil and
+                getgenv().Legendary and getgenv().SpawnLegend and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket") and not getgenv().EnterNow then
                     game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
                     wait(1)
                 end
-                if getgenv().Legendary and getgenv().SpawnRare and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") and not getgenv().EnterNow then
+                if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") == nil and
+                getgenv().Legendary and getgenv().SpawnRare and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") and not getgenv().EnterNow then
                     game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
                     wait(1)
                 end
-                if getgenv().Legendary and getgenv().SpawnCommon and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") and not getgenv().EnterNow then
+                if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") == nil and
+                getgenv().Legendary and getgenv().SpawnCommon and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") and not getgenv().EnterNow then
                     game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
                     wait(1)
                 end   
-            
+                if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") ~= nil then
+                    firesignal(k.ItemUseUI.Interface.ItemFrame.Menu.Yes.MouseButton1Click)
+                end
             end
         end
+    end
         if not Options.AutoSpawnPortal.Value and getgenv().NoEquip then
             getgenv().NoEquip = false
         end
