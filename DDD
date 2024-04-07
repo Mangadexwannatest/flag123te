@@ -114,6 +114,7 @@ do
     })
 
     Tabs.Main:AddToggle("AutoPortal", {Title = "Auto Portal", Default = false })
+    Tabs.Main:AddToggle("AutoSpawnPortal", {Title = "Auto Spawn Portal", Default = false })
 
     Tabs.Main:AddSection("Bounty Task")
 
@@ -414,7 +415,7 @@ do
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/07/2024",
-        Content = "[+] Auto Merchant\n[+] Webhook Merchant\n[+] Auto Spawn Portal\n[+] Options Auto Execute"
+        Content = "[+] Auto Merchant\n[+] Webhook Merchant\n   [-]sometime might bug\n[+] Auto Spawn Portal\n[+] Options Auto Execute"
     })
     
 
@@ -1306,20 +1307,22 @@ end))
                 end)
             end)
         end))
-        local MerchantFind = game.Workspace.NPC:WaitForChild("Traveling merchant")
-        local MerchantUi = game.Players.LocalPlayer.PlayerGui:WaitForChild("MerchantUI")
         
-        
+
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if Options.AutoBuyMerchantItem.Value and MerchantFind ~= nil and not MerchantUi.Enabled and not getgenv().AlrBuy then
+                if Options.AutoBuyMerchantItem.Value and not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled and not getgenv().AlrBuy and not getgenv().STOP then
+                    for i,v in pairs(game.Workspace.NPC:GetChildren()) do
+                        if v.Name == "Traveling merchant" then
                     repeat
                     wait()
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = MerchantFind.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
-                    fireproximityprompt(MerchantFind.HumanoidRootPart.Merchant)
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
+                    fireproximityprompt(v.HumanoidRootPart.Merchant)
                     getgenv().InMerchant = true
-                    until not Options.AutoBuyMerchantItem.Value or MerchantUi.Enabled or game.Workspace.NPC:FindFirstChild("Traveling merchant") == nil 
-                    or getgenv().AlrBuy
+                    until not Options.AutoBuyMerchantItem.Value or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled or getgenv().AlrBuy or getgenv().STOP
+                    getgenv().InMerchant = false
+                end
+            end
                 end
               end)
            end
@@ -1327,22 +1330,34 @@ end))
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
+                if game.PlaceId == 15049111150 then
+                    for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                 if game.Workspace.NPC:FindFirstChild("Traveling merchant") == nil and getgenv().InMerchant then
                     getgenv().InMerchant = false
                 end
                 if game.Workspace.NPC:FindFirstChild("Traveling merchant") == nil and getgenv().AlrBuy then
                     getgenv().AlrBuy = false
                 end
+                if v.Name == "Traveling merchant" then 
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                if dist >= 20 then
+                    wait(10)
+                    game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+                end
+                 end
+                    end
+                 end
             end)
         end
     end))
+    
 
 
         
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-            if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and MerchantUi.Enabled then
-                    for i,v in pairs(MerchantUi.Interface.Merchant.ItemFrame:GetChildren()) do
+            if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+                    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren()) do
                         if getgenv().MerchantTicket1 and v.Name == "[Tier 1] Summon Ticket" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
                             wait(.25)
@@ -1513,11 +1528,10 @@ end))
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if Options.AutoWebhookMerchant.Value and game.PlaceId == 15049111150 and MerchantFind ~= nil then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - MerchantFind.HumanoidRootPart.Position).Magnitude
-                    if dist <= 20 then
+                if Options.AutoWebhookMerchant.Value and game.PlaceId == 15049111150 then
+                    if game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                     for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
-                        if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") and dist <= 20 then
+                        if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") then
                             WebhookMerchant()
                             wait(1)
                         end
