@@ -286,7 +286,7 @@ do
         Title = "Merchant Item",
         Description = nil,
         Values = {"[Tier 1] Summon Ticket","[Tier 2] Summon Ticket","[Tier 3] Summon Ticket","Demon Fruit Remove Potion","Artifact Remove Potion","Busoshoku Haki Book","Kenbunshoku Haki Book",
-        "Infinity Orb","Sukuna Finger","Fishing Rod","Lightning Orb","Holy Grail","Light Fruit","Flame Fruit","Quake Fruit"},
+        "Infinity Orb","Sukuna Finger","Fishing Rod","Lightning Orb","Holy Grail","Operation Fruit","God Light Fruit","Solar Fruit","Light Fruit","Flame Fruit","Quake Fruit"},
         Multi = true,
         Default = {nil},
     })
@@ -331,6 +331,15 @@ do
         end
         if table.find(Values,"Holy Grail") and not getgenv().MerchantHolyGrail then
             getgenv().MerchantHolyGrail = true
+        end
+        if table.find(Values,"Operation Fruit") and not getgenv().MerchantOperation then
+            getgenv().MerchantOperation = true
+        end
+        if table.find(Values,"God Light Fruit") and not getgenv().MerchantGodLight then
+            getgenv().MerchantGodLight = true
+        end
+        if table.find(Values,"Solar Fruit") and not getgenv().MerchantSolar then
+            getgenv().MerchantSolar = true
         end
         if table.find(Values,"Light Fruit") and not getgenv().MerchantLight then
             getgenv().MerchantLight = true
@@ -377,6 +386,15 @@ do
         end
         if not table.find(Values,"Holy Grail") and getgenv().MerchantHolyGrail then
             getgenv().MerchantHolyGrail = false
+        end
+        if not table.find(Values,"Operation Fruit") and getgenv().MerchantOperation then
+            getgenv().MerchantOperation = false
+        end
+        if not table.find(Values,"God Light Fruit") and getgenv().MerchantGodLight then
+            getgenv().MerchantGodLight = false
+        end
+        if not table.find(Values,"Solar Fruit") and getgenv().MerchantSolar then
+            getgenv().MerchantSolar = false
         end
         if not table.find(Values,"Light Fruit") and  getgenv().MerchantLight then
             getgenv().MerchantLight = false
@@ -1276,8 +1294,8 @@ end))
                 end)
             end)
         end))
-        local MerchantFind = game.Workspace.NPC:FindFirstChild("Traveling merchant")
-        local MerchantUi = game.Players.LocalPlayer.PlayerGui.MerchantUI
+        local MerchantFind = game.Workspace.NPC:WaitForChild("Traveling merchant")
+        local MerchantUi = game.Players.LocalPlayer.PlayerGui:WaitForChild("MerchantUI")
         
         
         coroutine.resume(coroutine.create(function()
@@ -1292,70 +1310,49 @@ end))
               end)
            end
         end))
-
+        
         coroutine.resume(coroutine.create(function()
-            if Options.AutoBuyMerchantItem.Value and game.PalceId == 15049111150 and MerchantUi.Enabled then
+            if Options.AutoBuyMerchantItem.Value and MerchantUi.Enabled then
+                print("Checking , , ,")
                     for i,v in pairs(MerchantUi.Interface.Merchant.ItemFrame:GetChildren()) do
-                        if getgenv().MerchantTicket1 then
+                        if getgenv().MerchantTicket1 and v.Name == "[Tier 1] Summon Ticket" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
-                        end
-                        if getgenv().MerchantTicket2 then
+                        elseif getgenv().MerchantTicket2 and v.Name == "[Tier 2] Summon Ticket" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
-                            
-                        end
-                        if getgenv().MerchantTicket3 then
+                        elseif getgenv().MerchantTicket3 and v.Name == "[Tier 3] Summon Ticket" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
-                            
-                        end
-                        if getgenv().DemonRemove  then
+                        elseif getgenv().DemonRemove  and v.Name == "Demon Fruit Remove Potion" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Demon Fruit Remove Potion")
-                            
-                        end
-                        if getgenv().ArtifactRemove  then
+                        elseif getgenv().ArtifactRemove  and v.Name == "Artifact Remove Potion" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Artifact Remove Potion")
-                            
-                        end
-                        if getgenv().MerchantBusoHaki  then
+                        elseif getgenv().MerchantBusoHaki  and v.Name == "Busoshoku Haki Book" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Busoshoku Haki Book")
-                            
-                        end
-                        if getgenv().MerchantKenHaki  then
+                        elseif getgenv().MerchantKenHaki  and v.Name == "Kenbunshoku Haki Book" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Kenbunshoku Haki Book")
-                            
-                        end
-                        if getgenv().MerchantInfOrb then
+                        elseif getgenv().MerchantInfOrb and v.Name == "Infinity Orb" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Infinity Orb")
-                            
-                        end
-                        if getgenv().MerchantSukuna then
+                        elseif getgenv().MerchantSukuna and v.Name == "Sukuna Finger" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
-                            
-                        end
-                        if getgenv().MerchantFishRod then
+                        elseif getgenv().MerchantFishRod and v.Name == "Fishing Rod" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Fishing Rod")
-                            
-                        end
-                        if getgenv().MerchantLightOrb then
+                        elseif getgenv().MerchantLightOrb and v.Name == "Lightning Orb" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Lightning Orb")
-                            
-                        end
-                        if getgenv().MerchantLight  then
+                        elseif getgenv().MerchantOperation  and v.Name == "Operation Fruit" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Operation")
+                        elseif getgenv().MerchantGodLight and v.Name == "God Light Fruit" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
+                        elseif getgenv().MerchantSolar and v.Name == "Solar Fruit" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Solar")
+                        elseif getgenv().MerchantLight  and v.Name == "Light Fruit" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Light")
-                            
-                        end
-                        if getgenv().MerchantFlame then
+                        elseif getgenv().MerchantFlame and v.Name == "Flame Fruit" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Flame")
-                            
-                        end
-                        if getgenv().MerchantQuake  then
+                        elseif getgenv().MerchantQuake  and v.Name == "Quake Fruit" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Quake")
-                            
                         end
                 end
             end
         end))
-
-        print(getgenv().MerchantQuake)
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
@@ -1364,8 +1361,8 @@ end))
                     if dist <= 20 then
                     for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
                         if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") and dist <= 20 then
-                            wait(1.5)
                             WebhookMerchant()
+                            wait(5)
                             break
                         end
                         end
