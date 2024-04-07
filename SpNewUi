@@ -1,23 +1,28 @@
 repeat wait() until game:IsLoaded()
 repeat task.wait() until game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+
+if game.CoreGui:FindFirstChild("CrazyDay") == nil then
+    warn("Loading Gui..")
+
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
     Title = "Second Piece",
-    SubTitle = "Last Update April/05/2024",
+    SubTitle = "Last Update April/07/2024 [YT:CrazyDay/edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
     Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl 
+    MinimizeKey = Enum.KeyCode.RightShift 
 })
 
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
     Webhook = Window:AddTab({ Title = "Webhook", Icon = "" }),
+    Other = Window:AddTab({ Title = "Other", Icon = "" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "" })
 }
 
@@ -25,14 +30,11 @@ local Options = Fluent.Options
 local SwordWeapon = 
 {
 }
-local MeeleeWeapon = 
-{
-"Hakari","Natsu","Jiren","Choso","Gilgamesh","Itadori","Gon","Killua",
-"Sukuna","Sukuna[Half Power]","Tatsumaki","Uraume","Gojo","Gojo[Unleashed]",
-"Naruto"
-}
-local FruitsWeapon = 
-{
+local MeeleeWeapon = {
+    "Hakari","Natsu","Jiren","Choso","Gilgamesh","Itadori","Gon","Killua",
+    "Sukuna","Sukuna [Half Power]","Tatsumaki","Uraume","Gojo","Gojo [Unleashed]",
+    "Naruto","Combat"}
+local FruitsWeapon = {
 "Bomb","Smoke","Light","Sand","Flame","Quake",
 "GodLight","Operation","Solar"
 }
@@ -210,9 +212,10 @@ do
 
     Tabs.Webhook:AddToggle("AutoWebhookDungeon", {Title = "Auto Dungeon Reward", Default = false })
     Tabs.Webhook:AddToggle("AutoWebhookBountyTask", {Title = "Auto Bounty Task Reward", Default = false })
+    Tabs.Webhook:AddToggle("AutoWebhookMerchant", {Title = "Auto Merchant Reward", Default = false })
 
     Tabs.Webhook:AddButton({
-        Title = "Test",
+        Title = "Webhook",
         Description = nil,
         Callback = function()
             local timeInfo = os.date("*t")                                    
@@ -262,9 +265,6 @@ do
      for i,v in pairs(game.Workspace.Locations:GetChildren()) do
      table.insert(TeleportList,v.Name)
      end
-TeleportConfig:NewButton("Teleport", nil, function()
-  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[getgenv().TeleportSelect].CFrame
-end)
 
     Tabs.Webhook:AddDropdown("SelectLocation", {
         Title = "Select Location",
@@ -274,13 +274,149 @@ end)
     })
 
     Tabs.Webhook:AddButton({
-        Title = "Test",
+        Title = "Teleport",
         Description = nil,
         Callback = function()
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[Options.SelectLocation.Value].CFrame
         end})
 
     end
+
+    local MerchantDropdown = Tabs.Other:AddDropdown("MerchantSelect", {
+        Title = "Merchant Item",
+        Description = nil,
+        Values = {"[Tier 1] Summon Ticket","[Tier 2] Summon Ticket","[Tier 3] Summon Ticket","Demon Fruit Remove Potion","Artifact Remove Potion","Busoshoku Haki Book","Kenbunshoku Haki Book",
+        "Infinity Orb","Sukuna Finger","Fishing Rod","Lightning Orb","Holy Grail","Operation Fruit","God Light Fruit","Solar Fruit","Light Fruit","Flame Fruit","Quake Fruit"},
+        Multi = true,
+        Default = {nil},
+    })
+
+    MerchantDropdown:OnChanged(function(Value)
+        local Values = {}
+        for Value, State in next, Value do
+            table.insert(Values, Value)
+        end
+        if table.find(Values,"[Tier 1] Summon Ticket") and not getgenv().MerchantTicket1 then
+            getgenv().MerchantTicket1 = true
+        end
+        if table.find(Values,"[Tier 2] Summon Ticket") and not getgenv().MerchantTicket2 then
+            getgenv().MerchantTicket2 = true
+        end
+        if table.find(Values,"[Tier 3] Summon Ticket") and not getgenv().MerchantTicket3 then
+            getgenv().MerchantTicket3 = true
+        end
+        if table.find(Values,"Demon Fruit Remove Potion") and not getgenv().DemonRemove then
+            getgenv().DemonRemove = true
+        end
+        if table.find(Values,"Artifact Remove Potion") and not getgenv().ArtifactRemove then
+            getgenv().ArtifactRemove = true
+        end
+        if table.find(Values,"Busoshoku Haki Book") and not getgenv().MerchantBusoHaki then
+            getgenv().MerchantBusoHaki = true
+        end
+        if table.find(Values,"Kenbunshoku Haki Book") and not getgenv().MerchantKenHaki then
+            getgenv().MerchantKenHaki = true
+        end
+        if table.find(Values,"Infinity Orb") and not getgenv().MerchantInfOrb then
+            getgenv().MerchantInfOrb = true
+        end
+        if table.find(Values,"Sukuna Finger") and not getgenv().MerchantSukuna then
+            getgenv().MerchantSukuna = true
+        end
+        if table.find(Values,"Fishing Rod") and not getgenv().MerchantFishRod then
+            getgenv().MerchantFishRod = true
+        end
+        if table.find(Values,"Lightning Orb") and not getgenv().MerchantLightOrb then
+            getgenv().MerchantLightOrb = true
+        end
+        if table.find(Values,"Holy Grail") and not getgenv().MerchantHolyGrail then
+            getgenv().MerchantHolyGrail = true
+        end
+        if table.find(Values,"Operation Fruit") and not getgenv().MerchantOperation then
+            getgenv().MerchantOperation = true
+        end
+        if table.find(Values,"God Light Fruit") and not getgenv().MerchantGodLight then
+            getgenv().MerchantGodLight = true
+        end
+        if table.find(Values,"Solar Fruit") and not getgenv().MerchantSolar then
+            getgenv().MerchantSolar = true
+        end
+        if table.find(Values,"Light Fruit") and not getgenv().MerchantLight then
+            getgenv().MerchantLight = true
+        end
+        if table.find(Values,"Flame Fruit") and not getgenv().MerchantFlame then
+            getgenv().MerchantFlame = true
+        end
+        if table.find(Values,"Quake Fruit") and not getgenv().MerchantQuake then
+            getgenv().MerchantQuake = true
+        end
+
+        if not table.find(Values,"[Tier 1] Summon Ticket") and getgenv().MerchantTicket1 then
+            getgenv().MerchantTicket1 = false
+        end
+        if not table.find(Values,"[Tier 2] Summon Ticket") and getgenv().MerchantTicket2 then
+            getgenv().MerchantTicket2 = false
+        end
+        if not table.find(Values,"[Tier 3] Summon Ticket") and getgenv().MerchantTicket3 then
+            getgenv().MerchantTicket3 = false
+        end
+        if not table.find(Values,"Demon Fruit Remove Potion") and getgenv().DemonRemove then
+            getgenv().DemonRemove = false
+        end
+        if not table.find(Values,"Artifact Remove Potion") and getgenv().ArtifactRemove then
+            getgenv().ArtifactRemove = false
+        end
+        if not table.find(Values,"Busoshoku Haki Book") and getgenv().MerchantBusoHaki then
+            getgenv().MerchantBusoHaki = false
+        end
+        if not table.find(Values,"Kenbunshoku Haki Book") and getgenv().MerchantKenHaki then
+            getgenv().MerchantKenHaki = false
+        end
+        if not table.find(Values,"Infinity Orb") and getgenv().MerchantInfOrb then
+            getgenv().MerchantInfOrb = false
+        end
+        if not table.find(Values,"Sukuna Finger") and getgenv().MerchantSukuna then
+            getgenv().MerchantSukuna = false
+        end
+        if not table.find(Values,"Fishing Rod") and getgenv().MerchantFishRod then
+            getgenv().MerchantFishRod = false
+        end
+        if not table.find(Values,"Lightning Orb") and getgenv().MerchantLightOrb then
+            getgenv().MerchantLightOrb = false
+        end
+        if not table.find(Values,"Holy Grail") and getgenv().MerchantHolyGrail then
+            getgenv().MerchantHolyGrail = false
+        end
+        if not table.find(Values,"Operation Fruit") and getgenv().MerchantOperation then
+            getgenv().MerchantOperation = false
+        end
+        if not table.find(Values,"God Light Fruit") and getgenv().MerchantGodLight then
+            getgenv().MerchantGodLight = false
+        end
+        if not table.find(Values,"Solar Fruit") and getgenv().MerchantSolar then
+            getgenv().MerchantSolar = false
+        end
+        if not table.find(Values,"Light Fruit") and  getgenv().MerchantLight then
+            getgenv().MerchantLight = false
+        end
+        if not table.find(Values,"Flame Fruit") and  getgenv().MerchantFlame then
+            getgenv().MerchantFlame = false
+        end
+        if not table.find(Values,"Quake Fruit") and  getgenv().MerchantQuake then
+            getgenv().MerchantQuake = false
+        end
+
+    end)
+
+    Tabs.Other:AddToggle("AutoBuyMerchantItem", {Title = "Auto Merchant", Default = false })
+
+    local UpdateLog = Tabs.Other:AddSection("Update Log")
+
+    UpdateLog:AddParagraph({
+        Title = "Last Update April/07/2024",
+        Content = "[+] Auto Merchant\n[+] Webhook Merchant\n[+] Auto Spawn Portal\n[+] Options Auto Execute"
+    })
+    
 
 end -- End Of Do
 
@@ -300,7 +436,7 @@ function getclosest()
        local ClosestObject
        for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                local PlayersTable = table.find(GetPlayers,v.Name)
-               if not PlayersTable then
+               if not PlayersTable and v.Humanoid.Health > 0 then
                local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                if dist < MinDistance then
                    MinDistance, ClosestObject = dist, v
@@ -321,9 +457,11 @@ coroutine.resume(coroutine.create(function()
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - c.HumanoidRootPart.Position).Magnitude
                 if Options.Weapon.Value == "Melee" and MeleeTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
-                elseif  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
+                end
+                if  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
-                elseif  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
+                end
+                if  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                         end
                     end
@@ -568,6 +706,21 @@ coroutine.resume(coroutine.create(function()
     end))
 
     coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+            if Options.AutoPortal.Value and game.PlaceId ~= 15049111150 and not getgenv().Started then
+                game:GetService("ReplicatedStorage").Remotes.Ready:FireServer()
+                repeat wait() until game:IsLoaded()
+                wait(.5)
+                getgenv().Started = true
+                end
+           end) 
+           if getgenv().Started then
+        break
+           end
+        end
+    end))
+
+    coroutine.resume(coroutine.create(function()
         while wait() do
             pcall(function ()
                 if Options.AutoQuest.Value and not getgenv().DontAcceptQuest  and game.PlaceId == 15049111150 and not getgenv().STOP and getgenv().QuestHuntOnCoolDown then
@@ -709,7 +862,7 @@ coroutine.resume(coroutine.create(function()
             if Options.AutoBountyHunter.Value and game.PlaceId == 15049111150 and not getgenv().StopHealthDetech  then
                 local HPTax = game.Players.LocalPlayer.PlayerGui.MainUI.Interface.PlayerStatus.Hp.Frame.TextLabel.Text
                 local HpSplit = string.split(HPTax, "/")
-            local HealthPercent = HpSplit[2]/Options.HealthDetech.Value  
+                local HealthPercent = Options.HealthDetech.Value * (HpSplit[2] / 100)  
             if game.Players.LocalPlayer.Character.Humanoid.Health <= tonumber(HealthPercent) then
                 getgenv().STOP = true
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild("Safe Part").CFrame * CFrame.new(0,3,0)
@@ -773,8 +926,7 @@ end))
       coroutine.resume(coroutine.create(function()
         while task.wait() do pcall(function ()
             if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
-                    if dist >= 10 and not getgenv().STOP then
+                    if not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown then
                         repeat 
                            wait(.85)
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
@@ -871,7 +1023,7 @@ end))
           content = nil,
           embeds = {{
               ["author"] = {
-                  ["name"] = "Second Piece Notify",
+                  ["name"] = "CrazyDay",
                   ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
               },
               ["title"] = "Second Piece", 
@@ -918,7 +1070,7 @@ if v2.Name == "WorldModel" then
               content = nil,
               embeds = {{
                   ["author"] = {
-                      ["name"] = "Second Piece Notify",
+                      ["name"] = "CrazyDay",
                       ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
                   },
                   ["title"] = "Second Piece", 
@@ -953,6 +1105,52 @@ if v2.Name == "WorldModel" then
        end
     end
 end
+end
+end
+end
+
+function WebhookMerchant()
+    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
+        if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") then
+            local Split_V = string.split(v.Text.Text, ">")
+            local Split_A = string.split(Split_V[2], "<")
+    local timeInfo = os.date("*t")
+    BBody = game:GetService("HttpService"):JSONEncode({
+          content = nil,
+          embeds = {{
+              ["author"] = {
+                  ["name"] = "CrazyDay",
+                  ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
+              },
+              ["title"] = "Second Piece", 
+              ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png",
+              ["footer"] = {
+                  ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                  ["icon_url"] = "https://tr.rbxcdn.com/6536b9e54e326d9ebc730845842e5363/150/150/Image/Png"
+             
+              },
+              ["color"] = tonumber(0xFFD700),
+              ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+              ["fields"] = {
+              
+                             {
+                    ["name"] = "Traveling Merchant",
+                    ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\nYou received : "..Split_A[1],
+                    ["inline"] = false
+                      
+                  },
+                
+              }
+              }}
+          })
+      local response = syn.request({
+      Url = Options.WebhookLink.Value,
+      Method = "POST",
+      Headers = {
+          ["Content-Type"] = "application/json"
+      },
+      Body = BBody
+    })    
 end
 end
 end
@@ -1034,3 +1232,147 @@ coroutine.resume(coroutine.create(function()
                 end)
             end
         end))
+
+        coroutine.resume(coroutine.create(function()
+            pcall(function ()
+                if game.CoreGui:FindFirstChild("Close/Open") == nil then
+        local CloseOpen = Instance.new("ScreenGui")
+        local TextButton = Instance.new("TextButton")
+        CloseOpen.Name = "Close/Open"
+        CloseOpen.Parent = game:WaitForChild("CoreGui")
+        CloseOpen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        
+        TextButton.Parent = CloseOpen
+        TextButton.BackgroundColor3 = Color3.fromRGB(140, 140, 140)
+        TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        TextButton.BorderSizePixel = 0
+        TextButton.Position = UDim2.new(0.0174563117, 0, 0.286864668, 0)
+        TextButton.Size = UDim2.new(0.100000001, 0, 0.0633569732, 0)
+        TextButton.Font = Enum.Font.ArialBold
+        TextButton.Text = "Close/Open"
+        TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TextButton.TextScaled = true
+        TextButton.TextSize = 14.000
+        TextButton.TextWrapped = true
+                end
+        end)
+        end))
+        
+        local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
+        
+        coroutine.resume(coroutine.create(function()
+            while wait() do pcall(function ()
+        if game.CoreGui:FindFirstChild("CrazyDay") == nil then
+        for i,v in pairs(game.CoreGui:GetChildren()) do
+            if v.Name == "ScreenGui" then
+                for _,k in next, v:GetDescendants() do
+                    if k.Name == "TextLabel" and string.find(k.Text,"Second Piece") then
+                        k.Parent.Parent.Parent.Parent.Name = "CrazyDay"
+                        warn("Found Ui. . .")  
+                       end
+                    end
+                end
+            end
+        end
+    end)
+    if game.CoreGui:FindFirstChild("CrazyDay") ~= nil then
+        print("break")
+        break
+    end
+end
+end))
+
+
+        coroutine.resume(coroutine.create(function()
+            pcall(function ()
+        Button.TouchTap:Connect(function()
+        for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+                if v.Name == "Frame" and i == 2 then
+                    v.Visible = not v.Visible
+                            end
+                        end
+                end)
+            end)
+        end))
+        local MerchantFind = game.Workspace.NPC:WaitForChild("Traveling merchant")
+        local MerchantUi = game.Players.LocalPlayer.PlayerGui:WaitForChild("MerchantUI")
+        
+        
+        coroutine.resume(coroutine.create(function()
+            while wait() do pcall(function ()
+                if Options.AutoBuyMerchantItem.Value and MerchantFind ~= nil and not MerchantUi.Enabled then
+                    repeat
+                    wait()
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = MerchantFind.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
+                    fireproximityprompt(MerchantFind.HumanoidRootPart.Merchant)
+                    until not Options.AutoBuyMerchantItem.Value or MerchantUi.Enabled or MerchantFind == nil
+                end
+              end)
+           end
+        end))
+        
+        coroutine.resume(coroutine.create(function()
+            if Options.AutoBuyMerchantItem.Value then
+                print("Checking , , ,")
+                    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren()) do
+                        if getgenv().MerchantTicket1 and v.Name == "[Tier 1] Summon Ticket" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
+                        elseif getgenv().MerchantTicket2 and v.Name == "[Tier 2] Summon Ticket" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
+                        elseif getgenv().MerchantTicket3 and v.Name == "[Tier 3] Summon Ticket" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
+                        elseif getgenv().DemonRemove  and v.Name == "Demon Fruit Remove Potion" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Demon Fruit Remove Potion")
+                        elseif getgenv().ArtifactRemove  and v.Name == "Artifact Remove Potion" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Artifact Remove Potion")
+                        elseif getgenv().MerchantBusoHaki  and v.Name == "Busoshoku Haki Book" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Busoshoku Haki Book")
+                        elseif getgenv().MerchantKenHaki  and v.Name == "Kenbunshoku Haki Book" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Kenbunshoku Haki Book")
+                        elseif getgenv().MerchantInfOrb and v.Name == "Infinity Orb" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Infinity Orb")
+                        elseif getgenv().MerchantSukuna and v.Name == "Sukuna Finger" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
+                        elseif getgenv().MerchantFishRod and v.Name == "Fishing Rod" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Fishing Rod")
+                        elseif getgenv().MerchantLightOrb and v.Name == "Lightning Orb" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Lightning Orb")
+                        elseif getgenv().MerchantOperation  and v.Name == "Operation Fruit" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Operation")
+                        elseif getgenv().MerchantGodLight and v.Name == "God Light Fruit" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
+                        elseif getgenv().MerchantSolar and v.Name == "Solar Fruit" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Solar")
+                        elseif getgenv().MerchantLight  and v.Name == "Light Fruit" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Light")
+                        elseif getgenv().MerchantFlame and v.Name == "Flame Fruit" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Flame")
+                        elseif getgenv().MerchantQuake  and v.Name == "Quake Fruit" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Quake")
+                        end
+                end
+            end
+        end))
+
+        coroutine.resume(coroutine.create(function()
+            while wait() do pcall(function ()
+                if Options.AutoWebhookMerchant.Value and game.PlaceId == 15049111150 and MerchantFind ~= nil then
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - MerchantFind.HumanoidRootPart.Position).Magnitude
+                    if dist <= 20 then
+                    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
+                        if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") and dist <= 20 then
+                            WebhookMerchant()
+                            wait(5)
+                            break
+                        end
+                        end
+                    end
+                end
+            end)
+        end
+    end))
+
+
+    end -- End Of If
+
+    
