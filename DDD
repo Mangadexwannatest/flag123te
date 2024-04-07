@@ -1283,7 +1283,7 @@ end))
                 if Options.AutoBuyMerchantItem.Value and MerchantFind ~= nil and not MerchantUi.Enabled then
                     repeat
                     wait()
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = MerchantFind.HumanoidRootPart.CFrame
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = MerchantFind.HumanoidRootPart.CFrame * CFrame.new(0,0,-5)
                     fireproximityprompt(MerchantFind.HumanoidRootPart.Merchant)
                     until not Options.AutoBuyMerchantItem.Value or MerchantUi.Enabled or MerchantFind == nil
                 end
@@ -1292,52 +1292,64 @@ end))
         end))
 
         coroutine.resume(coroutine.create(function()
-            if Options.AutoBuyMerchantItem.Value and MerchantFind ~= nil and game.PalceId == 15915049111150 then
-                if MerchantUi.Enabled then
+            if Options.AutoBuyMerchantItem.Value and game.PalceId == 15915049111150 then
                     for i,v in pairs(MerchantUi.Interface.Merchant.ItemFrame:GetChildren()) do
-                        if getgenv().MerchantTicket1 and v.Name == "[Tier 1] Summon Ticket" then
+                        if getgenv().MerchantTicket1 and v.Name == "[Tier 1] Summon Ticket" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
+                            print("Buy")
                         end
-                        if getgenv().MerchantTicket2 and v.Name == "[Tier 2] Summon Ticket" then
+                        if getgenv().MerchantTicket2 and v.Name == "[Tier 2] Summon Ticket" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
+                            print("Buy")
                         end
-                        if getgenv().MerchantTicket3 and v.Name == "[Tier 3] Summon Ticket" then
+                        if getgenv().MerchantTicket3 and v.Name == "[Tier 3] Summon Ticket" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
+                            print("Buy")
                         end
-                        if getgenv().DemonRemove and v.Name == "Demon Fruit Remove Potion" then
+                        if getgenv().DemonRemove and v.Name == "Demon Fruit Remove Potion" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Demon Fruit Remove Potion")
+                            print("Buy")
                         end
-                        if getgenv().ArtifactRemove and v.Name == "Artifact Remove Potion" then
+                        if getgenv().ArtifactRemove and v.Name == "Artifact Remove Potion" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Artifact Remove Potion")
+                            print("Buy")
                         end
-                        if getgenv().MerchantBusoHaki and  v.Name == "Busoshoku Haki Book" then
+                        if getgenv().MerchantBusoHaki and  v.Name == "Busoshoku Haki Book" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Busoshoku Haki Book")
+                            print("Buy")
                         end
-                        if getgenv().MerchantKenHaki and v.Name == "Kenbunshoku Haki Book"  then
+                        if getgenv().MerchantKenHaki and v.Name == "Kenbunshoku Haki Book"  and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Kenbunshoku Haki Book")
+                            print("Buy")
                         end
-                        if getgenv().MerchantInfOrb and v.Name == "Infinity Orb" then
+                        if getgenv().MerchantInfOrb and v.Name == "Infinity Orb" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Infinity Orb")
+                            print("Buy")
                         end
-                        if getgenv().MerchantSukuna and v.Name == "Sukuna Finger"  then
+                        if getgenv().MerchantSukuna and v.Name == "Sukuna Finger"  and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
+                            print("Buy")
                         end
-                        if getgenv().MerchantFishRod and v.Name == "Fishing Rod" then
+                        if getgenv().MerchantFishRod and v.Name == "Fishing Rod" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Fishing Rod")
+                            print("Buy")
                         end
-                        if getgenv().MerchantLightOrb and v.Name == "Lightning Orb" then
+                        if getgenv().MerchantLightOrb and v.Name == "Lightning Orb" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Lightning Orb")
+                            print("Buy")
                         end
-                        if getgenv().MerchantLight and v.Name == "Light Fruit" then
+                        if getgenv().MerchantLight and v.Name == "Light Fruit" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Light")
+                            print("Buy")
                         end
-                        if getgenv().MerchantFlame and v.Name == "Flame Fruit" then
+                        if getgenv().MerchantFlame and v.Name == "Flame Fruit" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Flame")
+                            print("Buy")
                         end
-                        if getgenv().MerchantQuake and v.Name == "Quake Fruit" then
+                        if getgenv().MerchantQuake and v.Name == "Quake Fruit" and MerchantUi.Enabled == true then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Quake")
+                            print("Buy")
                         end
-                    end
                 end
             end
         end))
