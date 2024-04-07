@@ -251,13 +251,6 @@ do
             })    
         end
     })
-
-    Tabs.Other:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
-    Tabs.Other:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
-    Tabs.Other:AddToggle("AutoRejoinError", {Title = "Auto Rejoin When Disconnect ", Default = false })
-    Tabs.Other:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
-    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
-
     Tabs.Other:AddSection("Traveling Merchant")
 
     local MerchantDropdown = Tabs.Other:AddDropdown("MerchantSelect", {
@@ -408,6 +401,13 @@ do
             Callback = function()
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[Options.SelectLocation.Value].CFrame
             end})
+
+    Tabs.Other:AddSection("Other")
+    Tabs.Other:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
+    Tabs.Other:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
+    Tabs.Other:AddToggle("AutoRejoinError", {Title = "Auto Rejoin When Disconnect ", Default = false })
+    Tabs.Other:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
+    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
 
     local UpdateLog = Tabs.Other:AddSection("Update Log")
 
@@ -1546,7 +1546,7 @@ end))
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-        if Options.AutoSpawnPortal.Value and game.PalceId == 15915049111150 and not getgenv().EnterNow then
+        if Options.AutoSpawnPortal.Value and game.PalceId == 15049111150 and not getgenv().EnterNow then
             for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainUI.Interface.Inventory.ItemsFrame:GetChildren()) do
                 if getgenv().Legendary and string.find(v.Legendary,"Legendary") then
                 getgenv().SpawnLegend = true getgenv().SpawnLegendDetech = true getgenv().NoEquip = true
