@@ -106,11 +106,19 @@ do
 
 
     local PortalDropdown = Tabs.Main:AddDropdown("Portal", {
-        Title = "Portal",
+        Title = "Select Portal",
         Description = "Tier",
         Values = {"Common", "Uncommon", "Legendary"},
         Multi = true,
         Default = {nil},
+    })
+
+        Tabs.Main:AddDropdown("DungeonSelect", {
+        Title = "Select World",
+        Description = "[Legendary Only]",
+        Values = {"Tokyo Prefectural Jujutsu High School"},
+        Multi = false,
+        Default = 1,
     })
 
     Tabs.Main:AddToggle("AutoPortal", {Title = "Auto Portal", Default = false })
@@ -1594,8 +1602,11 @@ end))
                     game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
                     wait(1)
                 end   
-                if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") ~= nil then
+                if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") ~= nil and k:FindFirstChild("DungeonSelect") == nil then
                     firesignal(k.ItemUseUI.Interface.ItemFrame.Menu.Yes.MouseButton1Click)
+                end
+                if k.Name == "PlayerGui" and k:FindFirstChild("DungeonSelect") ~= nil then 
+                    firesignal(k.DungeonSelect.Interface.Frame.List[Options.DungeonSelect.Value].Label.MouseButton1Click)
                 end
             end
         end
