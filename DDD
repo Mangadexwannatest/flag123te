@@ -131,13 +131,6 @@ do
     Tabs.Main:AddToggle("AutoBountyHunter", {Title = "Auto Bounty Task", Default = false })
 
 
-    Tabs.Main:AddSection("Other")
-
-    Tabs.Main:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
-    Tabs.Main:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
-    Tabs.Main:AddToggle("AutoRejoinError", {Title = "Auto Rejoin When Disconnect ", Default = false })
-    Tabs.Main:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
-
     PortalDropdown:OnChanged(function(Value)
         local Values = {}
         for Value, State in next, Value do
@@ -259,29 +252,13 @@ do
         end
     })
 
-    if game.PlaceId == 15049111150 then
-    Tabs.Webhook:AddSection("Locations")
+    Tabs.Other:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
+    Tabs.Other:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
+    Tabs.Other:AddToggle("AutoRejoinError", {Title = "Auto Rejoin When Disconnect ", Default = false })
+    Tabs.Other:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
+    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
 
-    local TeleportList = {}
-     for i,v in pairs(game.Workspace.Locations:GetChildren()) do
-     table.insert(TeleportList,v.Name)
-     end
-
-    Tabs.Webhook:AddDropdown("SelectLocation", {
-        Title = "Select Location",
-        Values = TeleportList,
-        Multi = false,
-        Default = nil,
-    })
-
-    Tabs.Webhook:AddButton({
-        Title = "Teleport",
-        Description = nil,
-        Callback = function()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[Options.SelectLocation.Value].CFrame
-        end})
-
-    end
+    Tabs.Other:AddSection("Traveling Merchant")
 
     local MerchantDropdown = Tabs.Other:AddDropdown("MerchantSelect", {
         Title = "Merchant Item",
@@ -411,11 +388,32 @@ do
 
     Tabs.Other:AddToggle("AutoBuyMerchantItem", {Title = "Auto Merchant", Default = false })
 
+        Tabs.Other:AddSection("Locations")
+    
+        local TeleportList = {}
+         for i,v in pairs(game.Workspace.Locations:GetChildren()) do
+         table.insert(TeleportList,v.Name)
+         end
+    
+         Tabs.Other:AddDropdown("SelectLocation", {
+            Title = "Select Location",
+            Values = TeleportList,
+            Multi = false,
+            Default = nil,
+        })
+    
+        Tabs.Other:AddButton({
+            Title = "Teleport",
+            Description = nil,
+            Callback = function()
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[Options.SelectLocation.Value].CFrame
+            end})
+
     local UpdateLog = Tabs.Other:AddSection("Update Log")
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/07/2024",
-        Content = "[+] Auto Merchant\n[+] Webhook Merchant\n   [-]sometime might bug\n[+] Auto Spawn Portal\n[+] Options Auto Execute"
+        Content = "[+] Auto Merchant\n[+] Webhook Merchant\n[+] Auto Spawn Portal\n[+] Auto Close Gui After Execute\n[+] Auto Execute Script"
     })
     
 
@@ -456,13 +454,16 @@ coroutine.resume(coroutine.create(function()
                 for _,c in next,game.Workspace.Lives:GetChildren() do
                     if c.ClassName == "Model" and c.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - c.HumanoidRootPart.Position).Magnitude
-                if Options.Weapon.Value == "Melee" and MeleeTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
+                if Options.Weapon.Value == "Melee" and MeleeTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
+                and not getgenv().NoEquip then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                 end
-                if  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
+                if  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25
+                and not getgenv().NoEquip  then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                 end
-                if  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
+                if  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
+                and not getgenv().NoEquip then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                         end
                     end
@@ -1341,7 +1342,7 @@ end))
                 if v.Name == "Traveling merchant" then 
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
                 if dist >= 20 then
-                    wait(10)
+                    wait(7.5)
                     game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
                 end
                  end
@@ -1542,6 +1543,76 @@ end))
         end
     end))
 
+
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+        if Options.AutoSpawnPortal.Value and game.PalceId == 15915049111150 and not getgenv().EnterNow then
+            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainUI.Interface.Inventory.ItemsFrame:GetChildren()) do
+                if getgenv().Legendary and string.find(v.Legendary,"Legendary") then
+                getgenv().SpawnLegend = true getgenv().SpawnLegendDetech = true getgenv().NoEquip = true
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket"))
+                if game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket") == nil and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket") then
+                   game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Legendary] Portal Summon Ticket")
+                end
+                end
+                if getgenv().Uncommon and string.find(v.Name,"Rare") and not getgenv().SpawnLegend and not getgenv().SpawnLegendDetech then
+                getgenv().SpawnRare = true getgenv().SpawnRareDetech = true getgenv().NoEquip = true
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 2] Summon Ticket"))
+                if game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 2] Summon Ticket") == nil and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") then
+                   game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Rare] Portal Summon Ticket")
+                end
+                end
+                if getgenv().Common and string.find(v.Name,"Common") and not getgenv().SpawnLegend and not getgenv().SpawnRare and not getgenv().SpawnLegendDetech and not getgenv().SpawnRareDetech then
+                getgenv().SpawnCommon = true getgenv().NoEquip = true 
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 1] Summon Ticket"))
+                if game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 1] Summon Ticket") == nil and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") then
+                    game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Common] Portal Summon Ticket")
+                end
+                end
+                if not getgenv().Legendary and getgenv().SpawnLegend and getgenv().SpawnLegendDetech then 
+                    getgenv().SpawnLegend = false
+                    getgenv().SpawnLegendDetech = false
+                end
+                if not getgenv().Uncommon and getgenv().SpawnRare and getgenv().SpawnRareDetech then
+                    getgenv().SpawnRare = false
+                    getgenv().SpawnRareDetech =false
+                end
+    
+                if getgenv().Legendary and getgenv().SpawnLegend and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket") and not getgenv().EnterNow then
+                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
+                    wait(1)
+                end
+                if getgenv().Legendary and getgenv().SpawnRare and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") and not getgenv().EnterNow then
+                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
+                    wait(1)
+                end
+                if getgenv().Legendary and getgenv().SpawnCommon and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") and not getgenv().EnterNow then
+                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
+                    wait(1)
+                end   
+            
+            end
+        end
+        if not Options.AutoSpawnPortal.Value and getgenv().NoEquip then
+            getgenv().NoEquip = false
+        end
+    end)
+    end
+    end))
+
+    coroutine.resume(coroutine.create(function()
+        pcall(function ()
+            repeat wait() until game:IsLoaded()
+            game.CoreGui:WaitForChild("CrazyDay")
+            repeat wait() until game.CoreGui:FindFirstChild("CrazyDay") ~= nil
+            repeat wait() until Options.AutoCloseAfterExecute.Value
+            for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+                if v.Name == "Frame" and i == 2 then
+                    v.Visible = false
+                end
+            end
+        end)
+    end))
 
     end -- End Of If
 
