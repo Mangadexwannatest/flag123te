@@ -1593,20 +1593,26 @@ end))
                     wait(1)
                 end
                 if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") == nil and
-                getgenv().Legendary and getgenv().SpawnRare and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") and not getgenv().EnterNow then
-                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
+                getgenv().Rare and getgenv().SpawnRare and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") and not getgenv().EnterNow 
+                and not getgenv().STOPUserTicket then
+                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 2] Summon Ticket")
                     wait(1)
                 end
                 if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") == nil and
-                getgenv().Legendary and getgenv().SpawnCommon and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") and not getgenv().EnterNow then
-                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
+                getgenv().Common and getgenv().SpawnCommon and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") and not getgenv().EnterNow 
+                and not getgenv().STOPUserTicket then
+                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 1] Summon Ticket")
                     wait(1)
                 end   
-                if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") ~= nil and k:FindFirstChild("DungeonSelect") == nil and not getgenv().EnterNow then
+
+                if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") ~= nil and k:FindFirstChild("DungeonSelect") == nil and not getgenv().EnterNow 
+                and not getgenv().STOPPressYes then
+                    getgenv().STOPUserTicket = true
                     firesignal(k.ItemUseUI.Interface.ItemFrame.Menu.Yes.MouseButton1Click)
                 end
                 if k.Name == "PlayerGui" and k:FindFirstChild("DungeonSelect") ~= nil and not getgenv().EnterNow then 
-                    firesignal(k.DungeonSelect.Interface.Frame.List[Options.DungeonSelect.Value].Label.MouseButton1Click)
+                    getgenv().STOPPressYes = true
+                    firesignal(k.DungeonSelect.Interface.Frame.List[Options.DungeonSelect.Value].Label.MouseButton1Down)
                 end
             end
         end
