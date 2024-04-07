@@ -11,7 +11,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Second Piece",
-    SubTitle = "Last Update April/05/2024 [edek#1004]",
+    SubTitle = "Last Update April/07/2024 [YT:CrazyDay/edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -22,6 +22,7 @@ local Window = Fluent:CreateWindow({
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
     Webhook = Window:AddTab({ Title = "Webhook", Icon = "" }),
+    Other = Window:AddTab({ Title = "Other", Icon = "" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "" })
 }
 
@@ -279,6 +280,106 @@ do
         end})
 
     end
+
+    local MerchantDropdown = Tabs.Other:AddDropdown("MerchantSelect", {
+        Title = "Merchant Item",
+        Description = nil,
+        Values = {"[Tier 1] Summon Ticket","[Tier 2] Summon Ticket","[Tier 3] Summon Ticket","Demon Fruit Remove Potion","Artifact Remove Potion","Busoshoku Haki Book","Kenbunshoku Haki Book",
+        "Infinity Orb","Sukuna Finger","Fishing Rod","Lightning Orb","Holy Grail",},
+        Multi = true,
+        Default = {nil},
+    })
+
+    MerchantDropdown:OnChanged(function(Value)
+        local Values = {}
+        for Value, State in next, Value do
+            table.insert(Values, Value)
+        end
+        if table.find(Values,"[Tier 1] Summon Ticket") and not getgenv().MerchantTicket1 then
+            getgenv().MerchantTicket1 = true
+        end
+        if table.find(Values,"[Tier 2] Summon Ticket") and not getgenv().MerchantTicket2 then
+            getgenv().MerchantTicket2 = true
+        end
+        if table.find(Values,"[Tier 3] Summon Ticket") and not getgenv().MerchantTicket3 then
+            getgenv().MerchantTicket3 = true
+        end
+        if table.find(Values,"Demon Fruit Remove Potion") and not getgenv().DemonRemove then
+            getgenv().DemonRemove = true
+        end
+        if table.find(Values,"Artifact Remove Potion") and not getgenv().ArtifactRemove then
+            getgenv().ArtifactRemove = true
+        end
+        if table.find(Values,"Busoshoku Haki Book") and not getgenv().MerchantBusoHaki then
+            getgenv().MerchantBusoHaki = true
+        end
+        if table.find(Values,"Kenbunshoku Haki Book") and not getgenv().MerchantKenHaki then
+            getgenv().MerchantKenHaki = true
+        end
+        if table.find(Values,"Infinity Orb") and not getgenv().MerchantInfOrb then
+            getgenv().MerchantInfOrb = true
+        end
+        if table.find(Values,"Sukuna Finger") and not getgenv().MerchantSukuna then
+            getgenv().MerchantSukuna = true
+        end
+        if table.find(Values,"Fishing Rod") and not getgenv().MerchantFishRod then
+            getgenv().MerchantFishRod = true
+        end
+        if table.find(Values,"Lightning Orb") and not getgenv().MerchantLightOrb then
+            getgenv().MerchantLightOrb = true
+        end
+        if table.find(Values,"Holy Grail") and not getgenv().MerchantHolyGrail then
+            getgenv().MerchantHolyGrail = true
+        end
+
+        if not table.find(Values,"[Tier 1] Summon Ticket") and getgenv().MerchantTicket1 then
+            getgenv().MerchantTicket1 = false
+        end
+        if not table.find(Values,"[Tier 2] Summon Ticket") and getgenv().MerchantTicket2 then
+            getgenv().MerchantTicket2 = false
+        end
+        if not table.find(Values,"[Tier 3] Summon Ticket") and getgenv().MerchantTicket3 then
+            getgenv().MerchantTicket3 = false
+        end
+        if not table.find(Values,"Demon Fruit Remove Potion") and getgenv().DemonRemove then
+            getgenv().DemonRemove = false
+        end
+        if not table.find(Values,"Artifact Remove Potion") and getgenv().ArtifactRemove then
+            getgenv().ArtifactRemove = false
+        end
+        if not table.find(Values,"Busoshoku Haki Book") and getgenv().MerchantBusoHaki then
+            getgenv().MerchantBusoHaki = false
+        end
+        if not table.find(Values,"Kenbunshoku Haki Book") and getgenv().MerchantKenHaki then
+            getgenv().MerchantKenHaki = false
+        end
+        if not table.find(Values,"Infinity Orb") and getgenv().MerchantInfOrb then
+            getgenv().MerchantInfOrb = false
+        end
+        if not table.find(Values,"Sukuna Finger") and getgenv().MerchantSukuna then
+            getgenv().MerchantSukuna = false
+        end
+        if not table.find(Values,"Fishing Rod") and getgenv().MerchantFishRod then
+            getgenv().MerchantFishRod = false
+        end
+        if not table.find(Values,"Lightning Orb") and getgenv().MerchantLightOrb then
+            getgenv().MerchantLightOrb = false
+        end
+        if not table.find(Values,"Holy Grail") and getgenv().MerchantHolyGrail then
+            getgenv().MerchantHolyGrail = false
+        end
+
+    end)
+
+    Tabs.Other:AddToggle("AutoBuyMerchantItem", {Title = "Auto Merchant", Default = false })
+
+    local UpdateLog = Tabs.Other:AddSection("Update Log")
+
+    UpdateLog:AddParagraph({
+        Title = "Last Update April/07/2024",
+        Content = "[+] Auto Merchant\n[+] Webhook Merchant\n[+] Auto Spawn Portal\n[+] Options Auto Execute"
+    })
+    
 
 end -- End Of Do
 
@@ -568,7 +669,7 @@ coroutine.resume(coroutine.create(function()
     end))
 
     coroutine.resume(coroutine.create(function()
-        while wait(2.5) do pcall(function ()
+        while wait() do pcall(function ()
             if Options.AutoPortal.Value and game.PlaceId ~= 15049111150 and not getgenv().Started then
                 game:GetService("ReplicatedStorage").Remotes.Ready:FireServer()
                 repeat wait() until game:IsLoaded()
@@ -576,7 +677,9 @@ coroutine.resume(coroutine.create(function()
                 getgenv().Started = true
                 end
            end) 
+           if getgenv().Started then
         break
+           end
         end
     end))
 
@@ -1108,4 +1211,67 @@ end))
                 end)
             end)
         end))
+        local MerchantFind = game.Workspace.NPC:FindFirstChild("Traveling merchant")
+        local MerchantUi = game.Players.LocalPlayer.PlayerGui.MerchantUI
+        
+        
+        coroutine.resume(coroutine.create(function()
+            while wait() do pcall(function ()
+                if Options.AutoBuyMerchantItem.Value and MerchantFind ~= nil and not MerchantUi.Enabled then
+                    repeat
+                    wait()
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = MerchantFind.HumanoidRootPart.CFrame
+                    fireproximityprompt(MerchantFind.HumanoidRootPart.Merchant)
+                    until not Options.AutoBuyMerchantItem.Value or MerchantUi.Enabled or MerchantFind == nil
+                end
+              end)
+           end
+        end))
+
+        coroutine.resume(coroutine.create(function()
+            if Options.AutoBuyMerchantItem.Value and MerchantFind ~= nil and game.PalceId == 15915049111150 then
+                if MerchantUi.Enabled then
+                    for i,v in pairs(MerchantUi.Interface.Merchant.ItemFrame:GetChildren()) do
+                        if getgenv().MerchantTicket1 and v.Name == "[Tier 1] Summon Ticket" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"[Common] Portal Summon Ticket")
+                        end
+                        if getgenv().MerchantTicket2 and v.Name == "[Tier 2] Summon Ticket" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"[Rare] Portal Summon Ticket")
+                        end
+                        if getgenv().MerchantTicket3 and v.Name == "[Tier 3] Summon Ticket" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"[Legendary] Portal Summon Ticket")
+                        end
+                        if getgenv().DemonRemove and v.Name == "Demon Fruit Remove Potion" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"Demon Fruit Remove Potion")
+                        end
+                        if getgenv().ArtifactRemove and v.Name == "Artifact Remove Potion" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"Artifact Remove Potion")
+                        end
+                        if getgenv().MerchantBusoHaki and  v.Name == "Busoshoku Haki Book" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"Busoshoku Haki Book")
+                        end
+                        if getgenv().MerchantKenHaki and v.Name == "Kenbunshoku Haki Book"  then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"Kenbunshoku Haki Book")
+                        end
+                        if getgenv().MerchantInfOrb and v.Name == "Infinity Orb" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"Infinity Orb")
+                        end
+                        if getgenv().MerchantSukuna and v.Name == "Sukuna Finger"  then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"SukunaFinger")
+                        end
+                        if getgenv().MerchantFishRod and v.Name == "Fishing Rod" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"Fishing Rod")
+                        end
+                        if getgenv().MerchantLightOrb and v.Name == "Lightning Orb" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"Lightning Orb")
+                        end
+                        if getgenv().MerchantHolyGrail and v.Name == "Holy Grail" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer(MerchantFind,"Holy Grail")
+                        end
+                    end
+                end
+            end
+        end))
+
+
     end -- End Of If
