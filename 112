@@ -114,6 +114,7 @@ do
     })
 
     Tabs.Main:AddToggle("AutoPortal", {Title = "Auto Portal", Default = false })
+    Tabs.Main:AddToggle("AutoSpawnPortal", {Title = "Auto Spawn Portal", Default = false })
 
     Tabs.Main:AddSection("Bounty Task")
 
@@ -129,13 +130,6 @@ do
 
     Tabs.Main:AddToggle("AutoBountyHunter", {Title = "Auto Bounty Task", Default = false })
 
-
-    Tabs.Main:AddSection("Other")
-
-    Tabs.Main:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
-    Tabs.Main:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
-    Tabs.Main:AddToggle("AutoRejoinError", {Title = "Auto Rejoin When Disconnect ", Default = false })
-    Tabs.Main:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
 
     PortalDropdown:OnChanged(function(Value)
         local Values = {}
@@ -257,30 +251,7 @@ do
             })    
         end
     })
-
-    if game.PlaceId == 15049111150 then
-    Tabs.Webhook:AddSection("Locations")
-
-    local TeleportList = {}
-     for i,v in pairs(game.Workspace.Locations:GetChildren()) do
-     table.insert(TeleportList,v.Name)
-     end
-
-    Tabs.Webhook:AddDropdown("SelectLocation", {
-        Title = "Select Location",
-        Values = TeleportList,
-        Multi = false,
-        Default = nil,
-    })
-
-    Tabs.Webhook:AddButton({
-        Title = "Teleport",
-        Description = nil,
-        Callback = function()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[Options.SelectLocation.Value].CFrame
-        end})
-
-    end
+    Tabs.Other:AddSection("Traveling Merchant")
 
     local MerchantDropdown = Tabs.Other:AddDropdown("MerchantSelect", {
         Title = "Merchant Item",
@@ -410,11 +381,39 @@ do
 
     Tabs.Other:AddToggle("AutoBuyMerchantItem", {Title = "Auto Merchant", Default = false })
 
+        Tabs.Other:AddSection("Locations")
+    
+        local TeleportList = {}
+         for i,v in pairs(game.Workspace.Locations:GetChildren()) do
+         table.insert(TeleportList,v.Name)
+         end
+    
+         Tabs.Other:AddDropdown("SelectLocation", {
+            Title = "Select Location",
+            Values = TeleportList,
+            Multi = false,
+            Default = nil,
+        })
+    
+        Tabs.Other:AddButton({
+            Title = "Teleport",
+            Description = nil,
+            Callback = function()
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Locations[Options.SelectLocation.Value].CFrame
+            end})
+
+    Tabs.Other:AddSection("Other")
+    Tabs.Other:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
+    Tabs.Other:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
+    Tabs.Other:AddToggle("AutoRejoinError", {Title = "Auto Rejoin When Disconnect ", Default = false })
+    Tabs.Other:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
+    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
+
     local UpdateLog = Tabs.Other:AddSection("Update Log")
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/07/2024",
-        Content = "[+] Auto Merchant\n[+] Webhook Merchant\n[+] Auto Spawn Portal\n[+] Options Auto Execute"
+        Content = "[+] Auto Merchant\n[+] Webhook Merchant\n[+] Auto Spawn Portal\n[+] Auto Close Gui After Execute\n[+] Auto Execute Script"
     })
     
 
@@ -455,13 +454,16 @@ coroutine.resume(coroutine.create(function()
                 for _,c in next,game.Workspace.Lives:GetChildren() do
                     if c.ClassName == "Model" and c.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - c.HumanoidRootPart.Position).Magnitude
-                if Options.Weapon.Value == "Melee" and MeleeTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
+                if Options.Weapon.Value == "Melee" and MeleeTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
+                and not getgenv().NoEquip then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                 end
-                if  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
+                if  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25
+                and not getgenv().NoEquip  then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                 end
-                if  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 then
+                if  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
+                and not getgenv().NoEquip then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                         end
                     end
@@ -723,7 +725,8 @@ coroutine.resume(coroutine.create(function()
     coroutine.resume(coroutine.create(function()
         while wait() do
             pcall(function ()
-                if Options.AutoQuest.Value and not getgenv().DontAcceptQuest  and game.PlaceId == 15049111150 and not getgenv().STOP and getgenv().QuestHuntOnCoolDown then
+                if Options.AutoQuest.Value and not getgenv().DontAcceptQuest  and game.PlaceId == 15049111150 and not getgenv().STOP and getgenv().QuestHuntOnCoolDown 
+                and not getgenv().InMerchant then
                     for i,v in pairs(game.Players.LocalPlayer:GetChildren()) do 
                         if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil then
                             getgenv().NoQuest = true
@@ -738,7 +741,8 @@ coroutine.resume(coroutine.create(function()
     
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 then
+            if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
+            and not getgenv().InMerchant then
                 for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                     if v.Name == "Quest" then
                         if v.Value == Options.SelectQuest.Value then
@@ -747,7 +751,7 @@ coroutine.resume(coroutine.create(function()
                                     wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame
                                 fireproximityprompt(v.Parent)
-                                until not Options.AutoQuest.Value or not getgenv().NoQuest or getgenv().DontAcceptQuest or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown
+                                until not Options.AutoQuest.Value or not getgenv().NoQuest or getgenv().DontAcceptQuest or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant
                             end
                         end
                     end
@@ -761,7 +765,8 @@ coroutine.resume(coroutine.create(function()
 
      coroutine.resume(coroutine.create(function()
         while  wait() do pcall(function ()
-            if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 then
+            if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
+            and not getgenv().InMerchant then
                 for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                     if v.Name == "Quest" and v.Value == Options.SelectQuest.Value and not getgenv().NoQuest then
                                 for _,mon in pairs(game.Workspace.Lives:GetChildren()) do
@@ -770,7 +775,7 @@ coroutine.resume(coroutine.create(function()
                                             repeat task.wait()
                                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mon.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                         until mon.Humanoid.Health <= 0 or not Options.AutoQuest.Value or getgenv().NoQuest or getgenv().DontAcceptQuest
-                                        or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown
+                                        or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant
                                     end
                                 end
                             end
@@ -783,17 +788,19 @@ coroutine.resume(coroutine.create(function()
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if  Options.AutoGem.Value and not getgenv().StopFarmGem and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 then
+            if  Options.AutoGem.Value and not getgenv().StopFarmGem and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
+            and not getgenv().InMerchant then
                 for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                     if string.find(v.Name,BossTable[1]) or string.find(v.Name,BossTable[2]) 
-                    or string.find(v.Name,BossTable[3]) or string.find(v.Name,BossTable[4])  then
+                    or string.find(v.Name,BossTable[3]) or string.find(v.Name,BossTable[4])  
+                    and not getgenv().InMerchant then
                         if v.Humanoid.Health > 0 then
                             repeat
                                 task.wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                 getgenv().DontAcceptQuest = true
                          until v.Humanoid.Health <= 0 or not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown
-                            getgenv().DontAcceptQuest = false
+                            getgenv().DontAcceptQuest = false or getgenv().InMerchant
                         end
                     end
                     end
@@ -805,17 +812,19 @@ coroutine.resume(coroutine.create(function()
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if Options.AutoBossSpawn.Value and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 then
+            if Options.AutoBossSpawn.Value and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
+            and not getgenv().InMerchant then
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                 for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                     if string.find(v.Name,"Natsu") or string.find(v.Name,"Tatsumaki") or string.find(v.Name,"Artoria") or string.find(v.Name,"Sukuna") or string.find(v.Name,"Gojo") or string.find(v.Name,"Kashimo") 
-                    or string.find(v.Name,"Choso") or string.find(v.Name,"Killua")  or string.find(v.Name,"Chxmei") or string.find(v.Name,"Cid") and not getgenv().STOP and not getgenv().InBossHunt then
+                    or string.find(v.Name,"Choso") or string.find(v.Name,"Killua")  or string.find(v.Name,"Chxmei") or string.find(v.Name,"Cid") and not getgenv().STOP and not getgenv().InBossHunt
+                    and not getgenv().InMerchant  then
                         if v.Humanoid.Health > 0 and getgenv().QuestHuntOnCoolDown then
                             repeat task.wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                 getgenv().DontAcceptQuest = true
                                 getgenv().StopFarmGem = true
-                                until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown
+                                until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant
                                 getgenv().DontAcceptQuest = false   
                                 getgenv().StopFarmGem = false
                         end
@@ -830,7 +839,8 @@ coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
             if not Options.AutoBossSpawn.Value and getgenv().DontAcceptQuest then
                 getgenv().DontAcceptQuest = false
-            elseif not Options.AutoBossSpawn.Value and getgenv().StopFarmGem then
+            end
+            if not Options.AutoBossSpawn.Value and getgenv().StopFarmGem then
                 getgenv().StopFarmGem = false
             end 
           end) 
@@ -925,13 +935,15 @@ end))
     
       coroutine.resume(coroutine.create(function()
         while task.wait() do pcall(function ()
-            if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP then
+            if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP
+            and not getgenv().InMerchant then
                     if not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown then
                         repeat 
                            wait(.85)
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                             fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
-                            until getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown or not Options.AutoBountyHunter.Value or getgenv().STOP
+                            until getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown or not Options.AutoBountyHunter.Value or getgenv().STOP 
+                            or getgenv().InMerchant
                         end
                    end
             end)
@@ -941,13 +953,14 @@ end))
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if Options.AutoBountyHunter.Value and not getgenv().STOP then
+            if Options.AutoBountyHunter.Value and not getgenv().STOP and not getgenv().InMerchant then
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if string.find(v.Name,"Criminal") and v.Humanoid.Health > 0 and v.TaskBy.Value == game.Players.LocalPlayer.Name and not getgenv().STOP then
                     getgenv().InBossHunt = true
                     repeat task.wait()
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                     until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
+                    or getgenv().InMerchant
                     getgenv().InBossHunt = false
                     end
                 end
@@ -986,6 +999,7 @@ end))
                     wait(.5)
                     getgenv().InBossHunt = false
                     getgenv().QuestHuntOnCoolDown = false
+                    getgenv().InMerchant = false
                 end)
             end
         end)
@@ -1294,129 +1308,218 @@ end))
                 end)
             end)
         end))
-        local MerchantFind = game.Workspace.NPC:WaitForChild("Traveling merchant")
-        local MerchantUi = game.Players.LocalPlayer.PlayerGui:WaitForChild("MerchantUI")
         
-        
+
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if Options.AutoBuyMerchantItem.Value and MerchantFind ~= nil and not MerchantUi.Enabled then
+                if Options.AutoBuyMerchantItem.Value and not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled and not getgenv().AlrBuy and not getgenv().STOP then
+                    for i,v in pairs(game.Workspace.NPC:GetChildren()) do
+                        if v.Name == "Traveling merchant" then
                     repeat
                     wait()
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = MerchantFind.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
-                    fireproximityprompt(MerchantFind.HumanoidRootPart.Merchant)
-                    until not Options.AutoBuyMerchantItem.Value or MerchantUi.Enabled or MerchantFind == nil
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
+                    fireproximityprompt(v.HumanoidRootPart.Merchant)
+                    getgenv().InMerchant = true
+                    until not Options.AutoBuyMerchantItem.Value or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled or getgenv().AlrBuy or getgenv().STOP
+                    getgenv().InMerchant = false
+                end
+            end
                 end
               end)
            end
         end))
+
+        coroutine.resume(coroutine.create(function()
+            while wait() do pcall(function ()
+                if game.PlaceId == 15049111150 then
+                    for i,v in pairs(game.Workspace.NPC:GetChildren()) do
+                if game.Workspace.NPC:FindFirstChild("Traveling merchant") == nil and getgenv().InMerchant then
+                    getgenv().InMerchant = false
+                end
+                if game.Workspace.NPC:FindFirstChild("Traveling merchant") == nil and getgenv().AlrBuy then
+                    getgenv().AlrBuy = false
+                end
+                if v.Name == "Traveling merchant" then 
+                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                if dist >= 20 then
+                    wait(7.5)
+                    game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+                end
+                 end
+                    end
+                 end
+            end)
+        end
+    end))
+    
+
+
         
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-            if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and MerchantUi.Enabled then
-                    for i,v in pairs(MerchantUi.Interface.Merchant.ItemFrame:GetChildren()) do
+            if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+                    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren()) do
                         if getgenv().MerchantTicket1 and v.Name == "[Tier 1] Summon Ticket" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantTicket2 and v.Name == "[Tier 2] Summon Ticket" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantTicket3 and v.Name == "[Tier 3] Summon Ticket" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().DemonRemove  and v.Name == "Demon Fruit Remove Potion" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Demon Fruit Remove Potion")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Demon Fruit Remove Potion")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().ArtifactRemove  and v.Name == "Artifact Remove Potion" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Artifact Remove Potion")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Artifact Remove Potion")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantBusoHaki  and v.Name == "Busoshoku Haki Book" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Busoshoku Haki Book")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Busoshoku Haki Book")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantKenHaki  and v.Name == "Kenbunshoku Haki Book" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Kenbunshoku Haki Book")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Kenbunshoku Haki Book")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantInfOrb and v.Name == "Infinity Orb" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Infinity Orb")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Infinity Orb")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantSukuna and v.Name == "Sukuna Finger" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantFishRod and v.Name == "Fishing Rod" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Fishing Rod")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Fishing Rod")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantLightOrb and v.Name == "Lightning Orb" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Lightning Orb")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Lightning Orb")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
+                        end
+                        if getgenv().MerchantHolyGrail  and v.Name == "Holy Grail" then
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Holy Grail")
+                            wait(.25)
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Holy Grail")
+                            v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantOperation  and v.Name == "Operation Fruit" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Operation")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Operation")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantGodLight and v.Name == "God Light Fruit" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantSolar and v.Name == "Solar Fruit" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Solar")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Solar")
                             v:Destroy()
-                            
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantLight  and v.Name == "Light Fruit" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Light")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Light")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantFlame and v.Name == "Flame Fruit" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Flame")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Flame")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                         if getgenv().MerchantQuake  and v.Name == "Quake Fruit" then
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Quake")
                             wait(.25)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Quake")
                             v:Destroy()
+                            wait(1)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
                         end
                 end
             end
@@ -1426,14 +1529,12 @@ end))
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if Options.AutoWebhookMerchant.Value and game.PlaceId == 15049111150 and MerchantFind ~= nil then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - MerchantFind.HumanoidRootPart.Position).Magnitude
-                    if dist <= 20 then
+                if Options.AutoWebhookMerchant.Value and game.PlaceId == 15049111150 then
+                    if game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                     for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
-                        if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") and dist <= 20 then
+                        if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") then
                             WebhookMerchant()
-                            wait(5)
-                            break
+                            wait(1)
                         end
                         end
                     end
@@ -1442,6 +1543,76 @@ end))
         end
     end))
 
+
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+        if Options.AutoSpawnPortal.Value and game.PlaceId == 15049111150 and not getgenv().EnterNow then
+            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainUI.Interface.Inventory.ItemsFrame:GetChildren()) do
+                if getgenv().Legendary and string.find(v.Name,"Legendary") then
+                getgenv().SpawnLegend = true getgenv().SpawnLegendDetech = true getgenv().NoEquip = true
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket"))
+                if game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket") == nil and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket") then
+                   game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Legendary] Portal Summon Ticket")
+                end
+                end
+                if getgenv().Uncommon and string.find(v.Name,"Rare") and not getgenv().SpawnLegend and not getgenv().SpawnLegendDetech then
+                getgenv().SpawnRare = true getgenv().SpawnRareDetech = true getgenv().NoEquip = true
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 2] Summon Ticket"))
+                if game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 2] Summon Ticket") == nil and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") then
+                   game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Rare] Portal Summon Ticket")
+                end
+                end
+                if getgenv().Common and string.find(v.Name,"Common") and not getgenv().SpawnLegend and not getgenv().SpawnRare and not getgenv().SpawnLegendDetech and not getgenv().SpawnRareDetech then
+                getgenv().SpawnCommon = true getgenv().NoEquip = true 
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 1] Summon Ticket"))
+                if game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 1] Summon Ticket") == nil and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") then
+                    game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Common] Portal Summon Ticket")
+                end
+                end
+                if not getgenv().Legendary and getgenv().SpawnLegend and getgenv().SpawnLegendDetech then 
+                    getgenv().SpawnLegend = false
+                    getgenv().SpawnLegendDetech = false
+                end
+                if not getgenv().Uncommon and getgenv().SpawnRare and getgenv().SpawnRareDetech then
+                    getgenv().SpawnRare = false
+                    getgenv().SpawnRareDetech =false
+                end
+    
+                if getgenv().Legendary and getgenv().SpawnLegend and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket") and not getgenv().EnterNow then
+                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
+                    wait(1)
+                end
+                if getgenv().Legendary and getgenv().SpawnRare and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") and not getgenv().EnterNow then
+                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
+                    wait(1)
+                end
+                if getgenv().Legendary and getgenv().SpawnCommon and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") and not getgenv().EnterNow then
+                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
+                    wait(1)
+                end   
+            
+            end
+        end
+        if not Options.AutoSpawnPortal.Value and getgenv().NoEquip then
+            getgenv().NoEquip = false
+        end
+    end)
+    end
+    end))
+
+    coroutine.resume(coroutine.create(function()
+        pcall(function ()
+            repeat wait() until game:IsLoaded()
+            game.CoreGui:WaitForChild("CrazyDay")
+            repeat wait() until game.CoreGui:FindFirstChild("CrazyDay") ~= nil
+            repeat wait() until Options.AutoCloseAfterExecute.Value
+            for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+                if v.Name == "Frame" and i == 2 then
+                    v.Visible = false
+                end
+            end
+        end)
+    end))
 
     end -- End Of If
 
