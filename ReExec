@@ -1,17 +1,20 @@
-local queue_on_teleport = queue_on_teleport or syn and syn.queue_on_teleport
-[[   
+local queue_teleport = queueonteleport or queue_on_teleport
+local script = 
+[[
 loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/flag123te/main/ReExec'))()
 ]]
 while not game:IsLoaded() do wait() end 
 
+if (queue_teleport) then
+   queue_teleport(script)
+end
+
 local success = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/flag123te/main/111"))()
-print("Re Execute")
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/flag123te/main/111"))()
 end)
 
-
+print(success)
 if not success then
-    wait(20)
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/flag123te/main/ReExec"))()
-  print("Re Execute")
+   wait(20)
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/flag123te/main/111"))()
 end
